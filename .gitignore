@@ -33,3 +33,114 @@ celerybeat.pid
 
 # Python bytecode
 *.pyc
+
+# Node.js build files
+npm-debug.log
+node_modules/
+
+# Bower build files
+bower_components/
+.bowerrc
+
+# Grunt build files
+Gruntfile.js
+.grunt/
+
+# Gulp build files
+gulpfile.js
+
+# Webpack build files
+webpack.config.js
+
+# Sensitive information
+.env*
+
+# Various IDEs
+.DS_Store
+.project
+.tm_properties
+.vscode
+
+# IDE files
+.pydevproject
+
+# Eclipse
+.classpath
+.project
+.settings
+
+# NetBeans
+nbproject
+
+# PyCharm
+.idea
+
+# Django cache files
+*.cache
+
+# Pytest
+.cache
+.pytest_cache
+
+# Pytest coverage files
+.coverage
+.coverage.*
+
+# Mypy
+.mypy_cache
+.pytype
+
+# Pyre
+.pyre
+
+# Sphinx
+doc/_build/
+
+# Black
+.black*
+
+# Blackd
+.blackd
+
+# isort
+.isort.cfg
+
+# Pylint
+.pylintrc
+.pylint.d
+
+# Autopep8
+.autopep8
+
+# Flake8
+.flake8
+
+# Pylama
+.pylama
+
+# Pyflakes
+.pyflakes
+
+# Mypy
+.mypy_cache
+
+# YAPF
+.style.yapf
+
+# Vulture
+.vulture
+
+# Pycodestyle
+.pycodestyle
+
+# Bandit
+.bandit
+
+# Pyright
+.pyright
+
+# Backups
+*.bak
+
+# Local settings
+local_settings.py
