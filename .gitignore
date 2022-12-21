@@ -1,0 +1,35 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Django debug toolbar
+.debug_toolbar
+
+# PyCharm project files
+.idea
+
+# Django settings
+*.env
+
+# Django media files
+media/
+
+# Django static files
+static/
+
+# SQLite database file
+*.sqlite3
+
+# Django migrations
+migrations/
+
+# Django Celery task files
+celerybeat-schedule
+celerybeat.pid
+
+# Python bytecode
+*.pyc
