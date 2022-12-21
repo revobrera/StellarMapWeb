@@ -14,3 +14,6 @@
         hist = log --graph --oneline --decorate
         st = status
 
+[user]
+	email = rev.obrera@gmail.com
+	name = revobrera
