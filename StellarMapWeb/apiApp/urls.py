@@ -4,7 +4,7 @@ from apiApp import views
 app_name = 'apiApp'
 urlpatterns = [
     path(
-        'v1/check_url/<str:url>/',
+        'check_url/<str:url>/',
         views.check_url,
         name='check_url',
         docstring="""Check the reachability of the given URL.
@@ -17,7 +17,7 @@ urlpatterns = [
         """
     ),
     path(
-        'v1/check_all_urls/',
+        'check_all_urls/',
         views.check_all_urls,
         name='check_all_urls',
         docstring="""Check the reachability of all URLs in the sites_dict.
