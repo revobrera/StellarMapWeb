@@ -25,4 +25,5 @@ schema_view = get_swagger_view(title='StellarMap API')
 urlpatterns = [
     re_path('chief/', admin.site.urls),
     re_path('api/v1/', schema_view),
+    re_path('', include('webApp.urls')),
 ]
