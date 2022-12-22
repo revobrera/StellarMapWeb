@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .helpers import SiteChecker
+from helpers.conn import SiteChecker
 
 
 @api_view(['GET'])
