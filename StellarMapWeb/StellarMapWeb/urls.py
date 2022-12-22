@@ -20,7 +20,7 @@ from django.urls import include, re_path
 from django.contrib import admin
 
 urlpatterns = [
-    re_path(r'chief/', admin.site.urls),
-    re_path(r'api/v1/', include('apiApp.urls')),
-    re_path(r'^docs/', include('rest_framework_swagger.urls')),
+    re_path('chief/', admin.site.urls),
+    re_path('api/v1/', include('apiApp.urls')),
+    re_path('docs/', include('rest_framework_swagger.urls')),
 ]
