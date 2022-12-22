@@ -1,0 +1,70 @@
+{
+  "content": {
+    "_creators": null,
+    "architecture": 64,
+    "base_exec_prefix": "/usr/local",
+    "base_prefix": "/usr/local",
+    "distutils_install": {
+      "data": "",
+      "headers": "include/python3.9/UNKNOWN",
+      "platlib": "lib/python3.9/site-packages",
+      "purelib": "lib/python3.9/site-packages",
+      "scripts": "bin"
+    },
+    "exec_prefix": "/usr/local",
+    "executable": "/usr/bin/python3.9",
+    "file_system_encoding": "utf-8",
+    "has_venv": true,
+    "implementation": "CPython",
+    "max_size": 9223372036854775807,
+    "original_executable": "/usr/bin/python3.9",
+    "os": "posix",
+    "path": [
+      "/usr/local/lib/python3.10/site-packages/virtualenv/discovery",
+      "/usr/local/lib/python39.zip",
+      "/usr/local/lib/python3.9",
+      "/usr/local/lib/python3.9/lib-dynload",
+      "/usr/local/lib/python3.9/site-packages"
+    ],
+    "platform": "linux",
+    "prefix": "/usr/local",
+    "real_prefix": null,
+    "stdout_encoding": "utf-8",
+    "sysconfig": {
+      "makefile_filename": "/usr/local/lib/python3.9/config-3.9-x86_64-linux-gnu/Makefile"
+    },
+    "sysconfig_paths": {
+      "data": "{base}",
+      "include": "{installed_base}/include/python{py_version_short}{abiflags}",
+      "platlib": "{platbase}/{platlibdir}/python{py_version_short}/site-packages",
+      "platstdlib": "{platbase}/{platlibdir}/python{py_version_short}",
+      "purelib": "{base}/lib/python{py_version_short}/site-packages",
+      "scripts": "{base}/bin",
+      "stdlib": "{installed_base}/{platlibdir}/python{py_version_short}"
+    },
+    "sysconfig_scheme": null,
+    "sysconfig_vars": {
+      "PYTHONFRAMEWORK": "",
+      "abiflags": "",
+      "base": "/usr/local",
+      "installed_base": "/usr/local",
+      "platbase": "/usr/local",
+      "platlibdir": "lib",
+      "py_version_short": "3.9"
+    },
+    "system_executable": "/usr/bin/python3.9",
+    "system_stdlib": "/usr/local/lib/python3.9",
+    "system_stdlib_platform": "/usr/local/lib/python3.9",
+    "version": "3.9.13 (main, Jul 22 2022, 17:05:13) \n[GCC 9.4.0]",
+    "version_info": {
+      "major": 3,
+      "micro": 13,
+      "minor": 9,
+      "releaselevel": "final",
+      "serial": 0
+    },
+    "version_nodot": "39"
+  },
+  "path": "/usr/bin/python3.9",
+  "st_mtime": 1658509600.0
+}

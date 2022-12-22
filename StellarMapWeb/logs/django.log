@@ -1,0 +1,49 @@
+(0.128) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None; alias=default
+(0.004) SELECT "django_migrations"."id", "django_migrations"."app", "django_migrations"."name", "django_migrations"."applied" FROM "django_migrations"; args=(); alias=default
+(0.266) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None; alias=default
+(0.002) SELECT "django_migrations"."id", "django_migrations"."app", "django_migrations"."name", "django_migrations"."applied" FROM "django_migrations"; args=(); alias=default
+Watching for file changes with StatReloader
+Waiting for apps ready_event.
+Apps ready_event triggered. Sending autoreload_started signal.
+Watching dir /home/Revobrera/.local/lib/python3.10/site-packages/rest_framework/templates with glob **/*.
+Watching dir /home/Revobrera/StellarMapWeb/locale with glob **/*.mo.
+Watching dir /home/Revobrera/.local/lib/python3.10/site-packages/rest_framework/locale with glob **/*.mo.
+Watching dir /home/Revobrera/StellarMapWeb/apiApp/locale with glob **/*.mo.
+Watching dir /home/Revobrera/StellarMapWeb/radialTidyTreeApp/locale with glob **/*.mo.
+(0.006) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None; alias=default
+(0.002) SELECT "django_migrations"."id", "django_migrations"."app", "django_migrations"."name", "django_migrations"."applied" FROM "django_migrations"; args=(); alias=default
+Watching for file changes with StatReloader
+Waiting for apps ready_event.
+Apps ready_event triggered. Sending autoreload_started signal.
+Watching dir /home/Revobrera/.local/lib/python3.10/site-packages/rest_framework/templates with glob **/*.
+Watching dir /home/Revobrera/StellarMapWeb/locale with glob **/*.mo.
+Watching dir /home/Revobrera/.local/lib/python3.10/site-packages/rest_framework/locale with glob **/*.mo.
+Watching dir /home/Revobrera/StellarMapWeb/apiApp/locale with glob **/*.mo.
+Watching dir /home/Revobrera/StellarMapWeb/radialTidyTreeApp/locale with glob **/*.mo.
+(0.006) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None; alias=default
+(0.003) SELECT "django_migrations"."id", "django_migrations"."app", "django_migrations"."name", "django_migrations"."applied" FROM "django_migrations"; args=(); alias=default
+Watching for file changes with StatReloader
+Waiting for apps ready_event.
+Apps ready_event triggered. Sending autoreload_started signal.
+Watching dir /home/Revobrera/.local/lib/python3.10/site-packages/rest_framework/templates with glob **/*.
+Watching dir /home/Revobrera/StellarMapWeb/locale with glob **/*.mo.
+Watching dir /home/Revobrera/.local/lib/python3.10/site-packages/rest_framework/locale with glob **/*.mo.
+Watching dir /home/Revobrera/StellarMapWeb/apiApp/locale with glob **/*.mo.
+Watching dir /home/Revobrera/StellarMapWeb/radialTidyTreeApp/locale with glob **/*.mo.
+(0.006) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None; alias=default
+(0.002) SELECT "django_migrations"."id", "django_migrations"."app", "django_migrations"."name", "django_migrations"."applied" FROM "django_migrations"; args=(); alias=default

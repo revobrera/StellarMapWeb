@@ -1,0 +1,13 @@
+{
+  "completed": "2022-12-22T18:09:10.324186Z",
+  "periodic": true,
+  "started": "2022-12-22T18:09:04.703156Z",
+  "versions": [
+    {
+      "filename": "setuptools-65.6.3-py3-none-any.whl",
+      "found_date": "2022-12-22T18:09:05.690785Z",
+      "release_date": "2022-11-24T06:09:28.000000Z",
+      "source": "periodic"
+    }
+  ]
+}
