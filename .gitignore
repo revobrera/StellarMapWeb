@@ -14,6 +14,7 @@ __pycache__/
 
 # Django settings
 *.env
+*.virtualenvs
 
 # Django media files
 media/
