@@ -12,11 +12,14 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+
+django.conf.urls.url() was deprecated in Django 3.0, and is removed in Django 4.0+.
+user re_path with regex
 """
-from django.conf.urls import url, include
+from django.urls import include, re_path
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^(?i)chief/', admin.site.urls),
-    url(r'^(?i)api/v1/', include('apiApp.urls')),
+    re_path(r'^(?i)chief/', admin.site.urls),
+    re_path(r'^(?i)api/v1/', include('apiApp.urls')),
 ]
