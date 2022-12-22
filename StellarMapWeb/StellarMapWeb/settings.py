@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apiApp',
     'radialTidyTreeApp',
     'rest_framework_swagger',
+    'webApp',
 ]
 
 MIDDLEWARE = [
