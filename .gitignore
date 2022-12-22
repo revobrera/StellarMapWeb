@@ -145,3 +145,7 @@ doc/_build/
 
 # Local settings
 local_settings.py
+*.local/
+
+# vim
+.viminfo
