@@ -11,8 +11,6 @@
 # hlsearch on (H) or off (h):
 ~h
 # Command Line History (newest to oldest):
-:wq
-|2,0,1671734084,,"wq"
 :q!
 |2,0,1671731777,,"q!"
 
@@ -27,18 +25,18 @@
 # Registers:
 
 # File marks:
-'0  17  0  ~/.gitignore
-|4,48,17,0,1671734084,"~/.gitignore"
-'1  442  3  /var/log/revobrera.pythonanywhere.com.error.log
-|4,49,442,3,1671731777,"/var/log/revobrera.pythonanywhere.com.error.log"
+'0  442  3  /var/log/revobrera.pythonanywhere.com.error.log
+|4,48,442,3,1671731777,"/var/log/revobrera.pythonanywhere.com.error.log"
+'1  296  0  /var/log/revobrera.pythonanywhere.com.error.log
+|4,49,296,0,1671728030,"/var/log/revobrera.pythonanywhere.com.error.log"
 '2  296  0  /var/log/revobrera.pythonanywhere.com.error.log
 |4,50,296,0,1671728030,"/var/log/revobrera.pythonanywhere.com.error.log"
 '3  296  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,51,296,0,1671728030,"/var/log/revobrera.pythonanywhere.com.error.log"
+|4,51,296,0,1671728004,"/var/log/revobrera.pythonanywhere.com.error.log"
 '4  296  0  /var/log/revobrera.pythonanywhere.com.error.log
 |4,52,296,0,1671728004,"/var/log/revobrera.pythonanywhere.com.error.log"
-'5  296  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,53,296,0,1671728004,"/var/log/revobrera.pythonanywhere.com.error.log"
+'5  273  0  /var/log/revobrera.pythonanywhere.com.error.log
+|4,53,273,0,1671727873,"/var/log/revobrera.pythonanywhere.com.error.log"
 '6  273  0  /var/log/revobrera.pythonanywhere.com.error.log
 |4,54,273,0,1671727873,"/var/log/revobrera.pythonanywhere.com.error.log"
 '7  273  0  /var/log/revobrera.pythonanywhere.com.error.log
@@ -49,40 +47,20 @@
 |4,57,273,0,1671727873,"/var/log/revobrera.pythonanywhere.com.error.log"
 
 # Jumplist (newest first):
--'  17  0  ~/.gitignore
-|4,39,17,0,1671734084,"~/.gitignore"
--'  1  0  ~/.gitignore
-|4,39,1,0,1671734064,"~/.gitignore"
--'  442  3  /var/log/revobrera.pythonanywhere.com.error.log
-|4,39,442,3,1671731777,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  442  3  /var/log/revobrera.pythonanywhere.com.error.log
 |4,39,442,3,1671731777,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  296  0  /var/log/revobrera.pythonanywhere.com.error.log
 |4,39,296,0,1671731745,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  296  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,39,296,0,1671731745,"/var/log/revobrera.pythonanywhere.com.error.log"
--'  296  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,39,296,0,1671728030,"/var/log/revobrera.pythonanywhere.com.error.log"
--'  296  0  /var/log/revobrera.pythonanywhere.com.error.log
 |4,39,296,0,1671728030,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  296  0  /var/log/revobrera.pythonanywhere.com.error.log
 |4,39,296,0,1671728004,"/var/log/revobrera.pythonanywhere.com.error.log"
--'  296  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,39,296,0,1671728004,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  273  0  /var/log/revobrera.pythonanywhere.com.error.log
 |4,39,273,0,1671727970,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  273  0  /var/log/revobrera.pythonanywhere.com.error.log
 |4,39,273,0,1671727970,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  273  0  /var/log/revobrera.pythonanywhere.com.error.log
 |4,39,273,0,1671727970,"/var/log/revobrera.pythonanywhere.com.error.log"
--'  273  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,39,273,0,1671727970,"/var/log/revobrera.pythonanywhere.com.error.log"
--'  273  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,39,273,0,1671727970,"/var/log/revobrera.pythonanywhere.com.error.log"
--'  273  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,39,273,0,1671727970,"/var/log/revobrera.pythonanywhere.com.error.log"
--'  273  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,39,273,0,1671727873,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  273  0  /var/log/revobrera.pythonanywhere.com.error.log
 |4,39,273,0,1671727873,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  252  0  /var/log/revobrera.pythonanywhere.com.error.log
@@ -93,14 +71,6 @@
 |4,39,252,0,1671727784,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  252  0  /var/log/revobrera.pythonanywhere.com.error.log
 |4,39,252,0,1671727784,"/var/log/revobrera.pythonanywhere.com.error.log"
--'  252  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,39,252,0,1671727784,"/var/log/revobrera.pythonanywhere.com.error.log"
--'  252  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,39,252,0,1671727784,"/var/log/revobrera.pythonanywhere.com.error.log"
--'  252  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,39,252,0,1671727784,"/var/log/revobrera.pythonanywhere.com.error.log"
--'  252  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,39,252,0,1671727784,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
 |4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
 -'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
@@ -133,70 +103,6 @@
 |4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
 -'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
 |4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  135  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,135,0,1671727773,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
--'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
-|4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
 -'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
 |4,39,1,0,1671727756,"/var/log/revobrera.pythonanywhere.com.server.log"
 -'  1  0  /var/log/revobrera.pythonanywhere.com.server.log
@@ -233,10 +139,6 @@
 |4,39,252,0,1671727683,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  252  0  /var/log/revobrera.pythonanywhere.com.error.log
 |4,39,252,0,1671727683,"/var/log/revobrera.pythonanywhere.com.error.log"
--'  252  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,39,252,0,1671727683,"/var/log/revobrera.pythonanywhere.com.error.log"
--'  252  0  /var/log/revobrera.pythonanywhere.com.error.log
-|4,39,252,0,1671727683,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  147  0  /var/log/revobrera.pythonanywhere.com.error.log
 |4,39,147,0,1671727671,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  147  0  /var/log/revobrera.pythonanywhere.com.error.log
@@ -249,15 +151,104 @@
 |4,39,147,0,1671727671,"/var/log/revobrera.pythonanywhere.com.error.log"
 -'  147  0  /var/log/revobrera.pythonanywhere.com.error.log
 |4,39,147,0,1671727671,"/var/log/revobrera.pythonanywhere.com.error.log"
+-'  147  0  /var/log/revobrera.pythonanywhere.com.error.log
+|4,39,147,0,1671727574,"/var/log/revobrera.pythonanywhere.com.error.log"
+-'  147  0  /var/log/revobrera.pythonanywhere.com.error.log
+|4,39,147,0,1671727574,"/var/log/revobrera.pythonanywhere.com.error.log"
+-'  1  0  /var/log/revobrera.pythonanywhere.com.error.log
+|4,39,1,0,1671727536,"/var/log/revobrera.pythonanywhere.com.error.log"
+-'  1  0  /var/log/revobrera.pythonanywhere.com.error.log
+|4,39,1,0,1671727536,"/var/log/revobrera.pythonanywhere.com.error.log"
+-'  1  0  /var/log/revobrera.pythonanywhere.com.error.log
+|4,39,1,0,1671727536,"/var/log/revobrera.pythonanywhere.com.error.log"
+-'  1  0  /var/log/revobrera.pythonanywhere.com.error.log
+|4,39,1,0,1671727536,"/var/log/revobrera.pythonanywhere.com.error.log"
+-'  1  0  /var/log/revobrera.pythonanywhere.com.error.log
+|4,39,1,0,1671727536,"/var/log/revobrera.pythonanywhere.com.error.log"
+-'  1  0  /var/log/revobrera.pythonanywhere.com.error.log
+|4,39,1,0,1671727536,"/var/log/revobrera.pythonanywhere.com.error.log"
+-'  1  0  /var/log/revobrera.pythonanywhere.com.error.log
+|4,39,1,0,1671727536,"/var/log/revobrera.pythonanywhere.com.error.log"
+-'  1  0  /var/log/revobrera.pythonanywhere.com.error.log
+|4,39,1,0,1671727536,"/var/log/revobrera.pythonanywhere.com.error.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
+-'  53  0  /var/log/revobrera.pythonanywhere.com.access.log
+|4,39,53,0,1671727495,"/var/log/revobrera.pythonanywhere.com.access.log"
 
 # History of marks within files (newest to oldest):
-
-> ~/.gitignore
-	*	1671734082	0
-	"	17	0
-	^	17	1
-	.	17	0
-	+	17	0
 
 > /var/log/revobrera.pythonanywhere.com.error.log
 	*	1671731777	0
