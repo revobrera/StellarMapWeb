@@ -3,7 +3,7 @@
 <head>
   <title>Vue.js Search Field</title>
 </head>
-<body>
+<body class="bg-color-261D45">
   <div id="app">
     <div class="search-container">
       <input type="text" v-model="query" @keyup.enter="search" placeholder="Enter a search query">
@@ -37,6 +37,9 @@
     })
   </script>
   <style>
+    .bg-color-261D45 {
+      background-color: #261D45;
+    }
     .search-container {
       display: flex;
       justify-content: center;
