@@ -6,11 +6,12 @@
 <body class="bg-color-261D45">
   <div id="app">
     <div class="search-container">
-      <input type="text" v-model="query" @keyup.enter="search" placeholder="Paste a Stellar account address...">
-    </div>
-    <div class="results-container">
-      <div v-if="loading">Loading...</div>
-      <div v-else>{{ response }}</div>
+        <input type="text" v-model="query" @keyup.enter="search" placeholder="Paste a Stellar account address...">
+        <button @click="search"><i class="fa fa-search"></i></button>
+      </div>
+      <div class="results-container">
+        <div v-if="loading">Loading...</div>
+        <div v-else>{{ response }}</div>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -38,28 +39,36 @@
   </script>
   <style>
     .bg-color-261D45 {
-      background-color: #261D45;
+        background-color: #261D45;
     }
     .search-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+        display: flex;
+        align-items: center;
+        height: 100vh;
     }
-    input[type="text"] {
-      width: 900px;
-      font-size: 27px;
-      padding: 20px;
-      border: 9px solid #3f2c70;
-      border-radius: 10px;
-      background-color: #100D23;
-      color: #96DDF2;
+    .search-container input[type="text"] {
+        width: 900px;
+        font-size: 27px;
+        padding: 20px;
+        border: 9px solid #3f2c70;
+        border-radius: 10px;
+        background-color: #100D23;
+        color: #96DDF2;
+    }
+    .search-container button {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+    .search-container i {
+        font-size: 32px;
+        color: #3f2c70;
     }
     .results-container {
-      margin-top: 20px;
-      width: 500px;
-      font-size: 18px;
-      white-space: pre-wrap;
+        margin-top: 20px;
+        width: 500px;
+        font-size: 18px;
+        white-space: pre-wrap;
     }
   </style>
 </body>
