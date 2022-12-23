@@ -2,16 +2,18 @@
 <html>
 <head>
   <title>StellarMap Web</title>
+  <!-- include the Font Awesome library for the search icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
 </head>
 <body class="bg-color-261D45">
   <div id="app">
     <div class="search-container">
-        <input type="text" v-model="query" @keyup.enter="search" placeholder="Paste a Stellar account address...">
-        <button @click="search"><i class="fa fa-search"></i></button>
-      </div>
-      <div class="results-container">
-        <div v-if="loading">Loading...</div>
-        <div v-else>{{ response }}</div>
+      <input type="text" v-model="query" @keyup.enter="search" placeholder="Paste a Stellar account address...">
+      <button @click="search"><i class="fa fa-search"></i></button>
+    </div>
+    <div class="results-container">
+      <div v-if="loading">Loading...</div>
+      <div v-else>{{ response }}</div>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -40,11 +42,6 @@
   <style>
     .bg-color-261D45 {
         background-color: #261D45;
-    }
-    .search-container {
-        display: flex;
-        align-items: center;
-        height: 100vh;
     }
     .search-container input[type="text"] {
         width: 900px;
