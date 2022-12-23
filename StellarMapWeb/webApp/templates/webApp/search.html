@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Vue.js Search Field</title>
+  <title>StellarMap Web</title>
 </head>
 <body class="bg-color-261D45">
   <div id="app">
     <div class="search-container">
-      <input type="text" v-model="query" @keyup.enter="search" placeholder="Enter a search query">
+      <input type="text" v-model="query" @keyup.enter="search" placeholder="Paste a Stellar account address...">
     </div>
     <div class="results-container">
       <div v-if="loading">Loading...</div>
