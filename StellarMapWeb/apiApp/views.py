@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .helpers.conn import SiteChecker
+from .helpers.env import EnvHelpers
 
 
 @api_view(['GET'])
@@ -42,3 +43,22 @@ def check_all_urls(request):
     return Response(results)
 
 
+@api_view(['GET'])
+def set_network(request):
+    """Set the environment variables for the specified Stellar network.
+    
+    This API view function accepts a GET request with a `network` parameter in the query string,
+    which specifies the Stellar network for which to set the environment variables. The function
+    supports two values for the `network` parameter: 'testnet' and 'public'. If the `network`
+    parameter is not one of these values, the function returns an error response. Otherwise, it
+    sets the environment variables for the specified network and returns a success response.
+    """
+    env_helpers = EnvHelpers()
+    network = request.GET.get('network')
+    if network == 'testnet':
+        env_helpers.set_testnet_network()
+    elif network == 'public':
+        env_helpers.set_public_network()
+    else:
+        return Response({"error": "Invalid network value"}, status=400)
+    return Response({"success": "Network set successfully"})

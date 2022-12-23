@@ -14,4 +14,5 @@ urlpatterns = [
         views.check_all_urls,
         name='check_all_urls'
     ),
+    re_path('set_network/<str:network>/', views.set_network, name='set_network'),
 ]
