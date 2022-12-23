@@ -20,10 +20,10 @@ from django.urls import include, re_path
 from django.contrib import admin
 from rest_framework_swagger.views import get_swagger_view
 
-schema_view = get_swagger_view(title='StellarMap API')
+# schema_view = get_swagger_view(title='StellarMap API')
 
 urlpatterns = [
     re_path('chief/', admin.site.urls),
-    re_path('api/v1/', schema_view),
+    re_path('api/v1/', include('apiApp.urls')),
     re_path('', include('webApp.urls')),
 ]
