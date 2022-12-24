@@ -43,12 +43,20 @@
     .bg-color-261D45 {
         background-color: #261D45;
     }
+    .search-container {
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        border: 2px solid #3f2c70;
+        border-radius: 10px;
+        margin: 0 auto;
+        max-width: 900px;
+    }
     .search-container input[type="text"] {
-        width: 900px;
+        flex: 1;
         font-size: 27px;
         padding: 20px;
-        border: 9px solid #3f2c70;
-        border-radius: 10px;
+        border: none;
         background-color: #100D23;
         color: #96DDF2;
     }
@@ -60,12 +68,6 @@
     .search-container i {
         font-size: 32px;
         color: #3f2c70;
-    }
-    .results-container {
-        margin-top: 20px;
-        width: 500px;
-        font-size: 18px;
-        white-space: pre-wrap;
     }
   </style>
 </body>
