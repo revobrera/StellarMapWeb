@@ -14,7 +14,9 @@
         </div>
     </div>
     <div class="results-container">
-        <input type="text" v-model="response">
+        <div class="response-container">
+            <div v-model="response"></div>
+        </div>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -78,6 +80,17 @@
         font-size: 32px;
         color: #3f2c70;
     }
+    .results-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 50px; /* adjust the margin as needed */
+    }
+    .response-container {
+        max-width: 990px; /* adjust the width as needed */
+        text-align: center;
+    }
+
   </style>
 </body>
 </html>
