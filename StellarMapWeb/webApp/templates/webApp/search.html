@@ -7,9 +7,11 @@
 </head>
 <body class="bg-color-261D45">
   <div id="app">
-    <div class="search-container">
-      <input type="text" v-model="query" @keyup.enter="search" placeholder="Paste a Stellar account address...">
-      <button @click="search"><i class="fa fa-space-shuttle"></i></button>
+    <div class="top-container">
+        <div class="search-container">
+        <input type="text" v-model="query" @keyup.enter="search" placeholder="Paste a Stellar account address...">
+        <button @click="search"><i class="fa fa-space-shuttle"></i></button>
+        </div>
     </div>
     <div class="results-container">
       <div v-if="loading">Loading...</div>
@@ -42,6 +44,13 @@
   <style>
     .bg-color-261D45 {
         background-color: #261D45;
+    }
+    .top-container {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1;
+        box-shadow: 0 9px 63px rgba(0, 0, 0, 0.3);
     }
     .search-container {
         display: flex;
