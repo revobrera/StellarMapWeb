@@ -15,7 +15,7 @@
     </div>
     <div class="results-container">
       <div v-if="loading">Loading...</div>
-      <div v-else>{{ response }}</div>
+      <div v-else v-bind:class="{ loading: loading }">{{ response }}</div>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
