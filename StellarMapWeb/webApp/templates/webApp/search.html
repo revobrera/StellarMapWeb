@@ -15,7 +15,7 @@
     </div>
     <div class="results-container">
         <div class="response-container">
-            <span v-bind:value="response">{{ response }}</span>
+            <input type="text" v-model="response" class="command-prompt">
         </div>
     </div>
   </div>
@@ -60,7 +60,7 @@
         border: 6px solid #3f2c70;
         border-radius: 10px;
         margin: 0 auto;
-        max-width: 990px;
+        max-width: 996px;
         background-color: #100D23;
     }
     .search-container input[type="text"] {
@@ -91,7 +91,13 @@
         max-width: 990px; /* adjust the width as needed */
         text-align: center;
     }
-
+    .command-prompt {
+        font-family: monospace; /* use a monospace font */
+        background-color: #000; /* set the background color to black */
+        color: #0f0; /* set the text color to green */
+        border: none; /* remove the border */
+        padding: 10px; /* add some padding */
+    }
   </style>
 </body>
 </html>
