@@ -14,8 +14,7 @@
         </div>
     </div>
     <div class="results-container">
-        <div v-bind:class="{ loading: loading }" v-show="loading">Loading...</div>
-        <div v-bind:class="{ loading: loading }" v-show="!loading">{{ response }}</div>
+        <div>{{ response }}</div>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
