@@ -15,7 +15,7 @@
     </div>
     <div class="results-container">
         <div class="response-container">
-            <div class="command-prompt" v-text="response"></div>
+            <textarea readonly wrap="hard" v-model="response" class="command-prompt"></textarea>
         </div>
     </div>
   </div>
@@ -101,8 +101,6 @@
         max-width: 963px; /* add a max-width property */
         width: 100%; /* add a width property */
         height: 700px;
-        text-align: left;
-        white-space: pre-wrap;
     }
   </style>
 </body>
