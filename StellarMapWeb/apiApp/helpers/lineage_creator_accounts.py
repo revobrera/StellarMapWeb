@@ -2,6 +2,10 @@ import os
 import requests
 import logging
 
+from typing import Union
+from typing import Dict
+
+
 class LineageHelpers:
     def __init__(self, network, stellar_account_address):
         self.network = network
