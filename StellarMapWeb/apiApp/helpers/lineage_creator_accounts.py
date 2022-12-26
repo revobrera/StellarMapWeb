@@ -106,15 +106,16 @@ class LineageHelpers:
             # Check if the request was successful
             if response.status_code == 200:
                 # Extract the issuers from the JSON data
-                self.issuers += response.json()["issuers"]
+                self.issuers += response.json()["creator"]
 
-                # Check if there is a next URL in the JSON data
-                if "next_url" in response.json():
+                # Check if the "creator" data property exists and is not null
+                if "creator" in response.json() and response.json()["creator"] is not None:
                     # Set the URL to the next URL
-                    url = response.json()["next_url"]
+                    url = f"{os.environ['BASE_SE_NETWORK_ACCOUNT']}{response.json()['creator']}"
                 else:
                     # There are no more URLs to be queried, so set the flag to False
                     more_urls = False
+
             else:
                 logger.warning(f"Error: request to {url} returned status code {response.status_code}")
                 # There was an error, so set the flag to False
@@ -155,6 +156,9 @@ class LineageHelpers:
 
         # Make an API request
         account_response = self.make_api_request(self.get_stellar_account_url())
+
+        # Collect issuers upstream
+        self.collect_account_issuers(account_response.url) #TODO pass the initial http url from json
 
         # Get the upstream lineage
         upstream_lineage = self.get_upstream_lineage()
