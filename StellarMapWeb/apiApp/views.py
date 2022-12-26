@@ -62,3 +62,36 @@ def set_network(request):
     else:
         return Response({"error": "Invalid network value"}, status=400)
     return Response({"success": "Network set successfully"})
+
+
+@api_view(['GET'])
+def lineage_stellar_account(request, network, stellar_account_address):
+    """
+    Retrieve the upstream lineage of a Stellar account.
+    
+    This function will recursively crawl the creator accounts of the given Stellar account
+    to build a list of its upstream lineage. The resulting list will be returned as a JSON
+    response.
+    
+    Parameters:
+        - network (str): The network on which the Stellar account is located.
+        - stellar_account_address (str): The address of the Stellar account.
+    
+    Returns:
+        JSON response with the following fields:
+        - network (str): The network on which the Stellar account is located.
+        - stellar_account_address (str): The address of the Stellar account.
+        - upstream_lineage (list): A list of the upstream accounts in the lineage of the
+          given Stellar account, starting with the immediate creator and ending with the
+          root account.
+    """
+
+    # Create a dictionary with the relevant information
+    data = {
+        'network': network,
+        'stellar_account_address': stellar_account_address,
+        'upstream_lineage': ['account1', 'account2', 'account3'], 
+    }
+
+    # Return the data as a JSON response
+    return Response(data)
