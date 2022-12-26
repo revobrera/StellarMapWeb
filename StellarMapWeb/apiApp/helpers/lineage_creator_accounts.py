@@ -1,9 +1,9 @@
-import os
-import requests
 import logging
+import os
+import time
+from typing import Dict, Union
 
-from typing import Union
-from typing import Dict
+import requests
 from stellar_sdk import Address
 
 
@@ -77,6 +77,56 @@ class LineageHelpers:
             logging.error("Error fetching Stellar account information: %s", e)
             return None
 
+
+    def collect_account_issuers(initial_url):
+        """
+        Collects the issuers of an account from a series of URLs.
+        
+        Args:
+            initial_url (str): The initial URL to be queried.
+        
+        Returns:
+            list: A list of issuers for the account.
+        """
+        # Set up logging
+        logging.basicConfig(level=logging.INFO)
+        logger = logging.getLogger(__name__)
+
+        # Set the initial URL
+        url = initial_url
+
+        # Set up an empty list to store the values
+        issuers = []
+
+        # Set a flag to indicate whether there are more URLs to be queried
+        more_urls = True
+
+        while more_urls:
+            # Make a GET request to the URL
+            response = requests.get(url)
+
+            # Check if the request was successful
+            if response.status_code == 200:
+                # Extract the issuers from the JSON data
+                issuers += response.json()["issuers"]
+
+                # Check if there is a next URL in the JSON data
+                if "next_url" in response.json():
+                    # Set the URL to the next URL
+                    url = response.json()["next_url"]
+                else:
+                    # There are no more URLs to be queried, so set the flag to False
+                    more_urls = False
+            else:
+                logger.warning(f"Error: request to {url} returned status code {response.status_code}")
+                # There was an error, so set the flag to False
+                more_urls = False
+
+            # Wait for a specified amount of time before making the next request
+            time.sleep(1)
+
+        # Return the collected issuers
+        return issuers
 
 
     def main(self):
