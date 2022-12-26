@@ -1,5 +1,6 @@
 import os
 import requests
+import logging
 
 class LineageHelpers:
     def __init__(self, network, stellar_account_address):
@@ -65,9 +66,10 @@ class LineageHelpers:
             if response.status_code == 200:
                 return response.json()
             else:
+                logging.warning("API request returned status code %d", response.status_code)
                 return None
         except Exception as e:
-            print("Error fetching Stellar account information:", e)
+            logging.error("Error fetching Stellar account information: %s", e)
             return None
 
 
