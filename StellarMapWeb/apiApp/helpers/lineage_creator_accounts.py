@@ -4,6 +4,7 @@ import logging
 
 from typing import Union
 from typing import Dict
+from stellar_sdk import Address
 
 
 class LineageHelpers:
@@ -82,24 +83,39 @@ class LineageHelpers:
         """
         Main method for the LineageHelpers class.
         
-        This method calls all other methods in the class as needed.
+        This method retrieves and returns information about the upstream lineage of a Stellar account.
         
         Returns:
-            dict: A dictionary with the relevant information about the Stellar account's
-            upstream lineage.
+            dict: A dictionary with the relevant information about the Stellar account's upstream lineage, including the network and the Stellar account address.
         """
+        # Set up logging
+        logging.basicConfig(level=logging.INFO)
+        logger = logging.getLogger(__name__)
 
-        # set stellar_account_url
-        self.stellar_account_url('stellar_expert')
+        # Retrieve the Stellar account address from the class attribute
+        account_address = self.stellar_account_address
 
-        # make an api request
-        account_response_dict = self.make_api_request(self.get_stellar_account_url())
+        # Check if the Stellar account address is valid using the Address class from the Stellar SDK
+        try:
+            address = Address(account_address)
+        except:
+            logger.warning("Invalid Stellar account address")
+            return {"error": "Invalid Stellar account address"}
 
+        # Set the Stellar account URL
+        self.stellar_account_url("stellar_expert")
 
+        # Make an API request
+        account_response = self.make_api_request(self.get_stellar_account_url())
+
+        # Get the upstream lineage
         upstream_lineage = self.get_upstream_lineage()
 
+        # Return the relevant information as a dictionary
         return {
-            'network': self.network,
-            'stellar_account_address': self.stellar_account_address,
-            'upstream_lineage': upstream_lineage,
+            "network": self.network,
+            "stellar_account_address": account_address,
+            "upstream_lineage": upstream_lineage,
         }
+
+        
