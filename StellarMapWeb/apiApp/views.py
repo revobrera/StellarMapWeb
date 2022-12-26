@@ -65,7 +65,7 @@ def set_network(request):
 
 
 @api_view(['GET'])
-def lineage_stellar_account(request, network, stellar_account_address):
+def lineage_stellar_account(request):
     """
     Retrieve the upstream lineage of a Stellar account.
     
@@ -85,6 +85,9 @@ def lineage_stellar_account(request, network, stellar_account_address):
           given Stellar account, starting with the immediate creator and ending with the
           root account.
     """
+    # Retrieve the query parameters
+    network = request.GET.get('network')
+    stellar_account_address = request.GET.get('stellar_account_address')
 
     # Create a dictionary with the relevant information
     data = {
