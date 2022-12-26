@@ -12,6 +12,7 @@ class LineageHelpers:
         self.network = network
         self.stellar_account_address = stellar_account_address
         self.stellar_account_url = ''  # initialize empty attribute
+        self.issuers = [] # Set up an empty list of issuers to store the values
 
     def get_upstream_lineage(self):
         """
@@ -78,7 +79,7 @@ class LineageHelpers:
             return None
 
 
-    def collect_account_issuers(initial_url):
+    def collect_account_issuers(self, initial_url):
         """
         Collects the issuers of an account from a series of URLs.
         
@@ -95,9 +96,6 @@ class LineageHelpers:
         # Set the initial URL
         url = initial_url
 
-        # Set up an empty list to store the values
-        issuers = []
-
         # Set a flag to indicate whether there are more URLs to be queried
         more_urls = True
 
@@ -108,7 +106,7 @@ class LineageHelpers:
             # Check if the request was successful
             if response.status_code == 200:
                 # Extract the issuers from the JSON data
-                issuers += response.json()["issuers"]
+                self.issuers += response.json()["issuers"]
 
                 # Check if there is a next URL in the JSON data
                 if "next_url" in response.json():
@@ -122,11 +120,11 @@ class LineageHelpers:
                 # There was an error, so set the flag to False
                 more_urls = False
 
-            # Wait for a specified amount of time before making the next request
+            # Wait for a specified amount of time before making the next request for servers that rate limit requests
             time.sleep(1)
 
         # Return the collected issuers
-        return issuers
+        return self.issuers
 
 
     def main(self):
