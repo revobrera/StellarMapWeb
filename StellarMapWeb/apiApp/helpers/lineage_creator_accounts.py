@@ -1,4 +1,5 @@
 import os
+import requests
 
 class LineageHelpers:
     def __init__(self, network, stellar_account_address):
@@ -25,9 +26,9 @@ class LineageHelpers:
 
 
     @property
-    def stellar_account_url(self):
+    def get_stellar_account_url(self):
         """Get the URL for the Stellar account."""
-        return self._stellar_account_url
+        return self.stellar_account_url
 
     @stellar_account_url.setter
     def stellar_account_url(self, api_name):
@@ -42,11 +43,33 @@ class LineageHelpers:
             None
         """
         if api_name == 'stellar_expert':
-            self._stellar_account_url = f"{os.getenv('BASE_SE_NETWORK_ACCOUNT')}{self.stellar_account_address}"
+            self.stellar_account_url = f"{os.getenv('BASE_SE_NETWORK_ACCOUNT')}{self.stellar_account_address}"
         elif api_name == 'horizon':
-            self._stellar_account_url = f"{os.getenv('BASE_HORIZON_ACCOUNT')}{self.stellar_account_address}"
+            self.stellar_account_url = f"{os.getenv('BASE_HORIZON_ACCOUNT')}{self.stellar_account_address}"
         else:
             raise ValueError(f"Invalid API name: {api_name}")
+
+
+    def make_api_request(self, http_url: str) -> Union[Dict, None]:
+        """
+        Makes an API request to the specified URL and returns the JSON response.
+
+        Parameters:
+            http_url (str): The URL to make the API request to.
+
+        Returns:
+            Union[Dict, None]: The JSON response as a dictionary, or None if the request failed.
+        """
+        try:
+            response = requests.get(http_url)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                return None
+        except Exception as e:
+            print("Error fetching Stellar account information:", e)
+            return None
+
 
 
     def main(self):
@@ -59,6 +82,14 @@ class LineageHelpers:
             dict: A dictionary with the relevant information about the Stellar account's
             upstream lineage.
         """
+
+        # set stellar_account_url
+        self.stellar_account_url('stellar_expert')
+
+        # make an api request
+        account_response_dict = self.make_api_request(self.get_stellar_account_url())
+
+
         upstream_lineage = self.get_upstream_lineage()
 
         return {
