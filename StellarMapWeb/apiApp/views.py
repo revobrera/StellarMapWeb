@@ -3,13 +3,10 @@ import json
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework_swagger.views import get_swagger_view
 
 from .helpers.conn import SiteChecker
 from .helpers.env import EnvHelpers
 from .helpers.lineage_creator_accounts import LineageHelpers
-
-schema_view = get_swagger_view(title='StellarMap API')
 
 
 @api_view(['GET'])
