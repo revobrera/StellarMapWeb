@@ -18,23 +18,6 @@ class LineageHelpers:
 
         self.stellar_net = StellarNetwork(network)
 
-    def get_upstream_lineage(self):
-        """
-        Retrieve the upstream lineage of a Stellar account.
-        
-        This method will recursively crawl the creator accounts of the Stellar account
-        specified in the object's `stellar_account_address` attribute to build a list of
-        its upstream lineage. The resulting list will be returned.
-        
-        Returns:
-            list: A list of the upstream accounts in the lineage of the Stellar account,
-            starting with the immediate creator and ending with the root account.
-        """
-        # Perform some action here to retrieve the upstream lineage of the Stellar account,
-        # such as querying a database or making an API call
-
-        return ['account1', 'account2', 'account3']  # example upstream lineage
-
 
     @property
     def get_stellar_account_url(self):
@@ -60,28 +43,6 @@ class LineageHelpers:
             self.stellar_account_url = f"{self.stellar_net.env_helpers.get_base_horizon_account()}{self.stellar_account_address}"
         else:
             raise ValueError(f"Invalid API name: {api_name}")
-
-
-    def make_api_request(self, http_url: str) -> Union[Dict, None]:
-        """
-        Makes an API request to the specified URL and returns the JSON response.
-
-        Parameters:
-            http_url (str): The URL to make the API request to.
-
-        Returns:
-            Union[Dict, None]: The JSON response as a dictionary, or None if the request failed.
-        """
-        try:
-            response = requests.get(http_url)
-            if response.status_code == 200:
-                return response.json()
-            else:
-                logging.warning("API request returned status code %d", response.status_code)
-                return None
-        except Exception as e:
-            logging.error("Error fetching Stellar account information: %s", e)
-            return None
 
 
     def collect_account_issuers(self, initial_url):
@@ -162,20 +123,14 @@ class LineageHelpers:
         # Set the Stellar account URL
         self.stellar_account_url("stellar_expert")
 
-        # Make an API request
-        account_response = self.make_api_request(self.get_stellar_account_url())
-
         # Collect issuers upstream
-        self.collect_account_issuers(account_response.url) #TODO pass the initial http url from json
-
-        # Get the upstream lineage
-        upstream_lineage = self.get_upstream_lineage()
+        self.collect_account_issuers(self.stellar_account_url)
 
         # Return the relevant information as a dictionary
         return {
             "network": self.network,
             "stellar_account_address": account_address,
-            "upstream_lineage": upstream_lineage,
+            "upstream_lineage": self.base_se_network_account_responses,
         }
 
         
