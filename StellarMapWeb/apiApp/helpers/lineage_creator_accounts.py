@@ -4,9 +4,9 @@ import time
 from typing import Dict, Union
 
 import requests
-from stellar_sdk import Address
-from helpers.env import StellarNetwork
-from helpers.env import EnvHelpers
+
+from helpers.env import EnvHelpers, StellarNetwork
+from helpers.sm_validator import StellarMapValidatorHelpers
 
 
 class LineageHelpers:
@@ -115,7 +115,8 @@ class LineageHelpers:
 
         # Check if the Stellar account address is valid using the Address class from the Stellar SDK
         try:
-            address = Address(account_address)
+            sm_val = StellarMapValidatorHelpers()
+            sm_val.validate_stellar_account_address(account_address)
         except:
             logger.warning("Invalid Stellar account address")
             return {"error": "Invalid Stellar account address"}
