@@ -1,5 +1,5 @@
 from django.urls import re_path
-import views
+from apiApp import views
 from django.views.generic import TemplateView
 
 
