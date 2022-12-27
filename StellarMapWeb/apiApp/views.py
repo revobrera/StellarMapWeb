@@ -9,6 +9,9 @@ from .helpers.env import EnvHelpers
 from .helpers.lineage_creator_accounts import LineageHelpers
 
 
+def documentation_view(request):
+    return render(request, 'apiApp/documentation.html', {'schema_url': 'openapi-schema'})
+
 @api_view(['GET'])
 def check_url(request, url):
     """
