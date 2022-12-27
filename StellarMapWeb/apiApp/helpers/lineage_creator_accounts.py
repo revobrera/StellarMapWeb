@@ -5,8 +5,8 @@ from typing import Dict, Union
 
 import requests
 
-from env import StellarNetwork
-from sm_validator import StellarMapValidatorHelpers
+from .env import StellarNetwork
+from .sm_validator import StellarMapValidatorHelpers
 
 
 class LineageHelpers:
