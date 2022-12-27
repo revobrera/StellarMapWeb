@@ -5,7 +5,7 @@ from typing import Dict, Union
 
 import requests
 from stellar_sdk import Address
-
+from helpers.env import EnvHelpers
 
 class LineageHelpers:
     def __init__(self, network, stellar_account_address):
@@ -49,10 +49,11 @@ class LineageHelpers:
         Returns:
             None
         """
+        env_helpers = EnvHelpers()
         if api_name == 'stellar_expert':
-            self.stellar_account_url = f"{os.getenv('BASE_SE_NETWORK_ACCOUNT')}{self.stellar_account_address}"
+            self.stellar_account_url = f"{env_helpers.get_base_se_network_account()}{self.stellar_account_address}"
         elif api_name == 'horizon':
-            self.stellar_account_url = f"{os.getenv('BASE_HORIZON_ACCOUNT')}{self.stellar_account_address}"
+            self.stellar_account_url = f"{env_helpers.get_base_horizon_account()}{self.stellar_account_address}"
         else:
             raise ValueError(f"Invalid API name: {api_name}")
 
