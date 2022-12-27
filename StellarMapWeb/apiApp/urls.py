@@ -17,7 +17,7 @@ urlpatterns = [
     ),
     re_path('api/v1/set_network/<str:network>/', views.set_network, name='set_network'),
     re_path('api/v1/docs/', TemplateView.as_view(
-        template_name='documentation.html',
+        template_name='apiApp/documentation.html',
         extra_context={'schema_url':'openapi-schema'}
     ), name='swagger-ui'),
     re_path('api/v1/lineage/network/<str:network>/stellar_address/<str:stellar_account_address>/', views.lineage_stellar_account, name='lineage_stellar_account'),
