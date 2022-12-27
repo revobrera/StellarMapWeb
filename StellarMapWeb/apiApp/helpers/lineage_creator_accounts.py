@@ -9,6 +9,10 @@ from .env import StellarNetwork
 from .sm_validator import StellarMapValidatorHelpers
 
 
+# Set up logging for module
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 class LineageHelpers:
     def __init__(self, network, stellar_account_address):
         self.network = network
@@ -54,9 +58,6 @@ class LineageHelpers:
         Returns:
             list: A list of issuers for the account.
         """
-        # Set up logging
-        logging.basicConfig(level=logging.INFO)
-        logger = logging.getLogger(__name__)
 
         # Set the initial URL
         url = initial_url
@@ -105,9 +106,6 @@ class LineageHelpers:
         Returns:
             dict: A dictionary with the relevant information about the Stellar account's upstream lineage, including the network and the Stellar account address.
         """
-        # Set up logging
-        logging.basicConfig(level=logging.INFO)
-        logger = logging.getLogger(__name__)
 
         # Retrieve the Stellar account address from the class attribute
         account_address = self.stellar_account_address
