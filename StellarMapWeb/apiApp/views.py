@@ -1,9 +1,12 @@
+import json
+
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .helpers.conn import SiteChecker
 from .helpers.env import EnvHelpers
+from .helpers.lineage_creator_accounts import LineageHelpers
 
 
 @api_view(['GET'])
@@ -89,12 +92,14 @@ def lineage_stellar_account(request):
     network = request.GET.get('network')
     stellar_account_address = request.GET.get('stellar_account_address')
 
+    # Instantiate the LineageHelpers class with the network and stellar_account_address
+    lineage_helpers = LineageHelpers(network, stellar_account_address)
+    
     # Create a dictionary with the relevant information
-    data = {
-        'network': network,
-        'stellar_account_address': stellar_account_address,
-        'upstream_lineage': ['account1', 'account2', 'account3'], 
-    }
+    data_dict = lineage_helpers.main()
+
+    # Convert the data dictionary to a JSON response
+    data_json = json.dumps(data_dict)
 
     # Return the data as a JSON response
-    return Response(data)
+    return Response(data_json)
