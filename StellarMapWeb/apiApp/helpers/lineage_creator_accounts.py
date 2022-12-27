@@ -15,6 +15,7 @@ class LineageHelpers:
         self.stellar_account_address = stellar_account_address
         self.stellar_account_url = ''  # initialize empty attribute
         self.issuers = [] # Set up an empty list of issuers to store the values
+        self.base_se_network_account_responses = [] # Set an empty list to store the issuer and JSON responses as tuples
 
         self.stellar_net = StellarNetwork(network)
 
@@ -111,7 +112,10 @@ class LineageHelpers:
             # Check if the request was successful
             if response.status_code == 200:
                 # Extract the issuers from the JSON data
-                self.issuers += response.json()["creator"]
+                issuer = response.json()["creator"]
+
+                # Append the issuer and JSON response to the list as a tuple
+                self.base_se_network_account_responses.append((issuer, response.json()))
 
                 # Check if the "creator" data property exists and is not null
                 if "creator" in response.json() and response.json()["creator"] is not None:
@@ -130,7 +134,7 @@ class LineageHelpers:
             time.sleep(1)
 
         # Return the collected issuers
-        return self.issuers
+        return self.base_se_network_account_responses
 
 
     def main(self):
