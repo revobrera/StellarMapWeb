@@ -1,11 +1,13 @@
 from django.urls import re_path
 from apiApp import views
-from django.views.generic import TemplateView
+from rest_framework_swagger.views import get_swagger_view
 
+
+schema_view = get_swagger_view(title='StellarMap API')
 
 app_name = 'apiApp'
 urlpatterns = [
-    re_path('api/v1/docs/', views.schema_view, name='swagger-ui'),
+    re_path('api/v1/docs/', schema_view, name='swagger-ui'),
     re_path(
         'api/v1/check_url/<str:url>/',
         views.check_url,
