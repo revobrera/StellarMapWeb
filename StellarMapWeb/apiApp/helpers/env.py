@@ -1,4 +1,26 @@
 
+class StellarNetwork:
+    """A class for working with Stellar networks.
+    
+    This class allows users to set the network for a Stellar account and retrieve
+    the network details.
+    """
+
+    def __init__(self, network: str):
+        """Initialize the StellarNetwork class and set the network for the account.
+        
+        Args:
+            network: The network to use for the Stellar account. Valid values are
+                'testnet' and 'public'.
+        """
+        self.env_helpers = EnvHelpers()
+        if network == 'testnet':
+            self.env_helpers.set_testnet_network()
+        elif network == 'public':
+            self.env_helpers.set_public_network()
+        else:
+            raise ValueError(f"Invalid network name: {network}")
+
 
 class EnvHelpers:
     """A class for setting environment variables for different Stellar networks.

@@ -5,7 +5,9 @@ from typing import Dict, Union
 
 import requests
 from stellar_sdk import Address
+from helpers.env import StellarNetwork
 from helpers.env import EnvHelpers
+
 
 class LineageHelpers:
     def __init__(self, network, stellar_account_address):
@@ -13,6 +15,8 @@ class LineageHelpers:
         self.stellar_account_address = stellar_account_address
         self.stellar_account_url = ''  # initialize empty attribute
         self.issuers = [] # Set up an empty list of issuers to store the values
+
+        self.stellar_net = StellarNetwork(network)
 
     def get_upstream_lineage(self):
         """
@@ -49,11 +53,11 @@ class LineageHelpers:
         Returns:
             None
         """
-        env_helpers = EnvHelpers()
+
         if api_name == 'stellar_expert':
-            self.stellar_account_url = f"{env_helpers.get_base_se_network_account()}{self.stellar_account_address}"
+            self.stellar_account_url = f"{self.stellar_net.env_helpers.get_base_se_network_account()}{self.stellar_account_address}"
         elif api_name == 'horizon':
-            self.stellar_account_url = f"{env_helpers.get_base_horizon_account()}{self.stellar_account_address}"
+            self.stellar_account_url = f"{self.stellar_net.env_helpers.get_base_horizon_account()}{self.stellar_account_address}"
         else:
             raise ValueError(f"Invalid API name: {api_name}")
 
@@ -112,7 +116,7 @@ class LineageHelpers:
                 # Check if the "creator" data property exists and is not null
                 if "creator" in response.json() and response.json()["creator"] is not None:
                     # Set the URL to the next URL
-                    url = f"{os.environ['BASE_SE_NETWORK_ACCOUNT']}{response.json()['creator']}"
+                    url = f"{self.stellar_net.env_helpers.get_base_se_network_account()}{response.json()['creator']}"
                 else:
                     # There are no more URLs to be queried, so set the flag to False
                     more_urls = False
