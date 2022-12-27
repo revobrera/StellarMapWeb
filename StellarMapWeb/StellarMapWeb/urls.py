@@ -18,9 +18,7 @@ user re_path with regex
 """
 from django.urls import include, re_path
 from django.contrib import admin
-from rest_framework_swagger.views import get_swagger_view
 
-# schema_view = get_swagger_view(title='StellarMap API')
 
 urlpatterns = [
     re_path('chief/', admin.site.urls),

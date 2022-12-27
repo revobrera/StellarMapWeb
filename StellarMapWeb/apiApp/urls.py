@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 
 app_name = 'apiApp'
 urlpatterns = [
-    re_path('api/v1/docs/', views.documentation_view, name='swagger-ui'),
+    re_path('api/v1/docs/', views.schema_view, name='swagger-ui'),
     re_path(
         'api/v1/check_url/<str:url>/',
         views.check_url,
