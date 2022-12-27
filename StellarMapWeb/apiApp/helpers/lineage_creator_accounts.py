@@ -24,8 +24,7 @@ class LineageHelpers:
         """Get the URL for the Stellar account."""
         return self.stellar_account_url
 
-    @stellar_account_url.setter
-    def stellar_account_url(self, api_name):
+    def set_stellar_account_url(self, api_name):
         """
         Set the URL for the Stellar account based on the specified API.
         
@@ -122,7 +121,7 @@ class LineageHelpers:
             return {"error": "Invalid Stellar account address"}
 
         # Set the Stellar account URL
-        self.stellar_account_url("stellar_expert")
+        self.set_stellar_account_url("stellar_expert")
 
         # Collect issuers upstream
         self.collect_account_issuers(self.stellar_account_url)
