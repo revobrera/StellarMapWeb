@@ -1,4 +1,26 @@
-import os
+
+class StellarNetwork:
+    """A class for working with Stellar networks.
+    
+    This class allows users to set the network for a Stellar account and retrieve
+    the network details.
+    """
+
+    def __init__(self, network: str):
+        """Initialize the StellarNetwork class and set the network for the account.
+        
+        Args:
+            network: The network to use for the Stellar account. Valid values are
+                'testnet' and 'public'.
+        """
+        self.env_helpers = EnvHelpers()
+        if network == 'testnet':
+            self.env_helpers.set_testnet_network()
+        elif network == 'public':
+            self.env_helpers.set_public_network()
+        else:
+            raise ValueError(f"Invalid network name: {network}")
+
 
 class EnvHelpers:
     """A class for setting environment variables for different Stellar networks.
@@ -9,34 +31,65 @@ class EnvHelpers:
 
     def __init__(self):
         """Initialize the EnvHelpers class and set the environment variables for the testnet network."""
-        self.set_testnet_network()
+        self.debug = 'True'
+        self.network = 'testnet'
+        self.base_horizon = 'https://horizon-testnet.stellar.org'
+        self.base_site = 'https://stellar.expert'
+        self.base_se = 'https://api.stellar.expert'
+        self._set_base_network()
 
     def set_testnet_network(self):
         """Set the environment variables for the testnet network."""
-        os.environ['DEBUG'] = 'True'
-        os.environ['NETWORK'] = 'testnet'
-        os.environ['BASE_HORIZON'] = 'https://horizon-testnet.stellar.org'
+        self.debug = 'True'
+        self.network = 'testnet'
+        self.base_horizon = 'https://horizon-testnet.stellar.org'
         self._set_base_network()
 
     def set_public_network(self):
         """Set the environment variables for the public Stellar network."""
-        os.environ['DEBUG'] = 'False'
-        os.environ['NETWORK'] = 'public'
-        os.environ['BASE_HORIZON'] = 'https://horizon.stellar.org'
+        self.debug = 'False'
+        self.network = 'public'
+        self.base_horizon = 'https://horizon.stellar.org'
         self._set_base_network()
 
     def _set_base_network(self):
         """Set the base environment variables for the current Stellar network."""
-        # stellar.expert site
-        os.environ['BASE_SITE'] = 'https://stellar.expert'
-        os.environ['BASE_SITE_NETWORK'] = f"{os.getenv('BASE_SITE')}/explorer/{os.getenv('NETWORK')}"
-        os.environ['BASE_SITE_NETWORK_ACCOUNT'] = f"{os.getenv('BASE_SITE_NETWORK')}/account/"
+        self.base_site_network = f"{self.base_site}/explorer/{self.network}"
+        self.base_site_network_account = f"{self.base_site_network}/account/"
+        self.base_se_network = f"{self.base_se}/explorer/{self.network}"
+        self.base_se_network_account = f"{self.base_se_network}/account/"
+        self.base_se_network_dir = f"{self.base_se_network}/directory/"
+        self.base_horizon_account = f"{self.base_horizon}/accounts/"
 
-        # stellar.expert api
-        os.environ['BASE_SE'] = 'https://api.stellar.expert'
-        os.environ['BASE_SE_NETWORK'] = f"{os.getenv('BASE_SE')}/explorer/{os.getenv('NETWORK')}"
-        os.environ['BASE_SE_NETWORK_ACCOUNT'] = f"{os.getenv('BASE_SE_NETWORK')}/account/"
-        os.environ['BASE_SE_NETWORK_DIR'] = f"{os.getenv('BASE_SE_NETWORK')}/directory/"
+    def get_debug(self):
+        return self.debug
+    
+    def get_network(self):
+        return self.network
+    
+    def get_base_horizon(self):
+        return self.base_horizon
 
-        # horizon
-        os.environ['BASE_HORIZON_ACCOUNT'] = f"{os.getenv('BASE_HORIZON')}/accounts/"
+    def get_base_site(self):
+        return self.base_site
+
+    def get_base_se(self):
+        return self.base_se
+    
+    def get_base_site_network(self):
+        return self.base_site_network
+    
+    def get_base_site_network_account(self):
+        return self.base_site_network_account
+
+    def get_base_se_network(self):
+        return self.base_se_network
+
+    def get_base_se_network_account(self):
+        return self.base_se_network_account
+
+    def get_base_se_network_dir(self):
+        return self.base_se_network_dir
+
+    def get_base_horizon_account(self):
+        return self.base_horizon_account
