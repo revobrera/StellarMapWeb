@@ -14,7 +14,6 @@ class LineageHelpers:
         self.network = network
         self.stellar_account_address = stellar_account_address
         self.stellar_account_url = ''  # initialize empty attribute
-        self.issuers = [] # Set up an empty list of issuers to store the values
         self.base_se_network_account_responses = [] # Set an empty list to store the issuer and JSON responses as tuples
 
         self.stellar_net = StellarNetwork(network)
