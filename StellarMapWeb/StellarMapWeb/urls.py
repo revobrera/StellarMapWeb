@@ -24,6 +24,6 @@ from rest_framework_swagger.views import get_swagger_view
 
 urlpatterns = [
     re_path('chief/', admin.site.urls),
-    re_path('api/v1/', include('apiApp.urls')),
+    re_path('', include('apiApp.urls')),
     re_path('', include('webApp.urls')),
 ]

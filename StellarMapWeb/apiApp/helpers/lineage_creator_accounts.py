@@ -1,16 +1,14 @@
 import logging
 import os
 import time
-from typing import Dict, Union
 
 import requests
 
 from .env import StellarNetwork
 from .sm_validator import StellarMapValidatorHelpers
 
-
 # Set up logging for module
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 class LineageHelpers:
