@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from .helpers.env import EnvHelpers, StellarNetwork
+from .helpers.sm_validator import StellarMapValidatorHelpers
 
 
 class SwaggerUIViewTestCase(TestCase):
@@ -84,3 +85,18 @@ class TestEnvHelpers(unittest.TestCase):
         self.assertEqual(env_helpers.get_base_se_network_account(), 'https://api.stellar.expert/explorer/public/account/')
         self.assertEqual(env_helpers.get_base_se_network_dir(), 'https://api.stellar.expert/explorer/public/directory/')
         self.assertEqual(env_helpers.get_base_horizon_account(), 'https://horizon.stellar.org/accounts/')
+
+
+class TestStellarMapValidatorHelpers(unittest.TestCase):
+    def test_validate_stellar_account_address(self):
+        # Test a valid Stellar account address
+        self.assertTrue(StellarMapValidatorHelpers.validate_stellar_account_address('GA2C5RFPE6GCKMY3US5PAB6UZLKIGSPIUKSLRB6Q723BM2OARMDUYEJ5'))
+        
+        # Test an invalid Stellar account address with the wrong length
+        self.assertFalse(StellarMapValidatorHelpers.validate_stellar_account_address('GA2C5RFPE6GCKMY3US5PAB6UZLKIGSPIUKSLRB6Q723BM2OARMDUYEJ56789'))
+        
+        # Test an invalid Stellar account address with the wrong starting character
+        self.assertFalse(StellarMapValidatorHelpers.validate_stellar_account_address('HA2C5RFPE6GCKMY3US5PAB6UZLKIGSPIUKSLRB6Q723BM2OARMDUYEJ5'))
+        
+        # Test an invalid Stellar account address with invalid characters
+        self.assertFalse(StellarMapValidatorHelpers.validate_stellar_account_address('GA2C5RFPE6GCKMY3US5PAB6UZLKIGSPIUKSLRB6Q723BM2OARMDUYEJ$'))
