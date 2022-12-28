@@ -108,7 +108,7 @@ class LineageHelpers:
         # Retrieve the Stellar account address from the class attribute
         account_address = self.stellar_account_address
 
-        # Check if the Stellar account address is valid using the Address class from the Stellar SDK
+        # Check if the Stellar account address is valid
         try:
             sm_val = StellarMapValidatorHelpers()
             sm_val.validate_stellar_account_address(account_address)
