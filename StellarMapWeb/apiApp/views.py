@@ -35,8 +35,7 @@ def check_all_urls(request):
 
     results = {}
     checker = SiteChecker()
-    for site, url in sites_dict.items():
-        results[site] = checker.check_url(url)
+    results = checker.check_all_urls()
 
     return Response(results)
 

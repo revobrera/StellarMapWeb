@@ -19,23 +19,23 @@ class SiteChecker:
         except requests.RequestException:
             return False
 
-def check_all_urls(request):
-    """
-    Check the reachability of all URLs in the sites_dict.
+    def check_all_urls(self, request):
+        """
+        Check the reachability of all URLs in the sites_dict.
 
-    Returns:
-        JsonResponse: A JSON response containing the reachability status of each URL.
-    """
-    sites_dict = {
-        "stellar_github": "https://github.com/stellar",
-        "stellar_org": "https://www.stellar.org",
-        "stellar_doc": "https://stellar-documentation.netlify.app/api/",
-        "stellarmap": "http://revobrera.pythonanywhere.com/search/",
-    }
+        Returns:
+            JsonResponse: A JSON response containing the reachability status of each URL.
+        """
+        sites_dict = {
+            "stellar_github": "https://github.com/stellar",
+            "stellar_org": "https://www.stellar.org",
+            "stellar_doc": "https://stellar-documentation.netlify.app/api/",
+            "stellarmap": "http://revobrera.pythonanywhere.com/search/",
+        }
 
-    results = {}
-    checker = SiteChecker()
-    for site, url in sites_dict.items():
-        results[site] = checker.check_url(url)
+        results = {}
+        checker = SiteChecker()
+        for site, url in sites_dict.items():
+            results[site] = checker.check_url(url)
 
-    return JsonResponse(results)
+        return JsonResponse(results)
