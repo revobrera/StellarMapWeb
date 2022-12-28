@@ -1,4 +1,6 @@
 import requests
+from django.http import JsonResponse
+
 
 class SiteChecker:
     """A class for checking the reachability of URLs."""
@@ -19,7 +21,7 @@ class SiteChecker:
         except requests.RequestException:
             return False
 
-    def check_all_urls(self, request):
+    def check_all_urls(self):
         """
         Check the reachability of all URLs in the sites_dict.
 
