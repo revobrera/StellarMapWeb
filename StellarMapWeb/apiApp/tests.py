@@ -1,5 +1,10 @@
+import unittest
+
 from django.test import TestCase
 from django.urls import reverse
+
+from .helpers.env import EnvHelpers, StellarNetwork
+
 
 class SwaggerUIViewTestCase(TestCase):
     def test_swagger_ui(self):
@@ -32,3 +37,50 @@ class LineageStellarAccountViewTestCase(TestCase):
 
         # Check that the response is 200 (OK)
         self.assertEqual(response.status_code, 200)
+
+
+class TestStellarNetwork(unittest.TestCase):
+    def test_init(self):
+        # Test the initialization of the StellarNetwork class with the 'testnet' network
+        network = StellarNetwork('testnet')
+        self.assertEqual(network.env_helpers.get_network(), 'testnet')
+        self.assertEqual(network.env_helpers.get_debug(), 'True')
+        self.assertEqual(network.env_helpers.get_base_horizon(), 'https://horizon-testnet.stellar.org')
+        
+        # Test the initialization of the StellarNetwork class with the 'public' network
+        network = StellarNetwork('public')
+        self.assertEqual(network.env_helpers.get_network(), 'public')
+        self.assertEqual(network.env_helpers.get_debug(), 'False')
+        self.assertEqual(network.env_helpers.get_base_horizon(), 'https://horizon.stellar.org')
+        
+        # Test the initialization of the StellarNetwork class with an invalid network
+        with self.assertRaises(ValueError):
+            network = StellarNetwork('invalid')
+
+
+class TestEnvHelpers(unittest.TestCase):
+    def test_set_testnet_network(self):
+        env_helpers = EnvHelpers()
+        env_helpers.set_testnet_network()
+        self.assertEqual(env_helpers.get_network(), 'testnet')
+        self.assertEqual(env_helpers.get_debug(), 'True')
+        self.assertEqual(env_helpers.get_base_horizon(), 'https://horizon-testnet.stellar.org')
+        self.assertEqual(env_helpers.get_base_site_network(), 'https://stellar.expert/explorer/testnet')
+        self.assertEqual(env_helpers.get_base_site_network_account(), 'https://stellar.expert/explorer/testnet/account/')
+        self.assertEqual(env_helpers.get_base_se_network(), 'https://api.stellar.expert/explorer/testnet')
+        self.assertEqual(env_helpers.get_base_se_network_account(), 'https://api.stellar.expert/explorer/testnet/account/')
+        self.assertEqual(env_helpers.get_base_se_network_dir(), 'https://api.stellar.expert/explorer/testnet/directory/')
+        self.assertEqual(env_helpers.get_base_horizon_account(), 'https://horizon-testnet.stellar.org/accounts/')
+
+    def test_set_public_network(self):
+        env_helpers = EnvHelpers()
+        env_helpers.set_public_network()
+        self.assertEqual(env_helpers.get_network(), 'public')
+        self.assertEqual(env_helpers.get_debug(), 'False')
+        self.assertEqual(env_helpers.get_base_horizon(), 'https://horizon.stellar.org')
+        self.assertEqual(env_helpers.get_base_site_network(), 'https://stellar.expert/explorer/public')
+        self.assertEqual(env_helpers.get_base_site_network_account(), 'https://stellar.expert/explorer/public/account/')
+        self.assertEqual(env_helpers.get_base_se_network(), 'https://api.stellar.expert/explorer/public')
+        self.assertEqual(env_helpers.get_base_se_network_account(), 'https://api.stellar.expert/explorer/public/account/')
+        self.assertEqual(env_helpers.get_base_se_network_dir(), 'https://api.stellar.expert/explorer/public/directory/')
+        self.assertEqual(env_helpers.get_base_horizon_account(), 'https://horizon.stellar.org/accounts/')
