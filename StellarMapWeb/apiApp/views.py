@@ -27,7 +27,7 @@ def check_all_urls(request):
 
 
 @api_view(['GET'])
-def set_network(request):
+def set_network(request, network):
     """Set the environment variables for the specified Stellar network.
     
     This API view function accepts a GET request with a `network` parameter in the query string,
@@ -37,7 +37,6 @@ def set_network(request):
     sets the environment variables for the specified network and returns a success response.
     """
     env_helpers = EnvHelpers()
-    network = request.GET.get('network')
     if network == 'testnet':
         env_helpers.set_testnet_network()
     elif network == 'public':
