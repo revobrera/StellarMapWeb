@@ -12,13 +12,13 @@ class SwaggerUIViewTestCase(TestCase):
 class CheckUrlViewTestCase(TestCase):
     def test_check_url(self):
         # Issue a GET request to the check_url view
-        response = self.client.get(reverse('apiApp:check_url', kwargs={'url': 'http://revobrera.pythonanywhere.com/search/'}))
+        response = self.client.get(reverse('apiApp:check_url', kwargs={'url': 'stellar.org'}))
 
         # Check that the response is 200 (OK)
         self.assertEqual(response.status_code, 200)
 
         # Check that the response contains the expected data
-        self.assertEqual(response.data, {'url': 'http://revobrera.pythonanywhere.com/search/', 'status': 'OK'})
+        self.assertEqual(response.data, {'url': 'stellar.org', 'status': 'OK'})
 
 class CheckAllUrlsViewTestCase(TestCase):
     def test_check_all_urls(self):

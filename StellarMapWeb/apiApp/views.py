@@ -32,12 +32,6 @@ def check_all_urls(request):
     Returns:
         Response: A JSON response containing the reachability status of each URL.
     """
-    sites_dict = {
-        "stellar_github": "https://github.com/stellar",
-        "stellar_org": "https://www.stellar.org",
-        "stellar_doc": "https://stellar-documentation.netlify.app/api/",
-        "stellarmap": "http://revobrera.pythonanywhere.com/search/",
-    }
 
     results = {}
     checker = SiteChecker()
