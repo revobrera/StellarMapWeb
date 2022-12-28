@@ -11,21 +11,6 @@ from .helpers.lineage_creator_accounts import LineageHelpers
 
 
 @api_view(['GET'])
-def check_url(request, url):
-    """
-    Check the reachability of the given URL.
-
-    Parameters:
-        url (str): The URL to check.
-
-    Returns:
-        Response: A JSON response containing the reachability status of the URL.
-    """
-    checker = SiteChecker()
-    result = checker.check_url(url)
-    return Response({"reachable": result})
-
-@api_view(['GET'])
 def check_all_urls(request):
     """
     Check the reachability of all URLs in the sites_dict.
@@ -63,7 +48,7 @@ def set_network(request):
 
 
 @api_view(['GET'])
-def lineage_stellar_account(request):
+def lineage_stellar_account(request, network, stellar_account_address):
     """
     Retrieve the upstream lineage of a Stellar account.
     
@@ -83,9 +68,6 @@ def lineage_stellar_account(request):
           given Stellar account, starting with the immediate creator and ending with the
           root account.
     """
-    # Retrieve the query parameters
-    network = request.GET.get('network')
-    stellar_account_address = request.GET.get('stellar_account_address')
 
     # Instantiate the LineageHelpers class with the network and stellar_account_address
     lineage_helpers = LineageHelpers(network, stellar_account_address)

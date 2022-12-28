@@ -9,17 +9,6 @@ class SwaggerUIViewTestCase(TestCase):
         # Check that the response is 200 (OK)
         self.assertEqual(response.status_code, 200)
 
-class CheckUrlViewTestCase(TestCase):
-    def test_check_url(self):
-        # Issue a GET request to the check_url view
-        response = self.client.get(reverse('apiApp:check_url', kwargs={'url': 'stellar.org'}))
-
-        # Check that the response is 200 (OK)
-        self.assertEqual(response.status_code, 200)
-
-        # Check that the response contains the expected data
-        self.assertEqual(response.data, {'url': 'stellar.org', 'status': 'OK'})
-
 class CheckAllUrlsViewTestCase(TestCase):
     def test_check_all_urls(self):
         # Issue a GET request to the check_all_urls view
