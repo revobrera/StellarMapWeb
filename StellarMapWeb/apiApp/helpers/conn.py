@@ -1,5 +1,7 @@
+import json
+
 import requests
-from django.http import JsonResponse
+from rest_framework.response import Response
 
 
 class SiteChecker:
@@ -40,4 +42,9 @@ class SiteChecker:
         for site, url in sites_dict.items():
             results[site] = checker.check_url(url)
 
-        return JsonResponse(results, json_dumps_params={'default': str})
+
+        # Convert the data dictionary to a JSON response
+        data_json = json.dumps(results)
+
+        # Return the data as a JSON response
+        return Response(data_json)
