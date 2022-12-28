@@ -19,7 +19,7 @@ class SiteChecker:
         """
         try:
             response = requests.get(url)
-            return response.status_code == 200
+            return True
         except requests.RequestException:
             return False
 
