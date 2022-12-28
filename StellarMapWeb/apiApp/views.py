@@ -1,5 +1,6 @@
 import json
 
+from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -10,38 +11,23 @@ from .helpers.lineage_creator_accounts import LineageHelpers
 
 
 @api_view(['GET'])
-def check_url(request, url):
-    """
-    Check the reachability of the given URL.
-
-    Parameters:
-        url (str): The URL to check.
-
-    Returns:
-        Response: A JSON response containing the reachability status of the URL.
-    """
-    checker = SiteChecker()
-    result = checker.check_url(url)
-    return Response({"reachable": result})
-
-@api_view(['GET'])
 def check_all_urls(request):
     """
     Check the reachability of all URLs in the sites_dict.
 
     Returns:
-        Response: A JSON response containing the reachability status of each URL.
+        HttpResponse: An HTTP response containing the reachability status of each URL in JSON format.
     """
 
     results = {}
     checker = SiteChecker()
-    results = checker.check_all_urls()
+    results_json = checker.check_all_urls()
 
-    return Response(results)
+    return HttpResponse(results_json, content_type='application/json')
 
 
 @api_view(['GET'])
-def set_network(request):
+def set_network(request, network):
     """Set the environment variables for the specified Stellar network.
     
     This API view function accepts a GET request with a `network` parameter in the query string,
@@ -51,7 +37,6 @@ def set_network(request):
     sets the environment variables for the specified network and returns a success response.
     """
     env_helpers = EnvHelpers()
-    network = request.GET.get('network')
     if network == 'testnet':
         env_helpers.set_testnet_network()
     elif network == 'public':
@@ -62,7 +47,7 @@ def set_network(request):
 
 
 @api_view(['GET'])
-def lineage_stellar_account(request):
+def lineage_stellar_account(request, network, stellar_account_address):
     """
     Retrieve the upstream lineage of a Stellar account.
     
@@ -82,9 +67,6 @@ def lineage_stellar_account(request):
           given Stellar account, starting with the immediate creator and ending with the
           root account.
     """
-    # Retrieve the query parameters
-    network = request.GET.get('network')
-    stellar_account_address = request.GET.get('stellar_account_address')
 
     # Instantiate the LineageHelpers class with the network and stellar_account_address
     lineage_helpers = LineageHelpers(network, stellar_account_address)
