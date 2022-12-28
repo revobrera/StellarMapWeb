@@ -1,7 +1,7 @@
 import json
 
 import requests
-from rest_framework.response import Response
+from django.http import HttpResponse
 
 
 class SiteChecker:
@@ -28,7 +28,7 @@ class SiteChecker:
         Check the reachability of all URLs in the sites_dict.
 
         Returns:
-            JsonResponse: A JSON response containing the reachability status of each URL.
+            HttpResponse: An HTTP response containing the reachability status of each URL in JSON format.
         """
         sites_dict = {
             "stellar_github": "https://github.com/stellar",
@@ -47,4 +47,4 @@ class SiteChecker:
         data_json = json.dumps(results)
 
         # Return the data as a JSON response
-        return Response(data_json)
+        return HttpResponse(data_json, content_type='application/json')

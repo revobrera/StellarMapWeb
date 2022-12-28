@@ -1,5 +1,6 @@
 import json
 
+from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -30,14 +31,14 @@ def check_all_urls(request):
     Check the reachability of all URLs in the sites_dict.
 
     Returns:
-        Response: A JSON response containing the reachability status of each URL.
+        HttpResponse: An HTTP response containing the reachability status of each URL in JSON format.
     """
 
     results = {}
     checker = SiteChecker()
-    results = checker.check_all_urls()
+    results_json = checker.check_all_urls()
 
-    return Response(results)
+    return HttpResponse(results_json, content_type='application/json')
 
 
 @api_view(['GET'])
