@@ -1,7 +1,7 @@
 from django.db import models
+from django_cassandra_engine.models import DjangoCassandraModel
 
-
-class StellarAccountInquiryHistory(models.Model):
+class StellarAccountInquiryHistory(DjangoCassandraModel):
     """
     A model for storing the history of user requests to examine a Stellar account.
 
@@ -33,7 +33,7 @@ class StellarAccountInquiryHistory(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class StellarAccountInquiryDetail(models.Model):
+class StellarAccountInquiryDetail(DjangoCassandraModel):
     """
     A model for storing detailed information about user requests to examine a Stellar account.
     
