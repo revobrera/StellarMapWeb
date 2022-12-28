@@ -40,4 +40,4 @@ class SiteChecker:
         for site, url in sites_dict.items():
             results[site] = checker.check_url(url)
 
-        return JsonResponse(results)
+        return JsonResponse(results, json_dumps_params={'default': str})
