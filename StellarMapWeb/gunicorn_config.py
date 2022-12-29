@@ -2,8 +2,8 @@ import os
 
 bind = ['unix:/run/gunicorn.sock', '127.0.0.1:8000', '/home/revobrera/smenv/lib/python3.10/site-packages/gunicorn/gunicorn.sock', '/home/revobrera/smenv/bin/gunicorn.sock']
 workers = 3
-user = "revobrera"
-group = "revobrera"
+user = "www-data"
+group = "www-data"
 loglevel = "debug"
 accesslog = "/var/log/gunicorn/access.log"
 errorlog = "/var/log/gunicorn/error.log"
