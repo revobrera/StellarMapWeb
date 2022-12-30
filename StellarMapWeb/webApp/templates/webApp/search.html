@@ -9,8 +9,18 @@
   <div id="app">
     <div class="top-container">
         <div class="search-container">
-        <input type="text" v-model="query" @keyup.enter="search" placeholder="Paste a Stellar account address...">
-        <button @click="search"><i class="fa fa-space-shuttle"></i></button>
+          <input type="text" v-model="query" @keyup.enter="search" placeholder="Paste a Stellar account address...">
+          <button @click="search"><i class="fa fa-space-shuttle"></i></button>
+
+          <div class="network-selector">
+            <div class="network-selector">
+              <label class="toggle-button">
+                <input type="radio" name="network" value="testnet" v-model="network" checked> Testnet
+                <input type="radio" name="network" value="public" v-model="network"> Public
+                <span class="toggle-slider"></span>
+              </label>
+            </div>            
+          </div>
         </div>
     </div>
     <div class="results-container">
@@ -26,19 +36,23 @@
       data: {
         query: '',
         loading: false,
-        response: ''
+        response: '',
+        network: 'testnet'
       },
       methods: {
         async search() {
           this.loading = true
           try {
-            const response = await fetch(`https://horizon-testnet.stellar.org/accounts/${this.query}`)
+            const response = await fetch(
+              this.network === 'testnet'
+                  ? `https://horizon-testnet.stellar.org/accounts/${this.query}`
+                  : `https://horizon.stellar.org/accounts/${this.query}`
+              )
             this.response = await response.text()
             this.loading = false
           } catch (e) {
             this.response = e.message
           }
-          
         }
       }
     })
@@ -92,6 +106,18 @@
         text-align: center;
         color: #fff;
         padding-top: 55px;
+    }
+    .network-selector {
+      margin-left: auto; /* push the network selector to the right */
+    }
+
+    @media (max-width: 600px) { /* responsive styles for small screens */
+      .search-container {
+        flex-direction: column; /* stack elements vertically */
+      }
+      .network-selector {
+        margin-top: 20px; /* add some space between elements */
+      }
     }
 
   </style>
