@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-$2-dn#6etnko4hz(wk^3nr6uesv2*)bf*r_dm1a&0*e=e#(vow
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['Revobrera.pythonanywhere.com', '127.0.0.1']
+ALLOWED_HOSTS = ['stellarmap.network', 'Revobrera.pythonanywhere.com', '127.0.0.1']
 
 
 # Application definition
