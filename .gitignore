@@ -21,6 +21,7 @@ media/
 
 # Django static files
 static/
+static_root/
 
 # SQLite database file
 *.sqlite3
