@@ -5,9 +5,6 @@ from .settings_base import *
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$2-dn#6etnko4hz(wk^3nr6uesv2*)bf*r_dm1a&0*e=e#(vow'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
