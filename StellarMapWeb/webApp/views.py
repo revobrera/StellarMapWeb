@@ -1,4 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+
+
+def redirect_to_search_view(request):
+
+    # Redirect to the search_view view
+    return redirect('search_view')
 
 def search_view(request):
   context = {
