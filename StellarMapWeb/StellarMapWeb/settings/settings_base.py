@@ -182,3 +182,8 @@ LOGGING = {
 
 # swagger
 REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema' }
+
+# control how long your Django app's pages are cached by client browsers.
+# setting to 0 will not cache pages by client browsers.
+CACHE_MIDDLEWARE_SECONDS = 0
+
