@@ -34,7 +34,7 @@ DEBUG = True
 # Redirect all HTTP requests to HTTP
 SECURE_SSL_REDIRECT = False
 
-ALLOWED_HOSTS = ['stellarmap.network', 'Revobrera.pythonanywhere.com', '127.0.0.1']
+ALLOWED_HOSTS = ['stellarmap.network', '172.104.25.13', 'Revobrera.pythonanywhere.com', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
