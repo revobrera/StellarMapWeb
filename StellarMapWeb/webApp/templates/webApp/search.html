@@ -51,6 +51,16 @@
         and visualize them in a radial, tidy tree format. The tree maps address types 
         and activity, providing a clear and organized view of the relationships between addresses. 
       </div>
+
+      <template #footer="{ hide }">
+        <div class="d-flex text-light align-items-center px-3 py-2">
+        <b-button class="close-button" @click="hide">
+          <i class="fas fa-sign-out icon-pad"></i> Close
+        </b-button>
+
+        </div>
+      </template>
+   
     </b-sidebar>
   </div>
   <!-- Load required Bootstrap and BootstrapVue CSS -->
@@ -183,7 +193,33 @@
       background-color: transparent;
       color: #96DDF2; /* change the icon color to blue when hovering */
     }
-
+    .b-sidebar-header {
+      background-color: #100D23;
+      color: #01C176;
+    }
+    .b-sidebar-body {
+      background-color: #231B3D;
+      color: #96DDF2
+    }
+    .b-sidebar-footer {
+      background-color: #032314;
+      border-top: 1.7px solid #01C176;
+      display: flex; /* make the element a flex container */
+      justify-content: flex-start; /* align text to the left */
+    }
+    .close-button {
+      background-color: transparent;
+      border-color: transparent;
+      width: 100%;
+    }
+    .close-button:hover {
+      background-color: transparent;
+      border-color: transparent;
+      color: #96DDF2
+    }
+    .icon-pad {
+      padding-right:17px;
+    }
   </style>
 </body>
 </html>
