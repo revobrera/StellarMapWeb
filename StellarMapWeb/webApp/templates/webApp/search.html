@@ -12,11 +12,20 @@
   <div id="app">
     <div class="top-container">
         <div class="search-container">
-          
-          <b-button class="sidebar-button" v-b-toggle href="#sidebar-menu" @click.prevent><i class="fa fa-bars"></i></b-button>
-          
-          <input type="text" v-model="query" @keyup.enter="search" placeholder="Paste a Stellar account address...">
-          <button @click="search"><i class="fa fa-space-shuttle"></i></button>
+          <!-- keeps the elements on the same line and responsive -->
+          <div class="container-fluid">
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <b-button class="sidebar-button" v-b-toggle href="#sidebar-menu" @click.prevent><i class="fa fa-bars"></i></b-button>
+              </div>
+              <div class="col">
+                <input type="text" v-model="query" @keyup.enter="search" placeholder="Paste a Stellar account address...">
+              </div>
+              <div class="col-auto">
+                <button @click="search"><i class="fa fa-space-shuttle"></i></button>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
     <div class="results-container">
@@ -111,6 +120,7 @@
         border: none;
         background-color: #100D23;
         color: #96DDF2;
+        width: 100%;
     }
     .search-container button {
         background: transparent;
