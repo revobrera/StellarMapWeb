@@ -22,7 +22,12 @@
               </div>
               <div class="col">
                 <div class="row align-items-center">
-                  <b-form-checkbox v-model="network_toggle" switch @change="toggleNetwork">{{network_selected}}</b-form-checkbox>
+                  <b-form-checkbox 
+                    v-model="network_toggle" 
+                    switch 
+                    @change="toggleNetwork"
+                    :class="{ 'text-red': !network_toggle, 'text-green': network_toggle }"
+                  >{{network_selected}}</b-form-checkbox>
                   <input type="text" v-model="query_account" @keyup.enter="search" placeholder="Paste a Stellar account address...">
                 </div>
               </div>
@@ -144,6 +149,12 @@
     .network-selector {
       margin-left: auto; /* push the network selector to the right */
     }
+    .text-red {
+      color: #E5526F;
+    }
+    .text-green {
+      color: #0BE784;
+    }
 
     @media (max-width: 600px) { /* responsive styles for small screens */
       .search-container {
@@ -160,10 +171,14 @@
     }
     .sidebar-button:hover {
       background-color: transparent;
+      color: #96DDF2;
     }
     .sidebar-button:focus {
       background-color: transparent;
       border-color: transparent;
+    }
+    button:hover i {
+      color: #96DDF2; /* change the icon color to blue when hovering */
     }
 
   </style>
