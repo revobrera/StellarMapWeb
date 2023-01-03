@@ -1,26 +1,22 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 <head>
   <title>StellarMap Web</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- include the Font Awesome library for the search icon -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'font-awesome-6.2.1/css/all.min.css' %}">
 </head>
 <body class="bg-color-261D45">
   <div id="app">
     <div class="top-container">
         <div class="search-container">
+          
+          <b-button class="sidebar-button" v-b-toggle href="#sidebar-menu" @click.prevent><i class="fa fa-bars"></i></b-button>
+          
           <input type="text" v-model="query" @keyup.enter="search" placeholder="Paste a Stellar account address...">
           <button @click="search"><i class="fa fa-space-shuttle"></i></button>
-
-          <div class="network-selector">
-            <div class="network-selector">
-              <label class="toggle-button">
-                <input type="radio" name="network" value="testnet" v-model="network" checked> Testnet
-                <input type="radio" name="network" value="public" v-model="network"> Public
-                <span class="toggle-slider"></span>
-              </label>
-            </div>            
-          </div>
         </div>
     </div>
     <div class="results-container">
@@ -28,16 +24,48 @@
             <div type="text" v-text="response"></div>
         </div>
     </div>
+    
+    <b-sidebar id="sidebar-menu" title="StellarMap.Network" shadow>
+      <div class="px-3 py-2">
+        This web application allows users to generate the lineage of Stellar addresses 
+        and visualize them in a radial, tidy tree format. The tree maps address types 
+        and activity, providing a clear and organized view of the relationships between addresses. 
+      </div>
+    </b-sidebar>
+    <div>
+      <b-input-group size="sm" prepend="Small" class="mb-2">
+        <b-form-input aria-label="Small text input with custom switch"></b-form-input>
+        <b-input-group-append is-text>
+          <b-form-checkbox switch class="mr-n2 mb-n1">
+            <span class="sr-only">Checkbox for previous text input</span>
+          </b-form-checkbox>
+        </b-input-group-append>
+      </b-input-group>
+    
+      <b-input-group size="lg" prepend="Large" class="mb-2">
+        <b-form-input aria-label="Large text input with switch"></b-form-input>
+        <b-input-group-append is-text>
+          <b-form-checkbox switch class="mr-n2">
+            <span class="sr-only">Switch for previous text input</span>
+          </b-form-checkbox>
+        </b-input-group-append>
+      </b-input-group>
+    </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- Load required Bootstrap and BootstrapVue CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-4.6.2/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-vue-2.23.1/bootstrap-vue.min.css' %}">
+
+  <!-- Load Vue followed by BootstrapVue -->
+  <script src="{% static 'vue-2.6.12/vue.js' %}"></script>
+  <script src="{% static 'bootstrap-vue-2.23.1/bootstrap-vue.min.js' %}" crossorigin="anonymous"></script>
   <script>
     new Vue({
       el: '#app',
       data: {
         query: '',
         loading: false,
-        response: '',
-        network: 'testnet'
+        response: ''
       },
       methods: {
         async search() {
@@ -74,13 +102,12 @@
         border: 6px solid #3f2c70;
         border-radius: 10px;
         margin: 0 auto;
-        max-width: 996px;
         background-color: #100D23;
     }
     .search-container input[type="text"] {
         flex: 1;
-        font-size: 27px;
-        padding: 20px;
+        font-size: 23px;
+        padding: 17px;
         border: none;
         background-color: #100D23;
         color: #96DDF2;
@@ -92,7 +119,7 @@
         padding-right: 26px;
     }
     .search-container i {
-        font-size: 32px;
+        font-size: 23px;
         color: #3f2c70;
     }
     .results-container {
@@ -102,7 +129,6 @@
         margin-top: 50px; /* adjust the margin as needed */
     }
     .response-container {
-        max-width: 990px; /* adjust the width as needed */
         text-align: center;
         color: #fff;
         padding-top: 55px;
@@ -118,6 +144,18 @@
       .network-selector {
         margin-top: 20px; /* add some space between elements */
       }
+    }
+    .sidebar-button {
+      background-color: transparent;
+      border-color: transparent;
+      padding: 0.5rem 1rem;
+    }
+    .sidebar-button:hover {
+      background-color: transparent;
+    }
+    .sidebar-button:focus {
+      background-color: transparent;
+      border-color: transparent;
     }
 
   </style>
