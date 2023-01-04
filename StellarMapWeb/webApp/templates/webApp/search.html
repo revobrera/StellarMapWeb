@@ -18,6 +18,15 @@
         <div class="search-container">
           <!-- keeps the elements on the same line and responsive -->
           <div class="container-fluid">
+            <!--  loading bar that is displayed while data is being fetched from the server -->
+            <div>
+              <b-progress v-if="loading" :value="progressValue" variant="danger" animated=true class="mt-3"></b-progress>
+            </div>
+
+            <!-- The sidebar menu allows users to access different pages,
+                the network toggle allows users to switch between testnet and public Horizon servers,
+                the input field allows users to enter their query, 
+                and the search button initiates the search function. -->
             <div class="row align-items-center">
               <div class="col-auto">
                 <b-button class="sidebar-button" v-b-toggle href="#sidebar-menu" @click.prevent><i class="fa fa-bars"></i></b-button>
@@ -37,16 +46,20 @@
                 <button @click="search"><i class="fa fa-space-shuttle"></i></button>
               </div>
             </div>
+
           </div>
         </div>
-        {% endverbatim %}
+      {% endverbatim %}
     </div>
+
+    <!-- This element serves as a container for displaying the results of the search function -->
     <div class="results-container">
         <div class="response-container">
             <div type="text" v-text="response"></div>
         </div>
     </div>
     
+    <!-- The sidebar contains links and information that can be accessed by the user. -->
     <b-sidebar id="sidebar-menu" title="StellarMap.Network" shadow>
       <div class="px-3 py-2">
         This web application allows users to generate the lineage of Stellar addresses 
@@ -56,19 +69,17 @@
 
       <template #footer="{ hide }">
         <div class="d-flex text-light align-items-center px-3 py-2">
-        <b-button class="close-button" @click="hide">
-          <i class="fas fa-sign-out icon-pad"></i> Close
-        </b-button>
-
+          <b-button class="close-button" @click="hide">
+            <i class="fas fa-sign-out icon-pad"></i> Close
+          </b-button>
         </div>
       </template>
-   
     </b-sidebar>
   </div>
+
   <!-- Load required Bootstrap and BootstrapVue CSS -->
   <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-4.6.2/css/bootstrap.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-vue-2.23.1/bootstrap-vue.min.css' %}">
-
   <!-- Load Vue followed by BootstrapVue -->
   <script src="{% static 'vue-2.6.12/vue.js' %}"></script>
   <script src="{% static 'bootstrap-vue-2.23.1/bootstrap-vue.min.js' %}" crossorigin="anonymous"></script>
@@ -78,6 +89,7 @@
       data: {
         query_account: '',
         loading: false,
+        progressValue: 0,
         response: '',
         network_toggle: false,
         network_selected: 'testnet'
@@ -86,6 +98,7 @@
         async search() {
           // Set 'loading' to true to show a loading indicator
           this.loading = true;
+          this.progressValue = 17;
           try {
             // Fetch data from either the testnet or public Horizon server depending on the value of 'network_selected'
             const response = await fetch(
@@ -95,6 +108,7 @@
             );
             // Store the response text in 'response'
             this.response = await response.text();
+            this.progressValue = 71;
             // Set 'loading' to false to hide the loading indicator
             this.loading = false;
           } catch (e) {
