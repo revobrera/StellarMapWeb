@@ -1,0 +1,112 @@
+.bg-color-261D45 {
+    background-color: #261D45;
+}
+.top-container {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    box-shadow: 0 9px 63px rgba(0, 0, 0, 0.3);
+}
+.search-container {
+    display: flex;
+    align-items: center;
+    border: 6px solid #3f2c70;
+    border-radius: 10px;
+    margin: 0 auto;
+    background-color: #100D23;
+}
+.search-container input[type="text"] {
+    flex: 1;
+    font-size: 23px;
+    padding: 17px;
+    border: none;
+    background-color: #100D23;
+    color: #96DDF2;
+    width: 100%;
+}
+.search-container button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding-right: 26px;
+}
+.search-container i {
+    font-size: 23px;
+    color: #3f2c70;
+}
+.results-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px; /* adjust the margin as needed */
+}
+.response-container {
+    text-align: center;
+    color: #fff;
+    padding-top: 55px;
+}
+.network-selector {
+  margin-left: auto; /* push the network selector to the right */
+}
+.text-red {
+  color: #E5526F;
+}
+.text-green {
+  color: #0BE784;
+}
+
+@media (max-width: 600px) { /* responsive styles for small screens */
+  .search-container {
+    flex-direction: column; /* stack elements vertically */
+  }
+  .network-selector {
+    margin-top: 20px; /* add some space between elements */
+  }
+}
+.sidebar-button {
+  background-color: transparent;
+  border-color: transparent;
+  padding: 0.5rem 1rem;
+}
+.sidebar-button:hover {
+  background-color: transparent;
+  border-color: transparent;
+  color: #96DDF2;
+}
+.sidebar-button:focus {
+  background-color: transparent;
+  border-color: transparent;
+}
+button:hover i,
+.sidebar-button:hover i {
+  background-color: transparent;
+  color: #96DDF2; /* change the icon color to blue when hovering */
+}
+.b-sidebar-header {
+  background-color: #100D23;
+  color: #01C176;
+}
+.b-sidebar-body {
+  background-color: #231B3D;
+  color: #96DDF2
+}
+.b-sidebar-footer {
+  background-color: #032314;
+  border-top: 1.7px solid #01C176;
+  display: flex; /* make the element a flex container */
+  justify-content: flex-start; /* align text to the left */
+}
+.close-button {
+  background-color: transparent;
+  border-color: transparent;
+  width: 100%;
+}
+.close-button:hover {
+  background-color: transparent;
+  border-color: transparent;
+  color: #96DDF2
+}
+.icon-pad {
+  padding-right:17px;
+}
