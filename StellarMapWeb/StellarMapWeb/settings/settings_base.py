@@ -142,7 +142,11 @@ STATIC_ROOT = '/home/Revobrera/StellarMapWeb/static'
 STATIC_URL = '/static/'
 
 # load static files
-STATICFILES_DIRS = [os.path.join(BASE_DIR, '../static')]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, '../static'),
+    '/home/revobrera/StellarMapWeb/StellarMapWeb/webApp/static'
+]
+
 VENV_PATH = os.path.dirname(BASE_DIR)
 STATIC_ROOT = os.path.join(VENV_PATH, 'static_root')
 
