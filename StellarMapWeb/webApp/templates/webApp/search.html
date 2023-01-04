@@ -18,6 +18,9 @@
         <div class="search-container">
           <!-- keeps the elements on the same line and responsive -->
           <div class="container-fluid">
+            <div>
+              <b-progress v-if="loading" :value="progressValue" variant="danger" animated=true class="mt-3"></b-progress>
+            </div>
             <div class="row align-items-center">
               <div class="col-auto">
                 <b-button class="sidebar-button" v-b-toggle href="#sidebar-menu" @click.prevent><i class="fa fa-bars"></i></b-button>
@@ -78,6 +81,7 @@
       data: {
         query_account: '',
         loading: false,
+        progressValue: 0,
         response: '',
         network_toggle: false,
         network_selected: 'testnet'
@@ -86,6 +90,7 @@
         async search() {
           // Set 'loading' to true to show a loading indicator
           this.loading = true;
+          this.progressValue = 17;
           try {
             // Fetch data from either the testnet or public Horizon server depending on the value of 'network_selected'
             const response = await fetch(
@@ -95,6 +100,7 @@
             );
             // Store the response text in 'response'
             this.response = await response.text();
+            this.progressValue = 71;
             // Set 'loading' to false to hide the loading indicator
             this.loading = false;
           } catch (e) {
