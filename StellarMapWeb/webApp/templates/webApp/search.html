@@ -1,99 +1,127 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 <head>
   <title>StellarMap Web</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- include custom theme -->
+  <link rel="stylesheet" type="text/css" href="{% static 'webApp/frontend.css' %}">
   <!-- include the Font Awesome library for the search icon -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'font-awesome-6.2.1/css/all.min.css' %}">
 </head>
 <body class="bg-color-261D45">
   <div id="app">
     <div class="top-container">
+      <!-- using the verbatim tag to avoid conflicts between Django and Vue.js templates -->
+      {% verbatim %}
         <div class="search-container">
-        <input type="text" v-model="query" @keyup.enter="search" placeholder="Paste a Stellar account address...">
-        <button @click="search"><i class="fa fa-space-shuttle"></i></button>
+          <!-- keeps the elements on the same line and responsive -->
+          <div class="container-fluid">
+            <!--  loading bar that is displayed while data is being fetched from the server -->
+            <div>
+              <b-progress v-if="loading" :value="progressValue" variant="danger" animated=true class="mt-3"></b-progress>
+            </div>
+
+            <!-- The sidebar menu allows users to access different pages,
+                the network toggle allows users to switch between testnet and public Horizon servers,
+                the input field allows users to enter their query, 
+                and the search button initiates the search function. -->
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <b-button class="sidebar-button" v-b-toggle href="#sidebar-menu" @click.prevent><i class="fa fa-bars"></i></b-button>
+              </div>
+              <div class="col">
+                <div class="row align-items-center">
+                  <b-form-checkbox 
+                    v-model="network_toggle" 
+                    switch 
+                    @change="toggleNetwork"
+                    :class="{ 'text-red': !network_toggle, 'text-green': network_toggle }"
+                  >{{network_selected}}</b-form-checkbox>
+                  <input type="text" v-model="query_account" @keyup.enter="search" placeholder="Paste a Stellar account address...">
+                </div>
+              </div>
+              <div class="col-auto">
+                <button @click="search"><i class="fa fa-space-shuttle"></i></button>
+              </div>
+            </div>
+
+          </div>
         </div>
+      {% endverbatim %}
     </div>
+
+    <!-- This element serves as a container for displaying the results of the search function -->
     <div class="results-container">
         <div class="response-container">
             <div type="text" v-text="response"></div>
         </div>
     </div>
+    
+    <!-- The sidebar contains links and information that can be accessed by the user. -->
+    <b-sidebar id="sidebar-menu" title="StellarMap.Network" shadow>
+      <div class="px-3 py-2">
+        This web application allows users to generate the lineage of Stellar addresses 
+        and visualize them in a radial, tidy tree format. The tree maps address types 
+        and activity, providing a clear and organized view of the relationships between addresses. 
+      </div>
+
+      <template #footer="{ hide }">
+        <div class="d-flex text-light align-items-center px-3 py-2">
+          <b-button class="close-button" @click="hide">
+            <i class="fas fa-sign-out icon-pad"></i> Close
+          </b-button>
+        </div>
+      </template>
+    </b-sidebar>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+  <!-- Load required Bootstrap and BootstrapVue CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-4.6.2/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-vue-2.23.1/bootstrap-vue.min.css' %}">
+  <!-- Load Vue followed by BootstrapVue -->
+  <script src="{% static 'vue-2.6.12/vue.js' %}"></script>
+  <script src="{% static 'bootstrap-vue-2.23.1/bootstrap-vue.min.js' %}" crossorigin="anonymous"></script>
   <script>
     new Vue({
       el: '#app',
       data: {
-        query: '',
+        query_account: '',
         loading: false,
-        response: ''
+        progressValue: 0,
+        response: '',
+        network_toggle: false,
+        network_selected: 'testnet'
       },
       methods: {
         async search() {
-          this.loading = true
+          // Set 'loading' to true to show a loading indicator
+          this.loading = true;
+          this.progressValue = 17;
           try {
-            const response = await fetch(`https://horizon-testnet.stellar.org/accounts/${this.query}`)
-            this.response = await response.text()
-            this.loading = false
+            // Fetch data from either the testnet or public Horizon server depending on the value of 'network_selected'
+            const response = await fetch(
+              this.network_selected === 'testnet'
+                ? `https://horizon-testnet.stellar.org/accounts/${this.query_account}`
+                : `https://horizon.stellar.org/accounts/${this.query_account}`
+            );
+            // Store the response text in 'response'
+            this.response = await response.text();
+            this.progressValue = 71;
+            // Set 'loading' to false to hide the loading indicator
+            this.loading = false;
           } catch (e) {
-            this.response = e.message
+            // If an error occurs, store the error message in 'response'
+            this.response = e.message;
           }
-          
+        },
+        toggleNetwork() {
+          // Method that toggles the value of 'network_selected' between 'testnet' and 'public'
+          this.network_selected = this.network_toggle ? 'public' : 'testnet'
         }
       }
     })
   </script>
-  <style>
-    .bg-color-261D45 {
-        background-color: #261D45;
-    }
-    .top-container {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 1;
-        box-shadow: 0 9px 63px rgba(0, 0, 0, 0.3);
-    }
-    .search-container {
-        display: flex;
-        align-items: center;
-        border: 6px solid #3f2c70;
-        border-radius: 10px;
-        margin: 0 auto;
-        max-width: 996px;
-        background-color: #100D23;
-    }
-    .search-container input[type="text"] {
-        flex: 1;
-        font-size: 27px;
-        padding: 20px;
-        border: none;
-        background-color: #100D23;
-        color: #96DDF2;
-    }
-    .search-container button {
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        padding-right: 26px;
-    }
-    .search-container i {
-        font-size: 32px;
-        color: #3f2c70;
-    }
-    .results-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 50px; /* adjust the margin as needed */
-    }
-    .response-container {
-        max-width: 990px; /* adjust the width as needed */
-        text-align: center;
-        color: #fff;
-        padding-top: 55px;
-    }
-
-  </style>
 </body>
 </html>
