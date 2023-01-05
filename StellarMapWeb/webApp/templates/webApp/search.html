@@ -54,9 +54,33 @@
 
     <!-- This element serves as a container for displaying the results of the search function -->
     <div class="results-container">
+      {% verbatim %}
         <div class="response-container">
-            <div type="text" v-text="response"></div>
+          <div class="radial-tree-visual">
+            <span></span>
+          </div>
+
+          <div>
+            <b-card no-body class="bv-tabs">
+              <b-tabs card>
+                <b-tab title="Upsteam Creator Accounts" active>
+                  <b-card-text>Lineage of creator accounts</b-card-text>
+                </b-tab>
+                <b-tab title="JSON">
+                  <b-card-text>{{ response }</b-card-text>
+                </b-tab>
+                <b-tab title="TOML">
+                  <b-card-text>TOML outputs</b-card-text>
+                </b-tab>
+                <b-tab title="TERMINAL">
+                  <b-card-text>Terminal outputs</b-card-text>
+                </b-tab>
+              </b-tabs>
+            </b-card>
+          </div>
+
         </div>
+      {% endverbatim %}
     </div>
     
     <!-- The sidebar contains links and information that can be accessed by the user. -->
