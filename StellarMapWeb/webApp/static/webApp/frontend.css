@@ -47,6 +47,9 @@
     text-align: center;
     color: #FFF;
     padding-top: 55px;
+    padding-left: 17px;
+    padding-right: 17px;
+    width: 100%;
 }
 .network-selector {
   margin-left: auto; /* push the network selector to the right */
@@ -120,4 +123,30 @@ button:hover i,
 }
 .icon-pad {
   padding-right:17px;
+}
+
+/* bootstrap-vue tabs */
+.card {
+  border: transparent !important; 
+}
+.card-header {
+  background-color: var(--search-container-bg-color) !important;
+}
+.card-body {
+  background-color: var(--secondary-bg-color) !important;
+}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+  color: var(--search-container-text-color) !important;
+  background-color: var(--secondary-bg-color) !important;
+  border-color: transparent !important;
+}
+
+/* radial tidy tree */
+.radial-tree-visual {
+  width: 701px;
+  height: 471px;
+  background-color: var(--secondary-bg-color);
+  margin: auto;
+  margin-bottom: 17px;
+  
 }
