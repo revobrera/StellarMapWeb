@@ -144,7 +144,7 @@ STATIC_URL = '/static/'
 # load static files
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, '../static'),
-    os.path.join(BASE_DIR, 'webApp', 'static')
+    '/home/revobrera/StellarMapWeb/StellarMapWeb/webApp/static'
 ]
 
 VENV_PATH = os.path.dirname(BASE_DIR)
