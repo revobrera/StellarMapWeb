@@ -44,7 +44,7 @@
     margin-top: 50px; /* adjust the margin as needed */
 }
 .response-container {
-    text-align: center;
+    text-align: left;
     color: #FFF;
     padding-top: 55px;
     padding-left: 17px;
@@ -143,10 +143,9 @@ button:hover i,
 
 /* radial tidy tree */
 .radial-tree-visual {
-  width: 701px;
+  width: 100%;
   height: 471px;
   background-color: var(--secondary-bg-color);
   margin: auto;
   margin-bottom: 17px;
-  
 }
