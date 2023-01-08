@@ -6,7 +6,7 @@
   <title>StellarMap Web</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- include custom theme -->
-  <link rel="stylesheet" type="text/css" href="{% static 'webApp/frontend.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'webApp/css/frontend.css' %}">
   <!-- include the Font Awesome library for the search icon -->
   <link rel="stylesheet" type="text/css" href="{% static 'font-awesome-6.2.1/css/all.min.css' %}">
 </head>
@@ -64,7 +64,20 @@
             <b-card no-body class="bv-tabs">
               <b-tabs card>
                 <b-tab title="Upsteam Creator Accounts" active>
-                  <b-card-text>Lineage of creator accounts</b-card-text>
+                  <template>
+                    <div>
+                      <b-table
+                        id="table-transition-example"
+                        :items="items"
+                        :fields="fields"
+                        striped
+                        small
+                        primary-key="a"
+                        dark
+                        :tbody-transition-props="transProps"
+                      ></b-table>
+                    </div>
+                  </template>
                 </b-tab>
                 <b-tab title="JSON">
                   <b-card-text>{{ response }}</b-card-text>
@@ -107,9 +120,12 @@
   <!-- Load Vue followed by BootstrapVue -->
   <script src="{% static 'vue-2.6.12/vue.js' %}"></script>
   <script src="{% static 'bootstrap-vue-2.23.1/bootstrap-vue.min.js' %}" crossorigin="anonymous"></script>
+  <!-- Custom VueJS mixin -->
+  <script src="{% static 'webApp/js/lineage_table_mixin.js' %}"></script>
   <script>
-    new Vue({
+    var vm = new Vue({
       el: '#app',
+      mixins: [lineage_table_mixin],
       data: {
         query_account: '',
         loading: false,
