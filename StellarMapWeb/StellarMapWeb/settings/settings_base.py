@@ -138,7 +138,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # see https://help.pythonanywhere.com/pages/DjangoStaticFiles for more info
 MEDIA_ROOT = '/home/Revobrera/StellarMapWeb/media'
 MEDIA_URL = '/media/'
-STATIC_ROOT = '/home/Revobrera/StellarMapWeb/static'
+STATIC_ROOT = '/home/Revobrera/StellarMapWeb/static_root'
 STATIC_URL = '/static/'
 
 # load static files

@@ -84,7 +84,7 @@
                   </template>
                 </b-tab>
                 <b-tab title="JSON">
-                  <pre v-html="highlightedResponse"></pre>
+                  <pre v-html="highlightedJSONResponse"></pre>
                 </b-tab>
                 <b-tab title="TOML">
                   <b-card-text>TOML outputs</b-card-text>
@@ -135,7 +135,7 @@
         loading: false,
         progressValue: 0,
         response: '',
-        highlightedResponse: '',
+        highlightedJSONResponse: '',
         network_toggle: false,
         network_selected: 'testnet',
         loading_animation: true,
@@ -154,7 +154,7 @@
             );
             // Store the response text in 'response'
             this.response = await response.text();
-            this.highlightedResponse = hljs.highlight(this.response, {language: 'json'}).value;
+            this.highlightedJSONResponse = hljs.highlight(this.response, {language: 'json'}).value;
             this.progressValue = 71;
             // Set 'loading' to false to hide the loading indicator
             this.loading = false;
