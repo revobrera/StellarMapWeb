@@ -136,19 +136,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # default static files settings for PythonAnywhere.
 # see https://help.pythonanywhere.com/pages/DjangoStaticFiles for more info
-MEDIA_ROOT = '/home/Revobrera/StellarMapWeb/media'
+MEDIA_ROOT = '/home/revobrera/StellarMapWeb/media'
 MEDIA_URL = '/media/'
-STATIC_ROOT = '/home/Revobrera/StellarMapWeb/static_root'
+STATIC_ROOT = '/home/revobrera/StellarMapWeb/StellarMapWeb/static_root'
 STATIC_URL = '/static/'
 
 # load static files
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '../static'),
-    '/home/revobrera/StellarMapWeb/StellarMapWeb/webApp/static'
+    os.path.join(BASE_DIR, '../static_root'),
+    '/home/revobrera/StellarMapWeb/StellarMapWeb/StellarMapWeb/webApp/static/webApp'
 ]
 
 VENV_PATH = os.path.dirname(BASE_DIR)
-STATIC_ROOT = os.path.join(VENV_PATH, 'static_root')
+#STATIC_ROOT = os.path.join(VENV_PATH, 'static_root')
 
 LOGGING = {
     'version': 1,
