@@ -1,647 +1,585 @@
 {% load static %}
 
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
-.node {
-  cursor: pointer;
-  fill: #fff;
-}
-
-.node circle {
-  fill: #3f2c70;
-  stroke: #00FF9C;
-  stroke-width: 1px;
-}
-
-.node text {
-  font: 5px sans-serif;
-}
-
-.link {
-  fill: none;
-  stroke: #3f2c70;
-  stroke-width: 1.5px;
-}
-.legend text{
-  font: 15px sans-serif;
-  text-anchor: start;
-  fill: rgb(235, 239, 241);
-}
-.legend rect{
-  stroke: rgb(235, 239, 241);
-}
-  
-div.tooltip {  
-    /* background-color: #00FF9C; */
-    position: absolute;
-    padding: 7px;
-    font-size: 1.2em;
-    /* pointer-events: none; */
-    border-radius: 4px;
-    box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.25);
-    font: 10px sans-serif;
-    word-wrap: break-word;
-    width: 196px
-  } 
-
-  .breadcrumbs {
-  /* border: 1px solid #cbd2d9; */
-  display: inline-flex;
-  overflow: hidden;
-}
-
-.breadcrumbs__item {
-  /* background: red; */
-  color: #000000;
-  outline: none;
-  padding: 0.71em;
-  padding-left: 0.99em;
-  position: relative;
-  text-decoration: none;
-  transition: background 0.2s linear;
-  height: 0.96em;
-}
-.breadcrumbs__item:before{
-  background: #3f2c70;
-  bottom: 0;
-  clip-path: polygon(50% 50%, -50% -50%, 0 100%);
-  content: "";
-  left: 100%;
-  position: absolute;
-  top: 0;
-  transition: background 0.5s linear;
-  width: 1.3em;
-  z-index: 1;
-}
-
-.breadcrumbs__item:hover:after,
-.breadcrumbs__item:hover {
-  background: #edf1f5;
-}
-
-.breadcrumbs__item:focus:after,
-.breadcrumbs__item:focus,
-.breadcrumbs__item.is-active:focus {
-  background: #323f4a;
-  color: #fff;
-}
-
-div.after {
-  /* background: red; */
-  bottom: 0;
-  clip-path: polygon(50% 50%, -50% -50%, 0 100%);
-  content: "";
-  left: 100%;
-  position: absolute;
-  top: 0;
-  transition: background 0.2s linear;
-  width: 1em;
-  z-index: 1;
-}
-
-.breadcrumbs__item:before {
-  /* background: #cbd2d9; */
-  margin-left: 1px;
-}
-
-.breadcrumbs__item:last-child {
-  border-right: none;
-}
-
-.breadcrumbs__item.is-active {
-  background: #edf1f5;
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  padding: 10px;
-  position: fixed
-}
-
-
-</style>
-
+<html>
+<head>
+  <title>StellarMap Tree</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- include custom theme -->
+  <link rel="stylesheet" type="text/css" href="{% static 'radialTidyTreeApp/css/radial_tidy_tree.css' %}">
+</head>
 <body style="background-color:#261D45">
-   <div class="grid-container">
+  <div class="grid-container">
     <div class="b"></div>
-   </div>
-   
-<script src="{% static 'radialTidyTreeApp/d3-3.2.2/d3.v3.js' %}"></script>
-<script>
- //original code see fiddle http://jsfiddle.net/Nivaldo/CbGh2/
- 
- d3.json("{% static 'radialTidyTreeApp/json/test.json' %}", function(pubs) {
-    
-//initially set the opacity and position of tooltip to null
+  </div>
 
-console.log(pubs)
+  <script src="{% static 'radialTidyTreeApp/d3-3.2.2/d3.v3.js' %}"></script>
+  <script>
+    // Load the JSON data file
+    d3.json("{% static 'radialTidyTreeApp/json/test.json' %}", function (pubs) {
+      // Initialize the tooltip element and set its position and opacity to null
+      var tooltip = d3.select('body')
+        .append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0)
+        .style('left', 0)
+        .style('top', 0);
+
+      // Append a nav element to the div with class "b" and add a "breadcrumbs" class to it
+      var navbars = d3.select('div.b')
+        .append('nav')
+        .attr('class', 'breadcrumbs');
+
+      // Set the diameter and width/height variables
+      var diameter = 570;
+      var width = diameter;
+      var height = diameter;
+
+      // Set the duration, root, and i variables
+      var i = 0;
+      var duration = 350;
+      var root;
+
+      // Create the tree layout
+      var tree = d3.layout.tree()
+        .size([360, diameter])
+        .separation(function (a, b) {
+          // Calculate the separation between nodes based on their depth in the tree
+          return (a.parent == b.parent ? 1 : 1.5) / a.depth;
+        });
 
 
-d3.select('body').append('div').attr('class' , "tooltip")
-var tooltip = d3.select(".tooltip")
-                .style("opacity", 0)
-                .style("left", (0) + "px") 
-                .style("top", (0) + "px")
+      // Create the partition layout
+      var filteredPartition = d3.layout.partition()
+        .value(function (d) { return d.value; })
+        .children(function (d) {
+          // If the node has a value that is not a number
+          if (isNaN(d.value)) {
+            // Create an array to hold the filtered children
+            var filteredChildren = [];
+            // Iterate over the entries in the value
+            d3.entries(d.value).forEach(function (d2) {
+              // If the node type is not "ISSUER", add the node to the array
+              if (d2.node_type != "ISSUER") filteredChildren.push(d);
+            });
+            // Return the array of filtered children
+            return filteredChildren;
+            // Note that the nodes which pass the filter test will be shown
+            // and the nodes that fail will be hidden; make sure your filter
+            // is written in the way you want.
+          } else {
+            // If the node has a numeric value, return null
+            return null;
+          }
+        });
 
-var navbars = d3.select('div.b').append('nav').attr('class' , "breadcrumbs")
+      console.log(filteredPartition);
 
-var diameter = 570;
+      // Create the diagonal generator function
+      var diagonal = d3.svg.diagonal.radial()
+        .projection(function (d) {
+          // Project the data points onto the radial layout
+          return [d.y, d.x / 180 * Math.PI];
+        });
 
-// var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    width = diameter,
-    height = diameter;
- 
-var i = 0,
-    duration = 350,
-    root;
+      // Append an svg element to the body and set its viewBox and preserveAspectRatio attributes
+      var svg = d3.select('body').append('svg')
+        .attr('preserveAspectRatio', 'xMinYMin meet')
+        .attr('viewBox', '0 0 ' + width + ' ' + height)
+        .append('g')
+        // Set the transform attribute to translate the group element to the center of the svg element
+        .attr('transform', 'translate(' + diameter / 2 + ',' + diameter / 2 + ') rotate(0)');
 
-var tree = d3.layout.tree()
-    .size([360, diameter ])
-    .separation(function(a, b) { return (a.parent == b.parent ? 1 : 1.5) / a.depth; })
+      // Create the color scale
+      var color = d3.scale.ordinal(['#3f2c70', '#fcec04']);
 
-    console.log(tree)
+      // Append a legend element to the svg element
+      var legend = d3.select('body svg').append('g').attr('class', 'legend');
 
-var filteredPartition = d3.layout.partition()
-    .value(function(d) { return d.value; })
-    .children(function(d){
+      // Set the angle and buttons variables
+      var angle = 0;
+      var buttons = d3.select('body svg').append('g').attr('class', 'button');
 
-       if (isNaN(d.value)) {
-         var filteredChildren = [];
-         d3.entries(d.value).forEach(function(d2){
-           if (d2.node_type != "ISSUER") filteredChildren.push(d);
-           //a.push(d) adds d to the end of the array 'a'
-         });
-         return filteredChildren;
-       //Note that the nodes which PASS the filter test will be shown
-       //and the nodes that fail will be hidden; make sure your filter
-       //is written in the way you want.
-       }
-       else return null;
-    });
+      // Append a rect element to the buttons group
+      buttons.append('rect')
+        // Set the x and y attributes of the rect element
+        .attr('x', diameter / 2 - 10)
+        .attr('y', height - 10)
+        // Set the width and height attributes of the rect element
+        .attr('width', 10)
+        .attr('height', 10)
+        // Set the fill style of the rect element
+        .style('fill', 'white');
 
-    console.log(filteredPartition)
+      // Append a text element to the buttons group
+      buttons.append('text')
+        // Set the x and y attributes of the text element
+        .attr('x', diameter / 2 - 9)
+        .attr('y', height - 5)
+        // Set the alignment-baseline attribute of the text element
+        .attr('alignment-baseline', 'middle')
+        // Set the font-size attribute of the text element
+        .attr('font-size', 24)
+        // Set the fill style of the text element
+        .style('fill', '#000000')
+        // Set the text content of the text element
+        .text('-')
+        // Add a click event listener to the text element
+        .on('click', function () {
+          // Decrement the angle variable by 10
+          angle = angle - 10;
+          // Set the transform attribute of the svg element
+          svg.attr('transform', 'translate(' + diameter / 2 + ',' + diameter / 2 + ') rotate(' + (angle) + ')');
+        })
+        // Add mouseover and mouseout event listeners to the text element
+        .on({
+          'mouseover': function (d) {
+            // Set the cursor style when the mouse is over the text element
+            d3.select(this).style('cursor', 'pointer');
+          },
+          'mouseout': function (d) {
+            // Set the cursor style when the mouse is not over the text element
+            d3.select(this).style('cursor', 'default');
+          }
+        });
 
-    // var partitionTree = 
-    
+      // Append another rect element to the buttons group
+      buttons.append('rect')
+        // Set the x and y attributes of the rect element
+        .attr('x', diameter / 2 + 10)
+        .attr('y', height - 10)
+        // Set the width and height attributes of the rect element
+        .attr('width', 10)
+        .attr('height', 10)
+        // Set the fill style of the rect element
+        .style('fill', 'white');
 
-var diagonal = d3.svg.diagonal.radial()
-    .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
+      // Append a text element to the buttons group
+      buttons.append('text')
+        // Set the x and y attributes of the text element
+        .attr('x', diameter / 2 + 12)
+        .attr('y', height - 5)
+        // Set the alignment-baseline attribute of the text element
+        .attr('alignment-baseline', 'middle')
+        // Set the font-size attribute of the text element
+        .attr('font-size', 10)
+        // Set the font-weight attribute of the text element
+        .attr('font-weight', 'bold')
+        // Set the fill style of the text element
+        .style('fill', '#000000')
+        // Set the text content of the text element
+        .text('+')
+        // Add a click event listener to the text element
+        .on('click', function () {
+          // Increment the angle variable by 10
+          angle = angle + 10;
+          // Set the transform attribute of the svg element
+          svg.attr('transform', 'translate(' + diameter / 2 + ',' + diameter / 2 + ') rotate(' + (angle) + ')');
+        })
+        // Add mouseover and mouseout event listeners to the text element
+        .on({
+          'mouseover': function (d) {
+            // Set the cursor style when the mouse is over the text element
+            d3.select(this).style('cursor', 'pointer');
+          },
+          'mouseout': function (d) {
+            // Set the cursor style when the mouse is not over the text element
+            d3.select(this).style('cursor', 'default');
+          }
+        });
 
-var svg = d3.select("body").append("svg")
-          .attr("preserveAspectRatio", "xMinYMin meet")
-          .attr("viewBox", "0 0 "+width+" "+height)
-  .append("g")
-    .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ") rotate(0)");
-    //add legend
+      // Append a rect element to the legend group
+      legend.append('rect')
+        // Set the x, y, width, and height attributes of the rect element
+        .attr('x', 18)
+        .attr('y', height - 18)
+        .attr('width', 18)
+        .attr('height', 18)
+        // Set the fill style of the rect element
+        .style('fill', '#cc3463')
 
-    // svg.attr('transform', 'rotate(180)')
-    // svg.attr('transform',function(){
-    //             var me = svg.node()
-    //             var x1 = me.getBBox().x + me.getBBox().width/4;//the center x about which you want to rotate
-    //             var y1 = me.getBBox().y + me.getBBox().height/4;//the center y about which you want to rotate
-
-    //             return `rotate(180, ${x1}, ${y1})`;//rotate 180 degrees about x and y
-    //         }); 
-    var color = d3.scale.ordinal([`#3f2c70`, `#fcec04`]);
-  var legend = d3.select('body svg').append('g').attr('class' , "legend")
-  var angle = 0;
-  var buttons = d3.select('body svg').append('g').attr('class' , "button")
-  buttons.append("rect")
-              .attr("x", diameter/2-10)
-              .attr("y", height - 10)
-              .attr("width", 10)
-              .attr("height", 10)
-              .style("fill", 'white')
-
-              buttons.append("text")
-              .attr("x", diameter/2 -9)
-              .attr("y", height - 5)
-              .attr("alignment-baseline", "middle")
-              .attr("font-size", 24)
-              .style("fill", "#000000")
-              .text("-")
-              .on('click', function(){
-                angle = angle - 10;
-                svg.attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ") rotate("+(angle)+")");
-
-              }).on({
-                  "mouseover": function(d) {
-                    d3.select(this).style("cursor", "pointer"); 
-                  },
-                  "mouseout": function(d) {
-                    d3.select(this).style("cursor", "default"); 
-                  }
-                });
-
-              buttons.append("rect")
-              .attr("x", diameter/2+10)
-              .attr("y", height - 10)
-              .attr("width", 10)
-              .attr("height", 10)
-              .style("fill", 'white')
-
-              buttons.append("text")
-              .attr("x", diameter/2 +12)
-              .attr("y", height - 5)
-              .attr("alignment-baseline", "middle")
-              .attr("font-size", 10)
-              .attr("font-weight",'bold')
-              .style("fill", "#000000")
-              .text("+")
-              .on('click', function(){
-                angle = angle + 10;
-                svg.attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ") rotate("+(angle)+")");
-
-              }).on({
-                  "mouseover": function(d) {
-                    d3.select(this).style("cursor", "pointer"); 
-                  },
-                  "mouseout": function(d) {
-                    d3.select(this).style("cursor", "default"); 
-                  }
-                });
-  
-
-          //     .data(color.domain())
-          //     .enter().append("g")
-          //     .attr("class", "legend")
-          //     .attr("transform", function(d, i) { return "translate(-350," + i * 20 + ")"; });
-  
-          legend.append("rect")
-              .attr("x", 18)
-              .attr("y", height - 18)
-              .attr("width", 18)
-              .attr("height", 18)
-              .style("fill", '#cc3463')
-             
-              
-              legend.append("text")
-              .attr("x", 22)
-              .attr("y", height - 9)
-              .attr("alignment-baseline", "middle")
-              .attr("font-size", 24)
-              .style("fill", "#000000")
-              .text("✔")
-              .attr("classed", "checked")
-              .on('click' , function(){
-               if(d3.select(this).attr('classed') == 'checked')
-               {
-                d3.select(this).attr('classed' , "unchecked").style("opacity", 0)
-                d3.selectAll("g[name='DELETED']").style("opacity", 0)
-                d3.selectAll("path[name='DELETED']").style("opacity", 0)
-               }
-               else{
-                d3.select(this).attr('classed' , "checked").style("opacity", 1)
-                d3.selectAll("g[name='DELETED']").style("opacity", 1)
-                d3.selectAll("path[name='DELETED']").style("opacity", 1)
-               }
-              })
-              .on({
-                  "mouseover": function(d) {
-                    d3.select(this).style("cursor", "pointer"); 
-                  },
-                  "mouseout": function(d) {
-                    d3.select(this).style("cursor", "default"); 
-                  }
-                });
-
-  
-          legend.append("text")
-              .attr("x", 50)
-              .attr("y", height - 9)
-              .attr("dy", ".35em")
-              .text("Deleted");
-
-          legend.append("rect")
-              .attr("x", 18)
-              .attr("y", height - 40)
-              .attr("width", 18)
-              .attr("height", 18)
-              .style("fill", '#00FF9C');
-
-              legend.append("text")
-              .attr("x", 22)
-              .attr("y", height - 31)
-              .attr("alignment-baseline", "middle")
-              .attr("font-size", 24)
-              .style("fill", "#000000")
-              .text("✔")
-              .attr("classed", "checked")
-              .on('click' , function(){
-               if(d3.select(this).attr('classed') == 'checked')
-               {
-                d3.select(this).attr('classed' , "unchecked").style("opacity", 0)
-                d3.selectAll("g[name='ISSUER']").style("opacity", 0)
-                d3.selectAll("path[name='ISSUER']").style("opacity", 0)
-               }
-               else{
-                d3.select(this).attr('classed' , "checked").style("opacity", 1)
-                d3.selectAll("g[name='ISSUER']").style("opacity", 1)
-                d3.selectAll("path[name='ISSUER']").style("opacity", 1)
-               }
-              })
-              .on({
-                  "mouseover": function(d) {
-                    d3.select(this).style("cursor", "pointer"); 
-                  },
-                  "mouseout": function(d) {
-                    d3.select(this).style("cursor", "default"); 
-                  }
-                });
-  
-          legend.append("text")
-              .attr("x", 50)
-              .attr("y", height - 30)
-              .attr("dy", ".35em")
-              .text("Issuer");
-
-          legend.append("rect")
-              .attr("x", 18)
-              .attr("y", height - 62)
-              .attr("width", 18)
-              .attr("height", 18)
-              .style("fill", '#fcec04');
-
-              legend.append("text")
-              .attr("x", 22)
-              .attr("y", height - 53)
-              .attr("alignment-baseline", "middle")
-              .attr("font-size", 24)
-              .style("fill", "#000000")
-              .text("✔")
-              .attr("classed", "checked")
-              .on('click' , function(){
-               if(d3.select(this).attr('classed') == 'checked')
-               {
-                d3.select(this).attr('classed' , "unchecked").style("opacity", 0)
-                d3.selectAll("g[name='ASSET']").style("opacity", 0)
-                d3.selectAll("path[name='ASSET']").style("opacity", 0)
-               }
-               else{
-                d3.select(this).attr('classed' , "checked").style("opacity", 1)
-                d3.selectAll("g[name='ASSET']").style("opacity", 1)
-                d3.selectAll("path[name='ASSET']").style("opacity", 1)
-               }
-              })
-              .on({
-                  "mouseover": function(d) {
-                    d3.select(this).style("cursor", "pointer"); 
-                  },
-                  "mouseout": function(d) {
-                    d3.select(this).style("cursor", "default"); 
-                  }
-                });
-  
-          legend.append("text")
-              .attr("x", 50)
-              .attr("y", height - 51)
-              .attr("dy", ".35em")
-              .text("Asset");
-
-root = pubs;
-root.x0 = height / 2;
-root.y0 = 0;
-
-// root.children.forEach(collapse); // start with all children collapsed
-update(root);
-
-d3.select(self.frameElement).style("height", "800px");
-
-function update(source) {
-
-  // Compute the new tree layout.
-  var nodes = tree.nodes(root),
-      links = tree.links(nodes);
-
-  // Normalize for fixed-depth.
-  nodes.forEach(function(d) { d.y = d.depth * 80; });
-
-  // Update the nodes…
-  var node = svg.selectAll("g.node")
-      .data(nodes, function(d) { return d.id || (d.id = ++i); });
-
-  // Enter any new nodes at the parent's previous position.
-  var nodeEnter = node.enter()
-  .append("g")
-      .attr("class", "node")
-      .attr('name' , d=>{
-        if(d.deleted == true){return "DELETED"}
-        else
-        return d.node_type})
-      //.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
-      .on("click", click)
-      // A function that change this tooltip when the user hover a point.
-      // Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
-      .on("mouseenter", function(d) {
-        //  reset all nodes color
-        var lineage = []
-         var type = []
-        d3.selectAll("circle").style("fill", "#3f2c70");
-        d3.selectAll("path").style("stroke", "#3f2c70");
-        while (d.parent) {
-          d3.selectAll("#node"+d.id).style("fill", "red")
-          if (d.parent != "null"){
-            lineage.push(d.name)
-            if(d.node_type == 'ASSET') { type.push('#fcec04') }
+      // Append a text element to the legend group
+      legend.append('text')
+        // Set the x, y, and alignment-baseline attributes of the text element
+        .attr('x', 22)
+        .attr('y', height - 9)
+        .attr('alignment-baseline', 'middle')
+        // Set the font-size attribute of the text element
+        .attr('font-size', 24)
+        // Set the fill style of the text element
+        .style('fill', '#000000')
+        // Set the text content of the text element
+        .text('✔')
+        // Set the classed attribute of the text element
+        .attr('classed', 'checked')
+        // Add a click event listener to the text element
+        .on('click', function () {
+          // If the classed attribute of the text element is 'checked'
+          if (d3.select(this).attr('classed') == 'checked') {
+            // Set the classed attribute of the text element to 'unchecked' and set its opacity to 0
+            d3.select(this).attr('classed', 'unchecked').style('opacity', 0)
+            // Set the opacity of all g elements with the name 'DELETED' to 0
+            d3.selectAll("g[name='DELETED']").style('opacity', 0)
+            // Set the opacity of all path elements with the name 'DELETED' to 0
+            d3.selectAll("path[name='DELETED']").style("opacity", 0)
+          }
+          // If the checkmark is currently "unchecked", set its class to "checked" and set the opacity of all elements with the name 'DELETED' to 1
           else {
-          if(d.deleted == true) {  type.push('#cc3463')}
-          else
-              type.push("#00FF9C")
-        }
-            d3.selectAll("#link"+d.parent.id + "-" + d.id).style("stroke", "red")
+            d3.select(this).attr('classed', "checked").style("opacity", 1)
+            d3.selectAll("g[name='DELETED']").style("opacity", 1)
+            d3.selectAll("path[name='DELETED']").style("opacity", 1)
           }
-          d = d.parent;
-          
-        }
-            for(i=lineage.length-1; i>=0; i--){
-              navbars.append('a').attr('class' , 'breadcrumbs__item')
-              .style('background',type[i])
-              .append('text')
-              .style('fill' , 'black')
-              .text(lineage[i])
-              .append('div').attr('class' , 'after').style('background',type[i])
+        })
+        // Set the mouseover and mouseout event handlers to change the cursor style
+        .on({
+          "mouseover": function (d) {
+            d3.select(this).style("cursor", "pointer");
+          },
+          "mouseout": function (d) {
+            d3.select(this).style("cursor", "default");
+          }
+        });
+
+      // Append a text element to the legend to display 'Deleted'
+      legend.append("text")
+        .attr("x", 50)
+        .attr("y", height - 9)
+        .attr("dy", ".35em")
+        .text("Deleted");
+
+      // Create a rect element and append it to the legend element.
+      legend.append("rect")
+        .attr("x", 18)
+        .attr("y", height - 40)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", '#00FF9C');
+
+      // Append a text element to the legend to display a checkmark symbol
+      legend.append("text")
+        .attr("x", 22)
+        .attr("y", height - 31)
+        .attr("alignment-baseline", "middle")
+        .attr("font-size", 24)
+        .style("fill", "#000000")
+        .text("✔")
+        .attr("classed", "checked")
+        .on('click', function () {
+          if (d3.select(this).attr('classed') == 'checked') {
+            d3.select(this).attr('classed', "unchecked").style("opacity", 0)
+            d3.selectAll("g[name='ISSUER']").style("opacity", 0)
+            d3.selectAll("path[name='ISSUER']").style("opacity", 0)
+          }
+          else {
+            d3.select(this).attr('classed', "checked").style("opacity", 1)
+            d3.selectAll("g[name='ISSUER']").style("opacity", 1)
+            d3.selectAll("path[name='ISSUER']").style("opacity", 1)
+          }
+        })
+        .on({
+          "mouseover": function (d) {
+            d3.select(this).style("cursor", "pointer");
+          },
+          "mouseout": function (d) {
+            d3.select(this).style("cursor", "default");
+          }
+        });
+
+      // Append a text element to the legend to display 'ISSUER'
+      legend.append("text")
+        .attr("x", 50)
+        .attr("y", height - 30)
+        .attr("dy", ".35em")
+        .text("Issuer");
+
+      legend.append("rect")
+        .attr("x", 18)
+        .attr("y", height - 62)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", '#fcec04');
+
+      legend.append("text")
+        .attr("x", 22)
+        .attr("y", height - 53)
+        .attr("alignment-baseline", "middle")
+        .attr("font-size", 24)
+        .style("fill", "#000000")
+        .text("✔")
+        .attr("classed", "checked")
+        .on('click', function () {
+          if (d3.select(this).attr('classed') == 'checked') {
+            d3.select(this).attr('classed', "unchecked").style("opacity", 0)
+            d3.selectAll("g[name='ASSET']").style("opacity", 0)
+            d3.selectAll("path[name='ASSET']").style("opacity", 0)
+          }
+          else {
+            d3.select(this).attr('classed', "checked").style("opacity", 1)
+            d3.selectAll("g[name='ASSET']").style("opacity", 1)
+            d3.selectAll("path[name='ASSET']").style("opacity", 1)
+          }
+        })
+        .on({
+          "mouseover": function (d) {
+            d3.select(this).style("cursor", "pointer");
+          },
+          "mouseout": function (d) {
+            d3.select(this).style("cursor", "default");
+          }
+        });
+
+      // Append a text element to the legend element
+      legend.append("text")
+        .attr("x", 50)
+        .attr("y", height - 51)
+        .attr("dy", ".35em")
+        .text("Asset");
+
+      // Set the initial x and y positions of the root node
+      root = pubs;
+      root.x0 = height / 2;
+      root.y0 = 0;
+
+      // Collapse all children of the root node (optional)
+      // root.children.forEach(collapse);
+
+      // Call the update function to render the tree
+      update(root);
+
+      // Set the height of the frame element to 800px
+      d3.select(self.frameElement).style("height", "800px");
+
+
+      function update(source) {
+
+        // Compute the new tree layout.
+        var nodes = tree.nodes(root),
+          links = tree.links(nodes);
+
+        // Normalize for fixed-depth.
+        nodes.forEach(function (d) { d.y = d.depth * 80; });
+
+        // Update the nodes…
+        var node = svg.selectAll("g.node")
+          .data(nodes, function (d) { return d.id || (d.id = ++i); });
+
+        // Enter any new nodes at the parent's previous position.
+        var nodeEnter = node.enter()
+          .append("g")
+          .attr("class", "node")
+          .attr('name', d => {
+            if (d.deleted == true) { return "DELETED" }
+            else
+              return d.node_type
+          })
+          //.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+          .on("click", click)
+          // A function that change this tooltip when the user hover a point.
+          // Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
+          .on("mouseenter", function (d) {
+            //  reset all nodes color
+            var lineage = []
+            var type = []
+            d3.selectAll("circle").style("fill", "#3f2c70");
+            d3.selectAll("path").style("stroke", "#3f2c70");
+            while (d.parent) {
+              d3.selectAll("#node" + d.id).style("fill", "red")
+              if (d.parent != "null") {
+                lineage.push(d.name)
+                if (d.node_type == 'ASSET') { type.push('#fcec04') }
+                else {
+                  if (d.deleted == true) { type.push('#cc3463') }
+                  else
+                    type.push("#00FF9C")
+                }
+                d3.selectAll("#link" + d.parent.id + "-" + d.id).style("stroke", "red")
+              }
+              d = d.parent;
+
             }
-      })
-      //set the opacity and position of tooltip to null when mouse leaves
-      .on ("mouseleave", function (event, d) {
-        tooltip.style("opacity", 0)
-        d3.selectAll("circle").style("fill", "#3f2c70");
-        d3.selectAll("path").style("stroke", "#3f2c70");
-        d3.selectAll('.breadcrumbs__item').remove()           
-      });
+            for (i = lineage.length - 1; i >= 0; i--) {
+              navbars.append('a').attr('class', 'breadcrumbs__item')
+                .style('background', type[i])
+                .append('text')
+                .style('fill', 'black')
+                .text(lineage[i])
+                .append('div').attr('class', 'after').style('background', type[i])
+            }
+          })
+          //set the opacity and position of tooltip to null when mouse leaves
+          .on("mouseleave", function (event, d) {
+            tooltip.style("opacity", 0)
+            d3.selectAll("circle").style("fill", "#3f2c70");
+            d3.selectAll("path").style("stroke", "#3f2c70");
+            d3.selectAll('.breadcrumbs__item').remove()
+          });
 
-      //create a function to keep the tooltip displaying as long as the mouse does not leave it
-      tooltip.on('mouseenter' , function(d)
-      {
-        d3.select(this).style("opacity", 1)
-      })
-      .on('mouseleave' , function(d)
-      {
-        d3.select(this).style("opacity", 0)
-            .html("")
-            .style("left", (0) + "px") 
-            .style("top", (0) + "px")
-      })
+        //create a function to keep the tooltip displaying as long as the mouse does not leave it
+        tooltip.on('mouseenter', function (d) {
+          d3.select(this).style("opacity", 1)
+        })
+          .on('mouseleave', function (d) {
+            d3.select(this).style("opacity", 0)
+              .html("")
+              .style("left", (0) + "px")
+              .style("top", (0) + "px")
+          })
 
-  nodeEnter.append("circle")
-      .attr("r", 1e-7)
-      .on("mouseenter", function(d){
-        
-        //if node type is 'ISSUER' change the tooltip prooperties accordingly
-        if(d.node_type == 'ASSET')
-        {
-          tooltip.style("opacity", 0.71).style("background-color" , '#fcec04')
-          tooltip
-            .html("<b>Name:</b> " + d.name +"<br><b>Issuer Id:</b> "+ d.issuer_id 
-              +"<br><b>Asset type:</b> "+ d.asset_type 
-              +"<br><b>Asset Code:</b> "+ d.asset_code
-              +"<br><b>Number of Accounts:</b> "+ d.num_accounts
-              +"<br><b>Number of Claimable Balances:</b> "+ d.num_claimable_balances
-              +"<br><b>Num of Liquidity Pools:</b> "+ d.num_liquidity_pools
-              + "<br><b>Amount:</b> "+ d.amount
-              + "<br><b>Link:</b> "+ '<a href='+ d._links.toml.href +'>'+ d._links.toml.href+'</a>'
-              )
-            .style("left", (d3.event.pageX) + "px") 
-            .style("top", (d3.event.pageY ) + "px")
-         
+        nodeEnter.append("circle")
+          .attr("r", 1e-7)
+          .on("mouseenter", function (d) {
+
+            //if node type is 'ISSUER' change the tooltip prooperties accordingly
+            if (d.node_type == 'ASSET') {
+              tooltip.style("opacity", 0.71).style("background-color", '#fcec04')
+              tooltip
+                .html("<b>Name:</b> " + d.name + "<br><b>Issuer Id:</b> " + d.issuer_id
+                  + "<br><b>Asset type:</b> " + d.asset_type
+                  + "<br><b>Asset Code:</b> " + d.asset_code
+                  + "<br><b>Number of Accounts:</b> " + d.num_accounts
+                  + "<br><b>Number of Claimable Balances:</b> " + d.num_claimable_balances
+                  + "<br><b>Num of Liquidity Pools:</b> " + d.num_liquidity_pools
+                  + "<br><b>Amount:</b> " + d.amount
+                  + "<br><b>Link:</b> " + '<a href=' + d._links.toml.href + '>' + d._links.toml.href + '</a>'
+                )
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY) + "px")
+
+            }
+            else {
+              tooltip.style("opacity", 0.71).style("background-color", '#00FF9C')
+              if (d.deleted == true) {
+                tooltip.style("opacity", 0.71).style("background-color", '#cc3463')
+              }
+              tooltip
+                .html("<b>Name:</b> " + d.name + "<br><b>Issuer Id:</b> " + d.issuer_id + "<br><b>Description:</b> " + d.description
+                  + "<br><b>URL:</b> " + '<a href=https://www.' + d.url + '>' + d.url + '</a>' + "<br><b>Created:</b> " + d.created
+                  + "<br><b>Deleted:</b> " + d.deleted)
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY) + "px")
+            }
+
+            if (d.x < 90 && d.x > 0) {
+              tooltip
+                .style("left", (d3.event.pageX - tooltip.node().offsetWidth) + "px")
+                .style("top", (d3.event.pageY) + "px")
+            }
+            else if (d.x < 180 && d.x > 90) {
+              tooltip
+                .style("left", (d3.event.pageX - tooltip.node().offsetWidth) + "px")
+                .style("top", (d3.event.pageY - tooltip.node().offsetHeight) + "px")
+            }
+            else if (d.x < 270 && d.x > 180) {
+              tooltip
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - tooltip.node().offsetHeight) + "px")
+            }
+          })
+
+        nodeEnter.append("text")
+          .attr("x", function (d) { return d.x < Math.PI === !d.children ? 6 : 6; })
+          .attr("dy", "0.31em")
+          .attr("text-anchor", function (d) { return d.x < 180 ? "start" : "end"; })
+          // .attr("transform", function(d) { return "rotate(" + (d.x < Math.PI ? d.x - Math.PI / 2 : d.x + Math.PI / 2) * 180 / Math.PI + ")"; })
+          .text(function (d) { return d.name; })
+          .style("fill-opacity", 1e-6);
+
+        // d3.selectAll("g[name='23']").remove()
+
+        // Transition nodes to their new position.
+        var nodeUpdate = node.transition()
+          .duration(duration)
+          .attr("transform", function (d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+
+        nodeUpdate.select("circle")
+          .attr("r", diameter / 300)
+          .style("fill", function (d) { return d._children ? "#fff" : "#3f2c70"; })
+          .style("stroke", function (d) {
+            if (d.node_type == 'ASSET') { return '#fcec04' }
+            else {
+              if (d.deleted == true) { return '#cc3463' }
+            }
+          });
+
+        nodeUpdate.select("text")
+          .style("fill-opacity", 1)
+          .attr("transform", function (d) { return d.x < 180 ? "translate(0)" : "rotate(180)translate(-" + (12) + ")"; });
+
+        // TODO: appropriate transform
+        var nodeExit = node.exit().transition()
+          .duration(duration)
+          //.attr("transform", function(d) { return "diagonal(" + source.y + "," + source.x + ")"; })
+          .remove();
+
+        nodeExit.select("circle")
+          .attr("r", 1e-6);
+
+        nodeExit.select("text")
+          .style("fill-opacity", 1e-6);
+
+        // Update the links…
+        var link = svg.selectAll("path.link")
+          .data(links, function (d) { return d.target.id; });
+
+        // Enter any new links at the parent's previous position.
+        link.enter().insert("path", "g")
+          .attr("class", "link")
+          .attr("id", function (d) { return ("link" + d.source.id + "-" + d.target.id) })
+          .attr("name", function (d) {
+            if (d.target.deleted == true) { return "DELETED" }
+            else
+              return (d.target.node_type)
+          })
+          .attr("d", function (d) {
+            var o = { x: source.x0, y: source.y0 };
+            return diagonal({ source: o, target: o });
+          });
+
+        // Transition links to their new position.
+        link.transition()
+          .duration(duration)
+          .attr("d", diagonal);
+
+        // Transition exiting nodes to the parent's new position.
+        link.exit().transition()
+          .duration(duration)
+          .attr("d", function (d) {
+            var o = { x: source.x, y: source.y };
+            return diagonal({ source: o, target: o });
+          })
+          .remove();
+
+        // Stash the old positions for transition.
+        nodes.forEach(function (d) {
+          d.x0 = d.x;
+          d.y0 = d.y;
+        });
+      }
+
+      // Toggle children on click.
+      function click(d) {
+        if (d.children) {
+          d._children = d.children;
+          d.children = null;
+        } else {
+          d.children = d._children;
+          d._children = null;
         }
-        else{
-          tooltip.style("opacity", 0.71).style("background-color" , '#00FF9C')
-          if(d.deleted == true) {
-            tooltip.style("opacity", 0.71).style("background-color" , '#cc3463')
-          }
-          tooltip
-            .html("<b>Name:</b> " + d.name +"<br><b>Issuer Id:</b> "+ d.issuer_id + "<br><b>Description:</b> "+ d.description 
-            + "<br><b>URL:</b> "+ '<a href=https://www.'+ d.url +'>'+ d.url+'</a>' + "<br><b>Created:</b> "+ d.created
-             + "<br><b>Deleted:</b> "+ d.deleted)
-            .style("left", (d3.event.pageX) + "px") 
-            .style("top", (d3.event.pageY ) + "px")
+
+        update(d);
+      }
+
+      // Collapse nodes
+      function collapse(d) {
+        if (d.children) {
+          d._children = d.children;
+          d._children.forEach(collapse);
+          d.children = null;
         }
-
-        if(d.x <90 && d.x>0){
-          tooltip
-            .style("left", (d3.event.pageX - tooltip.node().offsetWidth) + "px") 
-            .style("top", (d3.event.pageY ) + "px")
-        }
-        else if(d.x <180 && d.x>90){
-          tooltip
-            .style("left", (d3.event.pageX - tooltip.node().offsetWidth) + "px") 
-            .style("top", (d3.event.pageY - tooltip.node().offsetHeight) + "px")
-        }
-        else if(d.x <270 && d.x>180){
-          tooltip
-            .style("left", (d3.event.pageX) + "px") 
-            .style("top", (d3.event.pageY - tooltip.node().offsetHeight) + "px")
-        }
-      })
-
-  nodeEnter.append("text")
-      .attr("x", function(d) { return d.x < Math.PI === !d.children ? 6 : 6; })
-      .attr("dy", "0.31em")
-      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-      // .attr("transform", function(d) { return "rotate(" + (d.x < Math.PI ? d.x - Math.PI / 2 : d.x + Math.PI / 2) * 180 / Math.PI + ")"; })
-      .text(function(d) { return d.name; })
-      .style("fill-opacity", 1e-6);
-
-      // d3.selectAll("g[name='23']").remove()
-
-  // Transition nodes to their new position.
-  var nodeUpdate = node.transition()
-      .duration(duration)
-      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
-
-  nodeUpdate.select("circle")
-      .attr("r", diameter/300)
-      .style("fill", function(d) { return d._children ? "#fff" : "#3f2c70"; })
-      .style("stroke", function(d) { 
-        if(d.node_type == 'ASSET') { return '#fcec04'}
-        else {
-          if(d.deleted == true) { return '#cc3463'}
-        }
-      });
+      }
 
 
-
-
-  nodeUpdate.select("text")
-      .style("fill-opacity", 1)
-      .attr("transform", function(d) { return d.x < 180 ? "translate(0)" : "rotate(180)translate(-" + (12)  + ")"; });
-
-  // TODO: appropriate transform
-  var nodeExit = node.exit().transition()
-      .duration(duration)
-      //.attr("transform", function(d) { return "diagonal(" + source.y + "," + source.x + ")"; })
-      .remove();
-
-  nodeExit.select("circle")
-      .attr("r", 1e-6);
-
-  nodeExit.select("text")
-      .style("fill-opacity", 1e-6);
-
-  // Update the links…
-  var link = svg.selectAll("path.link")
-      .data(links, function(d) { return d.target.id; });
-
-  // Enter any new links at the parent's previous position.
-  link.enter().insert("path", "g")
-      .attr("class", "link")
-      .attr("id", function(d){ return ("link" + d.source.id + "-" + d.target.id)})
-      .attr("name" , function(d){ if(d.target.deleted == true){return "DELETED"}
-        else
-        return (d.target.node_type )})
-      .attr("d", function(d) {
-        var o = {x: source.x0, y: source.y0};
-        return diagonal({source: o, target: o});
-      });
-
-
-  // Transition links to their new position.
-  link.transition()
-      .duration(duration)
-      .attr("d", diagonal);
-
-  // Transition exiting nodes to the parent's new position.
-  link.exit().transition()
-      .duration(duration)
-      .attr("d", function(d) {
-        var o = {x: source.x, y: source.y};
-        return diagonal({source: o, target: o});
-      })
-      .remove();
-
-  // Stash the old positions for transition.
-  nodes.forEach(function(d) {
-    d.x0 = d.x;
-    d.y0 = d.y;
-  });
-}
-
-// Toggle children on click.
-function click(d) {
-  if (d.children) {
-    d._children = d.children;
-    d.children = null;
-  } else {
-    d.children = d._children;
-    d._children = null;
-  }
-  
-  update(d);
-}
-
-// Collapse nodes
-function collapse(d) {
-  if (d.children) {
-      d._children = d.children;
-      d._children.forEach(collapse);
-      d.children = null;
-    }
-}
-
-
-});
-</script>
+    });
+  </script>
 </body>
+</html>
