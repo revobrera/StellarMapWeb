@@ -128,11 +128,11 @@ div.after {
     <div class="b"></div>
    </div>
    
-<script src="{% static 'd3-3.2.2/d3.v3.js' %}"></script>
+<script src="{% static 'radialTidyTreeApp/d3-3.2.2/d3.v3.js' %}"></script>
 <script>
  //original code see fiddle http://jsfiddle.net/Nivaldo/CbGh2/
  
- d3.json("test.json", function(pubs) {
+ d3.json("{% static 'radialTidyTreeApp/json/test.json' %}", function(pubs) {
     
 //initially set the opacity and position of tooltip to null
 

@@ -1,0 +1,172 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>StellarMap Web</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- include custom theme -->
+  <link rel="stylesheet" type="text/css" href="{% static 'webApp/css/frontend.css' %}">
+  <!-- include the Font Awesome library for the search icon -->
+  <link rel="stylesheet" type="text/css" href="{% static 'font-awesome-6.2.1/css/all.min.css' %}">
+  <!-- include HighlightJS library for the terminal text fields -->
+  <link rel="stylesheet" type="text/css" href="{% static 'highlightjs-11.7.0/styles/default.min.css' %}" disabled="disabled">
+  <link rel="stylesheet" type="text/css" href="{% static 'highlightjs-11.7.0/styles/monokai-sublime.min.css' %}">
+  <script src="{% static 'highlightjs-11.7.0/highlight.min.js' %}"></script>
+</head>
+<body class="bg-color-261D45">
+  <div id="app">
+    <div class="top-container">
+      <!-- using the verbatim tag to avoid conflicts between Django and Vue.js templates -->
+      {% verbatim %}
+        <div class="search-container">
+          <!-- keeps the elements on the same line and responsive -->
+          <div class="container-fluid">
+            <!--  loading bar that is displayed while data is being fetched from the server -->
+            <div>
+              <b-progress v-if="loading" :value="progressValue" variant="danger" :animated="loading_animation" class="mt-3"></b-progress>
+            </div>
+
+            <!-- The sidebar menu allows users to access different pages,
+                the network toggle allows users to switch between testnet and public Horizon servers,
+                the input field allows users to enter their query, 
+                and the search button initiates the search function. -->
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <b-button class="sidebar-button" v-b-toggle href="#sidebar-menu" @click.prevent><i class="fa fa-bars"></i></b-button>
+              </div>
+              <div class="col">
+                <div class="row align-items-center">
+                  <b-form-checkbox 
+                    v-model="network_toggle" 
+                    switch 
+                    @change="toggleNetwork"
+                    :class="{ 'text-red': !network_toggle, 'text-green': network_toggle }"
+                  >{{network_selected}}</b-form-checkbox>
+                  <input type="text" v-model="query_account" @keyup.enter="search" placeholder="Paste a Stellar account address...">
+                </div>
+              </div>
+              <div class="col-auto">
+                <button @click="search"><i class="fa fa-space-shuttle"></i></button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      {% endverbatim %}
+    </div>
+
+    <!-- This element serves as a container for displaying the results of the search function -->
+    <div class="results-container">
+      <div class="response-container">
+        <div class="radial-tree-visual">
+          {% include "radialTidyTreeApp/radial_tidy_tree.html" %}
+        </div>
+
+        <div>
+          <b-card no-body class="bv-tabs">
+            <b-tabs card>
+              <b-tab title="Upsteam Creator Accounts" active>
+                <template>
+                  <div>
+                    <b-table
+                      id="table-transition-example"
+                      :items="items"
+                      :fields="fields"
+                      striped
+                      small
+                      primary-key="a"
+                      dark
+                      :tbody-transition-props="transProps"
+                    ></b-table>
+                  </div>
+                </template>
+              </b-tab>
+              <b-tab title="JSON">
+                <pre v-html="highlightedJSONResponse"></pre>
+              </b-tab>
+              <b-tab title="TOML">
+                <b-card-text>TOML outputs</b-card-text>
+              </b-tab>
+              <b-tab title="TERMINAL">
+                <b-card-text>Terminal outputs</b-card-text>
+              </b-tab>
+            </b-tabs>
+          </b-card>
+        </div>
+
+      </div>
+    </div>
+    
+    <!-- The sidebar contains links and information that can be accessed by the user. -->
+    <b-sidebar id="sidebar-menu" title="StellarMap.Network" shadow>
+      <div class="px-3 py-2">
+        This web application allows users to generate the lineage of Stellar addresses 
+        and visualize them in a radial, tidy tree format. The tree maps address types 
+        and activity, providing a clear and organized view of the relationships between addresses. 
+      </div>
+
+      <template #footer="{ hide }">
+        <div class="d-flex text-light align-items-center px-3 py-2">
+          <b-button class="close-button" @click="hide">
+            <i class="fas fa-sign-out icon-pad"></i> Close
+          </b-button>
+        </div>
+      </template>
+    </b-sidebar>
+  </div>
+
+  <!-- Load required Bootstrap and BootstrapVue CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-4.6.2/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-vue-2.23.1/bootstrap-vue.min.css' %}">
+  <!-- Load Vue followed by BootstrapVue -->
+  <script src="{% static 'vue-2.6.12/vue.js' %}"></script>
+  <script src="{% static 'bootstrap-vue-2.23.1/bootstrap-vue.min.js' %}" crossorigin="anonymous"></script>
+  <!-- Custom VueJS mixin -->
+  <script src="{% static 'webApp/js/lineage_table_mixin.js' %}"></script>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      mixins: [lineage_table_mixin],
+      data: {
+        query_account: '',
+        loading: false,
+        progressValue: 0,
+        response: '',
+        highlightedJSONResponse: '',
+        network_toggle: false,
+        network_selected: 'testnet',
+        loading_animation: true,
+      },
+      methods: {
+        async search() {
+          // Set 'loading' to true to show a loading indicator
+          this.loading = true;
+          this.progressValue = 17;
+          try {
+            // Fetch data from either the testnet or public Horizon server depending on the value of 'network_selected'
+            const response = await fetch(
+              this.network_selected === 'testnet'
+                ? `https://horizon-testnet.stellar.org/accounts/${this.query_account}`
+                : `https://horizon.stellar.org/accounts/${this.query_account}`
+            );
+            // Store the response text in 'response'
+            this.response = await response.text();
+            this.highlightedJSONResponse = hljs.highlight(this.response, {language: 'json'}).value;
+            this.progressValue = 71;
+            // Set 'loading' to false to hide the loading indicator
+            this.loading = false;
+          } catch (e) {
+            // If an error occurs, store the error message in 'response'
+            this.response = e.message;
+          }
+        },
+        toggleNetwork() {
+          // Method that toggles the value of 'network_selected' between 'testnet' and 'public'
+          this.network_selected = this.network_toggle ? 'public' : 'testnet'
+        }
+      }
+    })
+  </script>
+</body>
+</html>

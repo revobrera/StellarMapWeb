@@ -1,0 +1,34 @@
+{% block display_dataset %}
+    <!-- This element serves as a container for displaying the results of the search function -->
+    <div class="results-container">
+        <div class="response-container">
+            <!-- <div class="radial-tree-visual">
+            {% include "radialTidyTreeApp/radial_tidy_tree.html" %}
+        </div>-->
+
+            <div>
+                <b-card no-body class="bv-tabs">
+                    <b-tabs card>
+                        <b-tab title="Upsteam Creator Accounts" active>
+                            <template>
+                                <div>
+                                    <b-table id="table-transition-example" :items="items" :fields="fields" striped small
+                                        primary-key="a" dark :tbody-transition-props="transProps"></b-table>
+                                </div>
+                            </template>
+                        </b-tab>
+                        <b-tab title="JSON">
+                            <pre v-html="highlightedJSONResponse"></pre>
+                        </b-tab>
+                        <b-tab title="TOML">
+                            <b-card-text>TOML outputs</b-card-text>
+                        </b-tab>
+                        <b-tab title="TERMINAL">
+                            <b-card-text>Terminal outputs</b-card-text>
+                        </b-tab>
+                    </b-tabs>
+                </b-card>
+            </div>
+        </div>
+    </div>
+{% endblock %}
