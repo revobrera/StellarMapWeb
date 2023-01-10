@@ -144,8 +144,8 @@ VENV_PATH = os.path.dirname(BASE_DIR)
 # load static files
 STATICFILES_DIRS = [
     # os.path.join(VENV_PATH, 'static'),
-    os.path.join(VENV_PATH, "webApp"),
-    os.path.join(VENV_PATH, "radialTidyTreeApp"),
+    os.path.join(VENV_PATH, "webApp", "static"),
+    os.path.join(VENV_PATH, "radialTidyTreeApp", "static"),
 ]
 
 #STATIC_ROOT = os.path.join(VENV_PATH, 'static_root')
