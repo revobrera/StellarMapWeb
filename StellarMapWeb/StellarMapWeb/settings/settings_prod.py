@@ -8,6 +8,12 @@ from .settings_base import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+# load static files
+STATICFILES_DIRS = [
+    os.path.join(VENV_PATH, "webApp", "static"),
+    os.path.join(VENV_PATH, "radialTidyTreeApp", "static"),
+]
+
 # Redirect all HTTP requests to HTTPS
 SECURE_SSL_REDIRECT = True
 

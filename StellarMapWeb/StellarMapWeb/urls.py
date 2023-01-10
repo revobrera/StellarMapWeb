@@ -24,4 +24,5 @@ urlpatterns = [
     re_path('chief/', admin.site.urls),
     re_path('', include('apiApp.urls')),
     re_path('', include('webApp.urls')),
+    re_path('', include('radialTidyTreeApp.urls')),
 ]
