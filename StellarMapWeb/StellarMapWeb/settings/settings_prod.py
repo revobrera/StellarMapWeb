@@ -10,7 +10,6 @@ DEBUG = False
 
 # load static files
 STATICFILES_DIRS = [
-    # os.path.join(VENV_PATH, 'static'),
     os.path.join(VENV_PATH, "webApp", "static"),
     os.path.join(VENV_PATH, "radialTidyTreeApp", "static"),
 ]
