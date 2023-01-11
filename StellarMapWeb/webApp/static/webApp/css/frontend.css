@@ -2,6 +2,7 @@
 
 .bg-color-261D45 {
     background-color: var(--main-bg-color);
+    padding-top: 107px; /* radial tree top padding */
 }
 .top-container {
     position: fixed;
@@ -41,17 +42,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    z-index: 1;
-    box-shadow: 0 9px 63px rgba(0, 0, 0, 0.3);
 }
 .response-container {
     text-align: left;
     color: #FFF;
-    padding-top: 55px;
     padding-left: 17px;
     padding-right: 17px;
     width: 100%;
