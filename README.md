@@ -2,7 +2,7 @@
 
 Welcome to the Stellar Lineage and Radial Tree application!
 
-<img src="/docs/source/images/v0.1.x/stellarmapweb_full_prototype_v0_1_0.png" width="100%" title="StellarMapWeb">
+<img src="/docs/source/images/v0.1.x/stellarmapweb_full_prototype_v0_1_1.png" width="100%" title="StellarMapWeb">
 
 This web application allows users to generate the lineage of Stellar addresses and visualize them in a radial, tidy tree format. The tree maps address types and activity, providing a clear and organized view of the relationships between addresses.
 
