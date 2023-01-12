@@ -154,6 +154,7 @@ button:hover i,
 /* vuejs table */
 .table-dark {
   color: var(--search-container-text-color) !important;
+  font-size: small;
   background-color: var(--secondary-bg-color) !important;
 }
 
