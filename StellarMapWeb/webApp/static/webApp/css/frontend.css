@@ -150,3 +150,24 @@ button:hover i,
   align-items: center;
   justify-content: center;
 }
+
+/* vuejs table */
+.table-dark {
+  color: var(--search-container-text-color) !important;
+  background-color: var(--secondary-bg-color) !important;
+}
+
+.table-dark td,
+.table-dark th,
+.table-dark thead th {
+  border-color: var(--search-container-border) !important;
+}
+
+.table-dark.table-striped tbody tr:nth-of-type(2n+1) {
+  background-color: var(--main-bg-color) !important;
+}
+
+.table-sm td,
+.table-sm th {
+  padding: 0.17rem !important;
+}
