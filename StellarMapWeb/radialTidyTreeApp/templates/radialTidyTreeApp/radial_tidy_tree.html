@@ -9,7 +9,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'radialTidyTreeApp/css/radial_tidy_tree.css' %}">
   <script src="{% static 'radialTidyTreeApp/d3-3.2.2/d3.v3.js' %}"></script>
 </head>
-<body style="background-color:#261D45">
+<body>
   <div class="grid-container">
     <div class="b"></div>
   </div>
@@ -18,7 +18,7 @@
   // Load the JSON data file
   d3.json("{% static 'radialTidyTreeApp/json/test.json' %}", function (pubs) {
     // Initialize the tooltip element and set its position and opacity to null
-    var tooltip = d3.select('body')
+    var tooltip = d3.select('#display_radial_tidy_tree')
       .append('div')
       .attr('class', 'tooltip')
       .style('opacity', 0)
@@ -83,7 +83,7 @@
       });
 
     // Append an svg element to the body and set its viewBox and preserveAspectRatio attributes
-    var svg = d3.select('body').append('svg')
+    var svg = d3.select('#display_radial_tidy_tree').append('svg')
       .attr('preserveAspectRatio', 'xMinYMin meet')
       .attr('viewBox', '0 0 ' + width + ' ' + height)
       .append('g')

@@ -2,6 +2,7 @@
 
 .bg-color-261D45 {
     background-color: var(--main-bg-color);
+    padding-top: 107px; /* radial tree top padding */
 }
 .top-container {
     position: fixed;
@@ -41,12 +42,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 50px; /* adjust the margin as needed */
 }
 .response-container {
     text-align: left;
     color: #FFF;
-    padding-top: 55px;
     padding-left: 17px;
     padding-right: 17px;
     width: 100%;
@@ -143,9 +142,33 @@ button:hover i,
 
 /* radial tidy tree */
 .radial-tree-visual {
-  width: 100%;
-  height: 471px;
+  width: 71%;
+  margin-top: 50px;;
   background-color: var(--secondary-bg-color);
-  margin: auto;
   margin-bottom: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* vuejs table */
+.table-dark {
+  color: var(--search-container-text-color) !important;
+  font-size: small;
+  background-color: var(--secondary-bg-color) !important;
+}
+
+.table-dark td,
+.table-dark th,
+.table-dark thead th {
+  border-color: var(--search-container-border) !important;
+}
+
+.table-dark.table-striped tbody tr:nth-of-type(2n+1) {
+  background-color: var(--main-bg-color) !important;
+}
+
+.table-sm td,
+.table-sm th {
+  padding: 0.17rem !important;
 }
