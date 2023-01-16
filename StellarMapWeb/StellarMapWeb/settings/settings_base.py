@@ -14,6 +14,7 @@ import os
 import sys
 from pathlib import Path
 
+from cassandra import ConsistencyLevel
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,10 +39,11 @@ ALLOWED_HOSTS = ['stellarmap.network', '172.104.25.13', 'Revobrera.pythonanywher
 
 # Application definition
 INSTALLED_APPS = [
+    'django_cassandra_engine',
+    'django_cassandra_engine.sessions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
@@ -50,6 +52,8 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'webApp',
 ]
+
+SESSION_ENGINE = 'django_cassandra_engine.sessions.backends.db'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -85,13 +89,40 @@ WSGI_APPLICATION = 'StellarMapWeb.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# Cassandra database settings
+CASSANDRA_DB_NAME = config('CASSANDRA_DB_NAME')
+CASSANDRA_USERNAME = config('CASSANDRA_USERNAME')
+CASSANDRA_PASSWORD = config('CASSANDRA_PASSWORD')
+CASSANDRA_HOST = config('CASSANDRA_HOST')
+CASSANDRA_REPLICATION_STRATEGY = config('CASSANDRA_REPLICATION_STRATEGY')
+CASSANDRA_REPLICATION_FACTOR = config('CASSANDRA_REPLICATION_FACTOR')
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/'.join([str(BASE_DIR), 'db.sqlite3']),
+        'ENGINE': 'django_cassandra_engine',
+        'NAME': CASSANDRA_DB_NAME,
+        'TEST_NAME': 'test_db',
+        'USER': CASSANDRA_USERNAME,
+        'PASSWORD': CASSANDRA_PASSWORD,
+        'HOST': CASSANDRA_HOST,
+        'OPTIONS': {
+            'replication': {
+                'strategy_class': CASSANDRA_REPLICATION_STRATEGY,
+                'replication_factor': CASSANDRA_REPLICATION_FACTOR
+            },
+            'connection': {
+                'consistency': ConsistencyLevel.LOCAL_ONE,
+                'retry_connect': True
+                # + All connection options for cassandra.cluster.Cluster()
+            },
+            'session': {
+                'default_timeout': 10,
+                'default_fetch_size': 10000
+                # + All options for cassandra.cluster.Session()
+            }
+        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
