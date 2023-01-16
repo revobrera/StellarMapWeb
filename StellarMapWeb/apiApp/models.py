@@ -1,7 +1,40 @@
-from django.db import models
+import uuid
+from datetime import datetime
+
+from cassandra.cqlengine import columns
 from django_cassandra_engine.models import DjangoCassandraModel
 
-class StellarAccountInquiryHistory(DjangoCassandraModel):
+PENDING = 'pending'
+IN_PROGRESS = 'in_progress'
+COMPLETED = 'completed'
+STATUS_CHOICES = (
+    (PENDING, 'Pending'),
+    (IN_PROGRESS, 'In Progress'),
+    (COMPLETED, 'Completed'),
+)
+
+TESTNET = 'testnet'
+PUBLIC = 'public'
+NETWORK_CHOICES = (
+    (TESTNET, 'testnet'),
+    (PUBLIC, 'public'),
+)
+
+class BaseModel(DjangoCassandraModel):
+    id = columns.UUID(primary_key=True, default=uuid.uuid4)
+    created_at = columns.DateTime()
+    updated_at = columns.DateTime()
+
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = datetime.datetime.utcnow()
+        self.updated_at = datetime.datetime.utcnow()
+        return super().save(*args, **kwargs)
+    
+    class Meta:
+        abstract = True
+
+class StellarAccountInquiryHistory(BaseModel):
     """
     A model for storing the history of user requests to examine a Stellar account.
 
@@ -11,55 +44,32 @@ class StellarAccountInquiryHistory(DjangoCassandraModel):
     
     This model has three fields:
         - id: an AutoField for storing a unique identifier for each record
-        - stellar_account_address: a CharField for storing the address of the Stellar account
-        - status: a CharField for storing the status of the request
-        - created_at: a DateTimeField for storing the date and time when the request was made
-        - updated_at: a DateTimeField for storing the date and time when the request was last updated
+        - stellar_account_address: a Text for storing the address of the Stellar account
+        - status: a Text for storing the status of the request
+        - created_at: a DateTime for storing the date and time when the request was made
+        - updated_at: a DateTime for storing the date and time when the request was last updated
     """
-    PENDING = 'pending'
-    IN_PROGRESS = 'in_progress'
-    COMPLETED = 'completed'
-    ERROR = 'error'
-    STATUS_CHOICES = (
-        (PENDING, 'Pending'),
-        (IN_PROGRESS, 'In Progress'),
-        (COMPLETED, 'Completed'),
-        (ERROR, 'Error'),
-    )
-    id = models.AutoField(primary_key=True)
-    stellar_account_address = models.CharField(max_length=56)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=PENDING)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
+    stellar_account_address = columns.Text(max_length=56)
+    network_name = columns.Text(max_length=9, default=TESTNET)
+    status = columns.Text(max_length=20, default=PENDING)
 
-class StellarAccountInquiryDetail(DjangoCassandraModel):
+class StellarAccountInquiryDetail(BaseModel):
     """
     A model for storing detailed information about user requests to examine a Stellar account.
     
     This model has six fields:
         - id: an AutoField for storing a unique identifier for each record
-        - inquiry: a ForeignKey field that references the id field in the StellarAccountInquiryHistory model
-        - stellar_account_address: a CharField for storing the address of the Stellar account
-        - uri_endpoint: a CharField for storing the URI endpoint of the request
-        - response: a TextField for storing the response to the request as a string
-        - status: a CharField for storing the status of the request
-        - created_at: a DateTimeField for storing the date and time when the request was made
-        - updated_at: a DateTimeField for storing the date and time when the request was last updated
+        - stellar_account_address: a Text for storing the address of the Stellar account
+        - uri_endpoint: a Text for storing the URI endpoint of the request
+        - response: a Text for storing the response to the request as a string
+        - status: a Text for storing the status of the request
+        - created_at: a DateTime for storing the date and time when the request was made
+        - updated_at: a DateTime for storing the date and time when the request was last updated
     """
-    PENDING = 'pending'
-    IN_PROGRESS = 'in_progress'
-    COMPLETED = 'completed'
-    STATUS_CHOICES = (
-        (PENDING, 'Pending'),
-        (IN_PROGRESS, 'In Progress'),
-        (COMPLETED, 'Completed'),
-    )
-    id = models.AutoField(primary_key=True)
-    inquiry = models.ForeignKey(StellarAccountInquiryHistory, on_delete=models.CASCADE)
-    stellar_account_address = models.CharField(max_length=56)
-    uri_endpoint = models.CharField(max_length=200)
-    response = models.TextField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=PENDING)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+
+    stellar_account_address = columns.Text(max_length=56)
+    network_name = columns.Text(max_length=9, default=TESTNET)
+    uri_endpoint = columns.Text(max_length=200)
+    response = columns.Text()
+    status = columns.Text(max_length=20, default=PENDING)
