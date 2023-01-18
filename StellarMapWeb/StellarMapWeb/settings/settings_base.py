@@ -15,6 +15,8 @@ import sys
 from pathlib import Path
 
 from cassandra import ConsistencyLevel
+from cassandra.auth import PlainTextAuthProvider
+from cassandra.cluster import Cluster
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -96,21 +98,26 @@ CASSANDRA_PASSWORD = config('CASSANDRA_PASSWORD')
 CASSANDRA_HOST = config('CASSANDRA_HOST')
 CASSANDRA_REPLICATION_STRATEGY = config('CASSANDRA_REPLICATION_STRATEGY')
 CASSANDRA_REPLICATION_FACTOR = config('CASSANDRA_REPLICATION_FACTOR')
+CLIENT_ID=config('CLIENT_ID')
+CLIENT_SECRET=config('CLIENT_SECRET')
+ASTRA_DB_ID=config('ASTRA_DB_ID')
+ASTRA_DB_APPLICATION_TOKEN=config('ASTRA_DB_APPLICATION_TOKEN')
 
 DATABASES = {
     'default': {
         'ENGINE': 'django_cassandra_engine',
         'NAME': CASSANDRA_DB_NAME,
         'TEST_NAME': 'test_db',
-        'USER': CASSANDRA_USERNAME,
-        'PASSWORD': CASSANDRA_PASSWORD,
-        'HOST': CASSANDRA_HOST,
         'OPTIONS': {
             'replication': {
                 'strategy_class': CASSANDRA_REPLICATION_STRATEGY,
                 'replication_factor': CASSANDRA_REPLICATION_FACTOR
             },
             'connection': {
+                'auth_provider': PlainTextAuthProvider(CLIENT_ID, CLIENT_SECRET),
+                'cloud': {
+                    'secure_connect_bundle': 'secure-connect-stellarmapdb.zip',
+                },
                 'consistency': ConsistencyLevel.LOCAL_ONE,
                 'retry_connect': True
                 # + All connection options for cassandra.cluster.Cluster()
