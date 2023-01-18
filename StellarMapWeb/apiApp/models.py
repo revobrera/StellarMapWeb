@@ -76,7 +76,7 @@ class StellarAccountLineage(BaseModel):
     stellar_account_created_at = columns.DateTime()
     network_name = columns.Text(max_length=9)
     home_domain = columns.Text(max_length=71)
-    xlm_balance = columns.Float(max_length=17)
+    xlm_balance = columns.Float()
     horizon_accounts_doc_api_endpoint = columns.Text()
     horizon_accounts_operations_doc_api_endpoint = columns.Text()
     horizon_accounts_effects_doc_api_endpoint = columns.Text()
