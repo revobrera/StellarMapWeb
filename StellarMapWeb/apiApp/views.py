@@ -123,9 +123,9 @@ class StellarAccountInquiryHistoryViewSet(APIView):
         serializer = StellarAccountInquiryHistorySerializer(data=request.data)
         if serializer.is_valid():
             # removing placeholders
-            del request.data['id']
-            del request.data['created_at']
-            del request.data['updated_at']
+            del serializer.data['id']
+            del serializer.data['created_at']
+            del serializer.data['updated_at']
 
             # create inquiry
             inquiry = AsyncStellarInquiryCreator().create_inquiry(**serializer.validated_data)
