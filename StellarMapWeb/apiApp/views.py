@@ -1,13 +1,17 @@
 import json
+import uuid
 
 from django.http import HttpResponse
-from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from .helpers.async_stellar_account_inquiry_history import \
+    AsyncStellarInquiryCreator
 from .helpers.conn import SiteChecker
 from .helpers.env import EnvHelpers
 from .helpers.lineage_creator_accounts import LineageHelpers
+from .serializers import StellarAccountInquiryHistorySerializer
 
 
 @api_view(['GET'])
@@ -79,3 +83,44 @@ def lineage_stellar_account(request, network, stellar_account_address):
 
     # Return the data as a JSON response
     return Response(data_json)
+
+
+class StellarAccountInquiryHistoryViewSet(APIView):
+    """
+    A viewset for handling the creation of inquiries for Stellar accounts.
+    """
+    def post(self, request):
+        """
+        Handles the creation of a new inquiry for a Stellar account.
+        
+        Parameters:
+            - request (HttpRequest): The request object containing the data for the new inquiry.
+        
+        Returns:
+            - 201 (created): If the inquiry is created successfully.
+            - 400 (bad request): If the request data is invalid.
+
+        Notes:
+            Regarding the use of async in views, Django views are synchronous by default.
+            This means that views are executed one after the other, and the next view is
+            executed only after the previous one has finished. Asynchronous views are not
+            supported in Django because of the way the framework is designed.
+
+            However, it's possible to use async in service layer or in the models. Async
+            can be used to optimize the performance of the application by allowing the
+            execution of multiple tasks at the same time, without waiting for one task
+            to finish before starting another one. For example, if you are making
+            multiple HTTP requests or performing a time-consuming computation, you can 
+            use async to perform those tasks concurrently and avoid blocking the execution
+            of other parts of the application.
+        """
+        # placeholders
+        request.data['id'] = uuid.uuid4()
+        request.data['created_at'] = ''
+        request.data['updated_at'] = ''
+
+        serializer = StellarAccountInquiryHistorySerializer(data=request.data)
+        if serializer.is_valid():
+            inquiry = AsyncStellarInquiryCreator().create_inquiry(**serializer.validated_data)
+            return Response(StellarAccountInquiryHistorySerializer(inquiry).data, status=201)
+        return Response(serializer.errors, status=400)

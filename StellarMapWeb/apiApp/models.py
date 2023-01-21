@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime
 
 from cassandra.cqlengine import columns
+from cassandra.cqlengine.models import Model as PythonCassandraModel
 from django_cassandra_engine.models import DjangoCassandraModel
 
 PENDING = 'pending'
@@ -20,7 +21,7 @@ NETWORK_CHOICES = (
     (PUBLIC, 'public'),
 )
 
-class BaseModel(DjangoCassandraModel):
+class BaseModel(DjangoCassandraModel, PythonCassandraModel):
     id = columns.UUID(primary_key=True, default=uuid.uuid4)
     created_at = columns.DateTime()
     updated_at = columns.DateTime()
@@ -49,7 +50,7 @@ class StellarAccountInquiryHistory(BaseModel):
 
     stellar_account = columns.Text(max_length=56)
     network_name = columns.Text(max_length=9)
-    status = columns.Text(max_length=20, default=PENDING)
+    status = columns.Text(max_length=20)
 
 class StellarAccountLineage(BaseModel):
     """
@@ -81,5 +82,5 @@ class StellarAccountLineage(BaseModel):
     horizon_accounts_operations_doc_api_href = columns.Text()
     horizon_accounts_effects_doc_api_href = columns.Text()
     stellar_expert_explorer_account_doc_api_href = columns.Text()
-    status = columns.Text(default=PENDING)
+    status = columns.Text(max_length=36)
 
