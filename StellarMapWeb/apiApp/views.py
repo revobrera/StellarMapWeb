@@ -115,13 +115,19 @@ class StellarAccountInquiryHistoryViewSet(APIView):
             use async to perform those tasks concurrently and avoid blocking the execution
             of other parts of the application.
         """
-        # placeholders
+        # placeholders to serialize data
         request.data['id'] = str(uuid.uuid4())
         request.data['created_at'] = datetime.datetime.utcnow()
         request.data['updated_at'] = datetime.datetime.utcnow()
 
         serializer = StellarAccountInquiryHistorySerializer(data=request.data)
         if serializer.is_valid():
+            # removing placeholders
+            del request.data['id']
+            del request.data['created_at']
+            del request.data['updated_at']
+
+            # create inquiry
             inquiry = AsyncStellarInquiryCreator().create_inquiry(**serializer.validated_data)
             return Response(StellarAccountInquiryHistorySerializer(inquiry).data, status=201)
         return Response(serializer.errors, status=400)
