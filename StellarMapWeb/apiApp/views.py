@@ -1,6 +1,6 @@
 import json
 import uuid
-from datetime import datetime
+import datetime
 
 from django.http import HttpResponse
 from rest_framework.decorators import api_view

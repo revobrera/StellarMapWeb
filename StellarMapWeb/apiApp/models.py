@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+import datetime
 
 from cassandra.cqlengine import columns
 from cassandra.cqlengine.models import Model as PythonCassandraModel
