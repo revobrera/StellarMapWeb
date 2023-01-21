@@ -1,7 +1,7 @@
 from apiApp.models import StellarAccountInquiryHistory
 from cassandra.cluster import Cluster
 from django.db import transaction
-from StellarMapWeb.StellarMapWeb.settings.settings_base import CASSANDRA_HOST, CASSANDRA_DB_NAME
+from StellarMapWeb.settings.settings_base import CASSANDRA_HOST, CASSANDRA_DB_NAME
 
 
 class AsyncStellarInquiryCreator:
