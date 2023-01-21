@@ -117,8 +117,8 @@ class StellarAccountInquiryHistoryViewSet(APIView):
         """
         # placeholders
         request.data['id'] = str(uuid.uuid4())
-        request.data['created_at'] = datetime.utcnow()
-        request.data['updated_at'] = datetime.utcnow()
+        request.data['created_at'] = datetime.datetime.utcnow()
+        request.data['updated_at'] = datetime.datetime.utcnow()
 
         serializer = StellarAccountInquiryHistorySerializer(data=request.data)
         if serializer.is_valid():
