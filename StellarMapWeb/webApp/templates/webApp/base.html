@@ -70,6 +70,10 @@
                     this.response = await response.text();
                     this.highlightedJSONResponse = hljs.highlight(this.response, { language: 'json' }).value;
                     this.progressValue = 71;
+
+                    // Create a new inquiry for the queried account
+                    await this.createInquiry(this.query_account, this.network_selected);
+
                     // Set 'loading' to false to hide the loading indicator
                     this.loading = false;
                 } catch (e) {
@@ -80,7 +84,23 @@
             toggleNetwork() {
                 // Method that toggles the value of 'network_selected' between 'testnet' and 'public'
                 this.network_selected = this.network_toggle ? 'public' : 'testnet'
-            }
+            },
+            async createInquiry(stellar_account, network_name) {
+                try {
+                    const body = JSON.stringify({
+                        "stellar_account": stellar_account,
+                        "network_name": network_name,
+                        "status": 'PENDING'
+                    });
+                    const headers = { 'Content-Type': 'application/json' };
+                    const inquiry_response = await fetch('/inquiries/', { method: 'POST', body, headers });
+                    if (!inquiry_response.ok) {
+                        throw new Error(`Failed to create inquiry: ${inquiry_response.status}`);
+                    }
+                } catch (e) {
+                    // Handle error
+                }
+            },
         }
     })
 </script>

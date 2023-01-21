@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime
 
 from cassandra.cqlengine import columns
+from cassandra.cqlengine.models import Model as PythonCassandraModel
 from django_cassandra_engine.models import DjangoCassandraModel
 
 PENDING = 'pending'
@@ -20,7 +21,7 @@ NETWORK_CHOICES = (
     (PUBLIC, 'public'),
 )
 
-class BaseModel(DjangoCassandraModel):
+class BaseModel(DjangoCassandraModel, PythonCassandraModel):
     id = columns.UUID(primary_key=True, default=uuid.uuid4)
     created_at = columns.DateTime()
     updated_at = columns.DateTime()
@@ -49,7 +50,7 @@ class StellarAccountInquiryHistory(BaseModel):
 
     stellar_account = columns.Text(max_length=56)
     network_name = columns.Text(max_length=9)
-    status = columns.Text(max_length=20, default=PENDING)
+    status = columns.Text(max_length=20)
 
 class StellarAccountLineage(BaseModel):
     """
@@ -63,10 +64,10 @@ class StellarAccountLineage(BaseModel):
         network_name (str): a field that stores the network name
         home_domain (str): a field that stores the home domain
         xlm_balance (float): a field that stores the XLM balance of the Stellar account
-        horizon_accounts_doc_api_endpoint (str): a field that stores the horizon accounts doc api endpoint
-        horizon_accounts_operations_doc_api_endpoint (str): a field that stores the horizon accounts operations doc api endpoint
-        horizon_accounts_effects_doc_api_endpoint (str): a field that stores the horizon accounts effects doc api endpoint
-        stellar_expert_explorer_account_doc_api_endpoint (str): a field that stores the Stellar expert explorer account doc api endpoint
+        horizon_accounts_doc_api_href (str): a field that stores the horizon accounts doc api href
+        horizon_accounts_operations_doc_api_href (str): a field that stores the horizon accounts operations doc api href
+        horizon_accounts_effects_doc_api_href (str): a field that stores the horizon accounts effects doc api href
+        stellar_expert_explorer_account_doc_api_href (str): a field that stores the Stellar expert explorer account doc api href
         status (str): a field that stores the status of the request with a default value of 'pending'. The valid choices for the status field are 'pending', 'in_progress', and 'completed'.
     """
 
@@ -77,9 +78,9 @@ class StellarAccountLineage(BaseModel):
     network_name = columns.Text(max_length=9)
     home_domain = columns.Text(max_length=71)
     xlm_balance = columns.Float()
-    horizon_accounts_doc_api_endpoint = columns.Text()
-    horizon_accounts_operations_doc_api_endpoint = columns.Text()
-    horizon_accounts_effects_doc_api_endpoint = columns.Text()
-    stellar_expert_explorer_account_doc_api_endpoint = columns.Text()
-    status = columns.Text(default=PENDING)
+    horizon_accounts_doc_api_href = columns.Text()
+    horizon_accounts_operations_doc_api_href = columns.Text()
+    horizon_accounts_effects_doc_api_href = columns.Text()
+    stellar_expert_explorer_account_doc_api_href = columns.Text()
+    status = columns.Text(max_length=36)
 
