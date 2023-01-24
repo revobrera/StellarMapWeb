@@ -8,6 +8,7 @@ from .helpers.sm_validator import StellarMapValidatorHelpers
 
 
 class SwaggerUIViewTestCase(TestCase):
+
     def test_swagger_ui(self):
         # Issue a GET request to the swagger_ui view
         response = self.client.get(reverse('apiApp:swagger-ui'))
@@ -16,6 +17,7 @@ class SwaggerUIViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
 class CheckAllUrlsViewTestCase(TestCase):
+
     def test_check_all_urls(self):
         # Issue a GET request to the check_all_urls view
         response = self.client.get(reverse('apiApp:check_all_urls'))
@@ -24,6 +26,7 @@ class CheckAllUrlsViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
 class SetNetworkViewTestCase(TestCase):
+
     def test_set_network(self):
         # Issue a GET request to the set_network view
         response = self.client.get(reverse('apiApp:set_network', kwargs={'network': 'testnet'}))
@@ -32,6 +35,7 @@ class SetNetworkViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
 class LineageStellarAccountViewTestCase(TestCase):
+
     def test_lineage_stellar_account(self):
         # Issue a GET request to the lineage_stellar_account view
         response = self.client.get(reverse('apiApp:lineage_stellar_account', kwargs={'network': 'testnet', 'stellar_account_address': 'GBRPYHIL2CI3FNQ4BXLFMNDLFJUNPU2HY3ZMFSHONUCEOASW7QC7OX2H'}))
@@ -41,6 +45,7 @@ class LineageStellarAccountViewTestCase(TestCase):
 
 
 class TestStellarNetwork(unittest.TestCase):
+
     def test_init(self):
         # Test the initialization of the StellarNetwork class with the 'testnet' network
         network = StellarNetwork('testnet')
@@ -60,6 +65,7 @@ class TestStellarNetwork(unittest.TestCase):
 
 
 class TestEnvHelpers(unittest.TestCase):
+
     def test_set_testnet_network(self):
         env_helpers = EnvHelpers()
         env_helpers.set_testnet_network()
@@ -88,6 +94,7 @@ class TestEnvHelpers(unittest.TestCase):
 
 
 class TestStellarMapValidatorHelpers(unittest.TestCase):
+
     def test_validate_stellar_account_address(self):
         # Test a valid Stellar account address
         self.assertTrue(StellarMapValidatorHelpers.validate_stellar_account_address('GA2C5RFPE6GCKMY3US5PAB6UZLKIGSPIUKSLRB6Q723BM2OARMDUYEJ5'))

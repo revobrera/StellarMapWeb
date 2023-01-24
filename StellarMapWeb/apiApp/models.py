@@ -2,7 +2,6 @@ import uuid
 import datetime
 
 from cassandra.cqlengine import columns
-from cassandra.cqlengine.models import Model as PythonCassandraModel
 from django_cassandra_engine.models import DjangoCassandraModel
 
 PENDING = 'pending'
@@ -21,7 +20,7 @@ NETWORK_CHOICES = (
     (PUBLIC, 'public'),
 )
 
-class BaseModel(DjangoCassandraModel, PythonCassandraModel):
+class BaseModel(DjangoCassandraModel):
     id = columns.UUID(primary_key=True, default=uuid.uuid4)
     created_at = columns.DateTime()
     updated_at = columns.DateTime()
