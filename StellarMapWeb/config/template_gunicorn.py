@@ -9,7 +9,7 @@ accesslog = "/var/log/gunicorn/access.log"
 errorlog = "/var/log/gunicorn/error.log"
 
 # Set the path to the Django project and settings module
-django_project_path = "/home/revobrera/StellarMapWeb/StellarMapWeb"
+django_project_path = "/your/project/path/StellarMapWeb/StellarMapWeb"
 django_settings_module = "StellarMapWeb.settings"
 
 # Set the environment variables for the Django project

@@ -1,0 +1,14 @@
+# /path/to/your/systemd/gunicorn.service
+
+[Unit]
+Description=Gunicorn daemon for StellarMapWeb project
+After=network.target
+
+[Service]
+User=your_username
+Group=your_group
+WorkingDirectory=/path/to/your/project/StellarMapWeb/StellarMapWeb
+ExecStart=/path/to/your/env/bin/gunicorn --bind 0.0.0.0:8000 StellarMapWeb.wsgi
+
+[Install]
+WantedBy=multi-user.target
