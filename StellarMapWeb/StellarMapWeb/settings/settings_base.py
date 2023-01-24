@@ -37,17 +37,17 @@ DEBUG = True
 # Redirect all HTTP requests to HTTP
 SECURE_SSL_REDIRECT = False
 
-ALLOWED_HOSTS = ['stellarmap.network', '172.104.25.13', 'Revobrera.pythonanywhere.com', '127.0.0.1']
+ALLOWED_HOSTS = [config('ALLOWED_HOSTS')]
 
 # Application definition
 INSTALLED_APPS = [
-    'django_cassandra_engine',
-    'django_cassandra_engine.sessions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_cassandra_engine',
+    'django_cassandra_engine.sessions',
     'rest_framework',
     'apiApp',
     'radialTidyTreeApp',
@@ -103,8 +103,20 @@ CLIENT_SECRET=config('CLIENT_SECRET')
 ASTRA_DB_ID=config('ASTRA_DB_ID')
 ASTRA_DB_APPLICATION_TOKEN=config('ASTRA_DB_APPLICATION_TOKEN')
 
+# Controls the fallback behavior when sorting query results.
+# It's worth mentioning that when this option is set to true, 
+# it will increase the time of execution and also it will 
+# consume a lot of memory, also it's not recommended to 
+# use it on large datasets.
+CASSANDRA_FALLBACK_ORDER_BY_PYTHON = False
+
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '/'.join([str(BASE_DIR), 'db.sqlite3']),
+        'SUPPORTS_TRANSACTIONS': True,
+    },
+    'cassandra': {
         'ENGINE': 'django_cassandra_engine',
         'NAME': CASSANDRA_DB_NAME,
         'TEST_NAME': 'test_db',
@@ -128,8 +140,19 @@ DATABASES = {
                 # + All options for cassandra.cluster.Session()
             }
         },
+        'SUPPORTS_TRANSACTIONS': True,
     }
 }
+
+DATABASE_APPS_MAPPING = {
+    'apiApp': 'cassandra',
+    'radialTidyTreeApp': 'internal',
+    'webApp': 'internal'
+}
+
+DATABASE_ROUTERS = ['StellarMapWeb.router.DatabaseAppsRouter']
+
+TEST_RUNNER = 'StellarMapWeb.testrunner.NoDbTestRunner'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
