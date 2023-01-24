@@ -37,7 +37,7 @@ DEBUG = True
 # Redirect all HTTP requests to HTTP
 SECURE_SSL_REDIRECT = False
 
-ALLOWED_HOSTS = [config('ALLOWED_HOSTS')]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=lambda v: [s.strip() for s in v.split(',')])
 
 # Application definition
 INSTALLED_APPS = [
