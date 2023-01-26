@@ -87,18 +87,33 @@
             },
             async createInquiry(stellar_account, network_name) {
                 try {
+                    // Get the CSRF token from the cookie
+                    const csrf_token = document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+
                     const body = JSON.stringify({
                         "stellar_account": stellar_account,
                         "network_name": network_name,
                         "status": 'PENDING'
                     });
-                    const headers = { 'Content-Type': 'application/json' };
-                    const inquiry_response = await fetch('/inquiries/', { method: 'POST', body, headers });
+                    const headers = {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrf_token
+                    };
+                    const inquiry_response = await fetch('/stellar-inquiries/', { method: 'POST', body, headers });
+
                     if (!inquiry_response.ok) {
-                        throw new Error(`Failed to create inquiry: ${inquiry_response.status}`);
+                        // Get the error message from the response
+                        const error = await inquiry_response.json();
+                        throw new Error(error.message);
                     }
+
+                    // Successful response, do something with the data
+                    const data = await inquiry_response.json();
+                    console.log(data);
                 } catch (e) {
                     // Handle error
+                    console.error(e);
+                    alert(e.message);
                 }
             },
         }

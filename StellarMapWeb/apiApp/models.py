@@ -1,8 +1,9 @@
-import uuid
 import datetime
+import uuid
 
-from cassandra.cqlengine import columns
+from cassandra.cqlengine import columns as cassandra_columns
 from django_cassandra_engine.models import DjangoCassandraModel
+from StellarMapWeb.settings.settings_base import CASSANDRA_DB_NAME
 
 PENDING = 'pending'
 IN_PROGRESS = 'in_progress'
@@ -21,9 +22,10 @@ NETWORK_CHOICES = (
 )
 
 class BaseModel(DjangoCassandraModel):
-    id = columns.UUID(primary_key=True, default=uuid.uuid4)
-    created_at = columns.DateTime()
-    updated_at = columns.DateTime()
+    __keyspace__ = CASSANDRA_DB_NAME
+    id = cassandra_columns.UUID(primary_key=True, default=uuid.uuid4)
+    created_at = cassandra_columns.DateTime()
+    updated_at = cassandra_columns.DateTime()
 
     def save(self, *args, **kwargs):
         if not self.created_at:
@@ -32,9 +34,10 @@ class BaseModel(DjangoCassandraModel):
         return super().save(*args, **kwargs)
     
     class Meta:
+        get_pk_field = "id"
         abstract = True
 
-class StellarAccountInquiryHistory(BaseModel):
+class StellarAccountInquiryHistory(DjangoCassandraModel):
     """
     A model for storing the history of user requests to examine a Stellar account.
 
@@ -47,11 +50,23 @@ class StellarAccountInquiryHistory(BaseModel):
         To prevent multiple requests for the same Stellar account, ask the user if they want to make a new request or retrieve data from previous requests for that Stellar account.
     """
 
-    stellar_account = columns.Text(max_length=56)
-    network_name = columns.Text(max_length=9)
-    status = columns.Text(max_length=20)
+    __keyspace__ = CASSANDRA_DB_NAME
+    id = cassandra_columns.UUID(primary_key=True, default=uuid.uuid4)
+    stellar_account = cassandra_columns.Text(max_length=56)
+    network_name = cassandra_columns.Text(max_length=9)
+    status = cassandra_columns.Text(max_length=20)
+    created_at = cassandra_columns.DateTime()
+    updated_at = cassandra_columns.DateTime()
 
-class StellarAccountLineage(BaseModel):
+    def __str__(self):
+        """ Method to display Stellar account, network and status in the admin django interface.
+        """
+        return 'Stellar Account: ' + self.stellar_account + ' | network: ' + self.network_name + ' | status: ' + self.status
+
+    class Meta:
+        get_pk_field = "id"
+
+class StellarAccountLineage(DjangoCassandraModel):
     """
     A model for storing detailed information about the lineage and creator accounts of the Stellar network.
     
@@ -70,16 +85,28 @@ class StellarAccountLineage(BaseModel):
         status (str): a field that stores the status of the request with a default value of 'pending'. The valid choices for the status field are 'pending', 'in_progress', and 'completed'.
     """
 
-    account_active = columns.Text(max_length=30)
-    stellar_creator_account = columns.Text(max_length=56)
-    stellar_account = columns.Text(max_length=56)
-    stellar_account_created_at = columns.DateTime()
-    network_name = columns.Text(max_length=9)
-    home_domain = columns.Text(max_length=71)
-    xlm_balance = columns.Float()
-    horizon_accounts_doc_api_href = columns.Text()
-    horizon_accounts_operations_doc_api_href = columns.Text()
-    horizon_accounts_effects_doc_api_href = columns.Text()
-    stellar_expert_explorer_account_doc_api_href = columns.Text()
-    status = columns.Text(max_length=36)
+    __keyspace__ = CASSANDRA_DB_NAME
+    id = cassandra_columns.UUID(primary_key=True, default=uuid.uuid4)
+    account_active = cassandra_columns.Text(max_length=30)
+    stellar_creator_account = cassandra_columns.Text(max_length=56)
+    stellar_account = cassandra_columns.Text(max_length=56)
+    stellar_account_created_at = cassandra_columns.DateTime()
+    network_name = cassandra_columns.Text(max_length=9)
+    home_domain = cassandra_columns.Text(max_length=71)
+    xlm_balance = cassandra_columns.Float()
+    horizon_accounts_doc_api_href = cassandra_columns.Text()
+    horizon_accounts_operations_doc_api_href = cassandra_columns.Text()
+    horizon_accounts_effects_doc_api_href = cassandra_columns.Text()
+    stellar_expert_explorer_account_doc_api_href = cassandra_columns.Text()
+    status = cassandra_columns.Text(max_length=36)
+    created_at = cassandra_columns.DateTime()
+    updated_at = cassandra_columns.DateTime()
+
+    def __str__(self):
+        """ Method to display active, creator account, Stellar account, network and status in the admin django interface.
+        """
+        return 'Active: ' + self.account_active + ' | Creator Account: ' + self.stellar_creator_account + ' | Stellar Account: ' + self.stellar_account + ' | network: ' + self.network_name + ' | status: ' + self.status
+
+    class Meta:
+        get_pk_field = "id"
 
