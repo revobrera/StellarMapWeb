@@ -108,7 +108,7 @@ ASTRA_DB_APPLICATION_TOKEN=config('ASTRA_DB_APPLICATION_TOKEN')
 # it will increase the time of execution and also it will 
 # consume a lot of memory, also it's not recommended to 
 # use it on large datasets.
-CASSANDRA_FALLBACK_ORDER_BY_PYTHON = False
+CASSANDRA_FALLBACK_ORDER_BY_PYTHON = True
 
 DATABASES = {
     'default': {

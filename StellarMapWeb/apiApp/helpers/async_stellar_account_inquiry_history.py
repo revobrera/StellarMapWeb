@@ -1,7 +1,5 @@
 from apiApp.models import StellarAccountInquiryHistory
-from cassandra.cluster import Cluster
 from django.db import transaction
-from StellarMapWeb.settings.settings_base import CASSANDRA_HOST, CASSANDRA_DB_NAME
 
 
 class AsyncStellarInquiryCreator:
@@ -34,15 +32,16 @@ class AsyncStellarInquiryCreator:
         Returns:
             - inquiry (StellarAccountInquiryHistory): The newly created inquiry object.
         """
-        async with transaction.atomic():
-            # Start a database transaction
-            # Using the transaction.atomic() context manager, you can run the database
-            # operations in an atomic transaction, and in case of an exception,
-            # the transaction will be rolled back and the database state will be preserved.
-            cluster = Cluster([CASSANDRA_HOST])
-            session = cluster.connect()
-            session.set_keyspace(CASSANDRA_DB_NAME)
-            inquiry = StellarAccountInquiryHistory(stellar_account=stellar_account, network_name=network_name, status=status)
-            await inquiry.save()
-            cluster.shutdown()
-        return inquiry
+        try:
+            async with transaction.atomic():
+                # Start a database transaction
+                # Using the transaction.atomic() context manager, you can run the database
+                # operations in an atomic transaction, and in case of an exception,
+                # the transaction will be rolled back and the database state will be preserved.
+
+                inquiry = StellarAccountInquiryHistory(stellar_account=stellar_account, network_name=network_name, status=status)
+                await inquiry.save()
+
+            return inquiry
+        except Exception as e:
+            return e

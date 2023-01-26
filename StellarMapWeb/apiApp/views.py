@@ -1,18 +1,28 @@
 import json
-import uuid
-import datetime
+import logging
+from datetime import datetime
+import pytz
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet, ViewSet
+from rest_framework import viewsets
 
 from .helpers.async_stellar_account_inquiry_history import \
     AsyncStellarInquiryCreator
 from .helpers.conn import SiteChecker
 from .helpers.env import EnvHelpers
 from .helpers.lineage_creator_accounts import LineageHelpers
-from .serializers import StellarAccountInquiryHistorySerializer
+from .models import StellarAccountInquiryHistory
+from .serializers import (BaseModelSerializer,
+                          StellarAccountInquiryHistorySerializer,
+                          StellarAccountLineageSerializer)
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 
 @api_view(['GET'])
@@ -86,10 +96,16 @@ def lineage_stellar_account(request, network, stellar_account_address):
     return Response(data_json)
 
 
-class StellarAccountInquiryHistoryViewSet(APIView):
+class StellarAccountInquiryHistoryViewSet_OLDER(APIView):
     """
     A viewset for handling the creation of inquiries for Stellar accounts.
     """
+
+    # DRF documentation states that without explicit declaration of authentication_classes, 
+    # default SessionAuthentication is enforced thus requires CSRF token
+    permission_classes = ()
+    authentication_classes = ()
+
     def post(self, request):
         """
         Handles the creation of a new inquiry for a Stellar account.
@@ -115,19 +131,90 @@ class StellarAccountInquiryHistoryViewSet(APIView):
             use async to perform those tasks concurrently and avoid blocking the execution
             of other parts of the application.
         """
-        # placeholders to serialize data
-        request.data['id'] = str(uuid.uuid4())
-        request.data['created_at'] = datetime.datetime.utcnow()
-        request.data['updated_at'] = datetime.datetime.utcnow()
+        import pdb; pdb.set_trace()
+        # create inquiry
+        try:
+            # inquire account
+            queryset = StellarAccountInquiryHistory.objects.filter(
+                stellar_account=request.data['stellar_account'],
+                network_name=request.data['network_name']
+            ).first()
 
-        serializer = StellarAccountInquiryHistorySerializer(data=request.data)
-        if serializer.is_valid():
-            # removing placeholders
-            del serializer.data['id']
-            del serializer.data['created_at']
-            del serializer.data['updated_at']
+            context = {}
+            context['stellar_account']=request.data['stellar_account']
+            context['network_name']=request.data['network_name']
 
-            # create inquiry
-            inquiry = AsyncStellarInquiryCreator().create_inquiry(**serializer.validated_data)
-            return Response(StellarAccountInquiryHistorySerializer(inquiry).data, status=201)
-        return Response(serializer.errors, status=400)
+            if queryset.exists():
+                payload = {
+                    "status":"RE_INQUIRY"
+                }
+
+                queryset.update(**payload)
+                context['message']='Stellar Account Address found and updated status: RE_INQUIRY'
+            else:
+                inquiry_qs = StellarAccountInquiryHistory(
+                    stellar_account=request.data['stellar_account'],
+                    network_name=request.data['network_name'],
+                    status=request.data['status']
+                )
+
+                inquiry_qs.save()
+                context['message']='Stellar Account Address sucessfully stored in DB.'
+
+            return Response(context)
+
+        except Exception as e:
+            logger.error("Error with executing POST request on StellarAccountInquiryHistoryViewSet_OLDER")
+            logger.error(e)
+
+
+class StellarAccountInquiryHistoryViewSet(ViewSet):
+    def list(self, request):
+        queryset = StellarAccountInquiryHistory.objects.all()
+        serializer = StellarAccountInquiryHistorySerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class StellarAccountInquiryHistoryListCreateAPIView(ListCreateAPIView):
+    queryset = StellarAccountInquiryHistory.objects.all()
+    serializer_class = StellarAccountInquiryHistorySerializer
+    permission_classes = ()
+
+
+class StellarAccountInquiryHistoryListAPIView(ListAPIView):
+    queryset = StellarAccountInquiryHistory.objects.all()
+    serializer_class = StellarAccountInquiryHistorySerializer
+    permission_classes = ()
+
+class StellarAccountInquiryHistoryModelViewSet(viewsets.ModelViewSet):
+    queryset = StellarAccountInquiryHistory.objects.all()
+    serializer_class = StellarAccountInquiryHistorySerializer
+
+    def create(self, request, *args, **kwargs):
+        # config NY time
+        tz_NY = pytz.timezone('America/New_York') 
+        datetime_NY = datetime.now(tz_NY)
+
+        # create datetime string
+        date_str = datetime_NY.strftime("%Y-%m-%d %H:%M:%S")
+
+        # create datetime object and NOT string
+        date_obj = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
+
+
+        queryset = self.get_queryset().filter(
+            stellar_account=request.data['stellar_account'],
+            network_name=request.data['network_name']
+        ).first()
+
+        if queryset:
+            payload = {
+                "status":"RE_INQUIRY",
+                "updated_at":date_obj
+            }
+            self.get_queryset().filter(id=queryset.id).update(**payload)
+            return Response({'message': 'Stellar Account Address found and updated status: RE_INQUIRY'})
+        else:
+            request.data.update({'created_at':date_obj})
+            return super().create(request, *args, **kwargs)
+
