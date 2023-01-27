@@ -21,6 +21,7 @@ from .models import StellarAccountInquiryHistory
 from .serializers import (BaseModelSerializer,
                           StellarAccountInquiryHistorySerializer,
                           StellarAccountLineageSerializer)
+from .managers import StellarAccountInquiryHistoryManager
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -132,7 +133,7 @@ class StellarAccountInquiryHistoryViewSet_OLDER(APIView):
             use async to perform those tasks concurrently and avoid blocking the execution
             of other parts of the application.
         """
-        import pdb; pdb.set_trace()
+
         # create inquiry
         try:
             # inquire account
@@ -192,26 +193,18 @@ class StellarAccountInquiryHistoryModelViewSet(viewsets.ModelViewSet):
     serializer_class = StellarAccountInquiryHistorySerializer
 
     def create(self, request, *args, **kwargs):
-        # get datetime object
-        dt_helpers = StellarMapDateTimeHelpers()
-        dt_helpers.set_datetime_obj()
-        date_obj = dt_helpers.get_datetime_obj()
-
         # query stellar account in db
-        queryset = self.get_queryset().filter(
+        inquiry_manager = StellarAccountInquiryHistoryManager()
+
+        queryset = inquiry_manager.get_queryset(
             stellar_account=request.data['stellar_account'],
             network_name=request.data['network_name']
-        ).first()
+        )
 
         # if stellar account found, update status
         if queryset:
-            payload = {
-                "status":"RE_INQUIRY",
-                "updated_at":date_obj
-            }
-            self.get_queryset().filter(id=queryset.id).update(**payload)
+            inquiry_manager.update_inquiry(id=queryset.id)
             return Response({'message': 'Stellar Account Address found and updated status: RE_INQUIRY'})
         else:
-            request.data.update({'created_at':date_obj})
-            return super().create(request, *args, **kwargs)
+            return inquiry_manager.create_inquiry(request)
 
