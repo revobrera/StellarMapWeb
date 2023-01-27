@@ -35,9 +35,11 @@ class StellarAccountInquiryHistoryManager():
         
         :param kwargs: keyword arguments to filter the queryset by
         :return: a filtered queryset
+        
         """
+        
         try:
-            return StellarAccountInquiryHistory.objects.filter(**kwargs).limit(0)
+            return StellarAccountInquiryHistory.objects.filter(**kwargs).first()
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e
@@ -58,10 +60,10 @@ class StellarAccountInquiryHistoryManager():
             dt_helpers.set_datetime_obj()
             date_obj = dt_helpers.get_datetime_obj()
 
-            # add the created_at field to the kwargs
-            kwargs['created_at'] = date_obj
+            # add the created_at field to the request
+            request.data['created_at'] = date_obj
 
-            return StellarAccountInquiryHistory.objects.create(**kwargs)
+            return StellarAccountInquiryHistory.objects.create(**request.data)
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e
@@ -80,18 +82,13 @@ class StellarAccountInquiryHistoryManager():
             date_obj = dt_helpers.get_datetime_obj()
 
             # get the inquiry instance
-            inquiry = StellarAccountInquiryHistory.objects.filter(id=id).limit(1)
-            if inquiry:
-                inquiry.status = "RE_INQUIRY"
-                inquiry.updated_at = date_obj
-                inquiry.save()
-                return inquiry
-            else:
-                return None
+            inquiry = self.get_queryset(id=id)
+            
+            return inquiry.update(
+                status = "RE_INQUIRY",
+                updated_at = date_obj
+            )
+            
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e
-
-
-
-    
