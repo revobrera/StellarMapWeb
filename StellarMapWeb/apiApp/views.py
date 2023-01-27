@@ -10,10 +10,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework import viewsets
+from apiApp.helpers.sm_datetime import StellarMapDateTimeHelpers
 
 from .helpers.async_stellar_account_inquiry_history import \
     AsyncStellarInquiryCreator
-from .helpers.conn import SiteChecker
+from .helpers.sm_conn import SiteChecker
 from .helpers.env import EnvHelpers
 from .helpers.lineage_creator_accounts import LineageHelpers
 from .models import StellarAccountInquiryHistory
@@ -191,22 +192,18 @@ class StellarAccountInquiryHistoryModelViewSet(viewsets.ModelViewSet):
     serializer_class = StellarAccountInquiryHistorySerializer
 
     def create(self, request, *args, **kwargs):
-        # config NY time
-        tz_NY = pytz.timezone('America/New_York') 
-        datetime_NY = datetime.now(tz_NY)
+        # get datetime object
+        dt_helpers = StellarMapDateTimeHelpers()
+        dt_helpers.set_datetime_obj()
+        date_obj = dt_helpers.get_datetime_obj()
 
-        # create datetime string
-        date_str = datetime_NY.strftime("%Y-%m-%d %H:%M:%S")
-
-        # create datetime object and NOT string
-        date_obj = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
-
-
+        # query stellar account in db
         queryset = self.get_queryset().filter(
             stellar_account=request.data['stellar_account'],
             network_name=request.data['network_name']
         ).first()
 
+        # if stellar account found, update status
         if queryset:
             payload = {
                 "status":"RE_INQUIRY",

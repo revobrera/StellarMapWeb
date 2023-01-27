@@ -66,19 +66,37 @@
                             ? `https://horizon-testnet.stellar.org/accounts/${this.query_account}`
                             : `https://horizon.stellar.org/accounts/${this.query_account}`
                     );
-                    // Store the response text in 'response'
-                    this.response = await response.text();
-                    this.highlightedJSONResponse = hljs.highlight(this.response, { language: 'json' }).value;
-                    this.progressValue = 71;
+                    
+                    // uses horizon input validation to check naming convention is correct
+                    if (response.status === 200) {
+                        // Store the response text in 'response'
+                        this.response = await response.text();
+                        this.highlightedJSONResponse = hljs.highlight(this.response, { language: 'json' }).value;
+                        this.progressValue = 71;
 
-                    // Create a new inquiry for the queried account
-                    await this.createInquiry(this.query_account, this.network_selected);
+                        // Create a new inquiry for the queried account
+                        await this.createInquiry(this.query_account, this.network_selected);
+                        
+                    } else {
+                        let jsonResponse = await response.json();
+                        let extras = "";
+                        for (let key in jsonResponse.extras) {
+                            extras += "   " + key + ": " + jsonResponse.extras[key] + "\n";
+                        }
+                        alert(
+                            "Error: " + jsonResponse.title + "\n" +
+                            "Status: " + jsonResponse.status + "\n" +
+                            "Detail: " + jsonResponse.detail + "\n" +
+                            "Extras: \n" + extras
+                        );
+                    }
 
                     // Set 'loading' to false to hide the loading indicator
                     this.loading = false;
                 } catch (e) {
                     // If an error occurs, store the error message in 'response'
                     this.response = e.message;
+                    alert(this.response)
                 }
             },
             toggleNetwork() {
