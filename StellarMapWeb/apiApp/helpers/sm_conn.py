@@ -48,3 +48,45 @@ class SiteChecker:
 
         # Return the data as a JSON response
         return HttpResponse(data_json, content_type='application/json')
+
+
+class StellarMapHTTPHelpers:
+    """
+    A class to handle external HTTP requests for the StellarMap application.
+    """
+
+    def __init__(self):
+        self.url = None
+
+    def add_url(self, url):
+        """
+        Add the full URL for the API endpoint.
+        :param url: str
+        """
+        self.url = url
+
+    def handle_response(self, response):
+        """
+        Handle the response from the API.
+        :param response: requests.Response
+        :return: dict
+        """
+        try:
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.HTTPError as e:
+            raise ValueError(f'HTTP Error: {e}')
+        except ValueError as e:
+            raise ValueError(f'Invalid JSON: {e}')
+
+    def get(self):
+        """
+        Perform a GET request.
+        :return: dict
+        """
+        url = f"{self.url}"
+        try:
+            response = requests.get(url)
+            return self.handle_response(response)
+        except requests.exceptions.RequestException as e:
+            raise ValueError(f'Error: {e}')

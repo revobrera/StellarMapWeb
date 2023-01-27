@@ -10,16 +10,18 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework import viewsets
+from apiApp.helpers.sm_datetime import StellarMapDateTimeHelpers
 
 from .helpers.async_stellar_account_inquiry_history import \
     AsyncStellarInquiryCreator
-from .helpers.conn import SiteChecker
+from .helpers.sm_conn import SiteChecker
 from .helpers.env import EnvHelpers
 from .helpers.lineage_creator_accounts import LineageHelpers
 from .models import StellarAccountInquiryHistory
 from .serializers import (BaseModelSerializer,
                           StellarAccountInquiryHistorySerializer,
                           StellarAccountLineageSerializer)
+from .managers import StellarAccountInquiryHistoryManager
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -131,7 +133,7 @@ class StellarAccountInquiryHistoryViewSet_OLDER(APIView):
             use async to perform those tasks concurrently and avoid blocking the execution
             of other parts of the application.
         """
-        import pdb; pdb.set_trace()
+
         # create inquiry
         try:
             # inquire account
@@ -191,30 +193,18 @@ class StellarAccountInquiryHistoryModelViewSet(viewsets.ModelViewSet):
     serializer_class = StellarAccountInquiryHistorySerializer
 
     def create(self, request, *args, **kwargs):
-        # config NY time
-        tz_NY = pytz.timezone('America/New_York') 
-        datetime_NY = datetime.now(tz_NY)
+        # query stellar account in db
+        inquiry_manager = StellarAccountInquiryHistoryManager()
 
-        # create datetime string
-        date_str = datetime_NY.strftime("%Y-%m-%d %H:%M:%S")
-
-        # create datetime object and NOT string
-        date_obj = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
-
-
-        queryset = self.get_queryset().filter(
+        queryset = inquiry_manager.get_queryset(
             stellar_account=request.data['stellar_account'],
             network_name=request.data['network_name']
-        ).first()
+        )
 
+        # if stellar account found, update status
         if queryset:
-            payload = {
-                "status":"RE_INQUIRY",
-                "updated_at":date_obj
-            }
-            self.get_queryset().filter(id=queryset.id).update(**payload)
+            inquiry_manager.update_inquiry(id=queryset.id)
             return Response({'message': 'Stellar Account Address found and updated status: RE_INQUIRY'})
         else:
-            request.data.update({'created_at':date_obj})
-            return super().create(request, *args, **kwargs)
+            return inquiry_manager.create_inquiry(request)
 

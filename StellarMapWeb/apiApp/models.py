@@ -65,6 +65,7 @@ class StellarAccountInquiryHistory(DjangoCassandraModel):
 
     class Meta:
         get_pk_field = "id"
+        db_table = 'stellar_account_inquiry_history'
 
 class StellarAccountLineage(DjangoCassandraModel):
     """
