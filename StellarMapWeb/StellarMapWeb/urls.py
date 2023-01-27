@@ -19,10 +19,14 @@ user re_path with regex
 from django.urls import include, re_path
 from django.contrib import admin
 
+# sentry error
+def trigger_error(request):
+    division_by_zero = 1 / 0
 
 urlpatterns = [
     re_path('chief/', admin.site.urls),
     re_path('', include('apiApp.urls')),
     re_path('', include('webApp.urls')),
     re_path('', include('radialTidyTreeApp.urls')),
+    re_path('sentry-debug/', trigger_error),
 ]
