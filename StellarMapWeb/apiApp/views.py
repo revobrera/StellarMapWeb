@@ -206,5 +206,6 @@ class StellarAccountInquiryHistoryModelViewSet(viewsets.ModelViewSet):
             inquiry_manager.update_inquiry(id=queryset.id)
             return Response({'message': 'Stellar Account Address found and updated status: RE_INQUIRY'})
         else:
-            return inquiry_manager.create_inquiry(request)
+            inquiry_manager.create_inquiry(request)
+            return Response({'message': f'Stellar Account Address {request.data["stellar_account"]} saved successfully'})
 
