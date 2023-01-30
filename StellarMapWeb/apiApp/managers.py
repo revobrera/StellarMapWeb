@@ -68,7 +68,7 @@ class StellarAccountInquiryHistoryManager():
             sentry_sdk.capture_exception(e)
             raise e
 
-    def update_inquiry(self, id):
+    def update_inquiry(self, id, status):
         """
         Updates an inquiry with the given id.
 
@@ -85,7 +85,7 @@ class StellarAccountInquiryHistoryManager():
             inquiry = self.get_queryset(id=id)
             
             return inquiry.update(
-                status = "RE_INQUIRY",
+                status = status,
                 updated_at = date_obj
             )
             
