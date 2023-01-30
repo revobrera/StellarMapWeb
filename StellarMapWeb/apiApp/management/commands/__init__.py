@@ -1,1 +1,1 @@
-from .cron_get_creator_account import Command
+from .cron_make_parent_account_lineage import Command
