@@ -54,7 +54,7 @@ class StellarAccountInquiryHistory(DjangoCassandraModel):
     id = cassandra_columns.UUID(primary_key=True, default=uuid.uuid4)
     stellar_account = cassandra_columns.Text(max_length=56)
     network_name = cassandra_columns.Text(max_length=9)
-    status = cassandra_columns.Text(max_length=20)
+    status = cassandra_columns.Text(max_length=63)
     created_at = cassandra_columns.DateTime()
     updated_at = cassandra_columns.DateTime()
 
@@ -99,7 +99,7 @@ class StellarAccountLineage(DjangoCassandraModel):
     horizon_accounts_operations_doc_api_href = cassandra_columns.Text()
     horizon_accounts_effects_doc_api_href = cassandra_columns.Text()
     stellar_expert_explorer_account_doc_api_href = cassandra_columns.Text()
-    status = cassandra_columns.Text(max_length=36)
+    status = cassandra_columns.Text(max_length=63)
     created_at = cassandra_columns.DateTime()
     updated_at = cassandra_columns.DateTime()
 
