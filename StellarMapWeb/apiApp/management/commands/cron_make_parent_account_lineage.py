@@ -30,16 +30,16 @@ class Command(BaseCommand):
             )
 
             try:
-            
+                PENDING = 'PENDING_HORIZON_API_DATASETS'
                 if lin_queryset:
                     # TODO: update datetime only if 3 hours passed
-                    lineage_manager.update_lineage(id=lin_queryset.id)
+                    lineage_manager.update_lineage(id=lin_queryset.id, status=PENDING)
                 else:
                     request = HttpRequest()
                     request.data = {
                         'stellar_account': inq_queryset.stellar_account,
                         'network_name': inq_queryset.network_name,
-                        'status': 'PENDING_HORIZON_API_DATASETS'
+                        'status': PENDING
                     }
 
                     lineage_manager.create_lineage(request)

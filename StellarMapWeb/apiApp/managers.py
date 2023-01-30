@@ -73,6 +73,7 @@ class StellarAccountInquiryHistoryManager():
         Updates an inquiry with the given id.
 
         :param id: the id of the inquiry to update
+        :param status: the status of the inquiry to update
         :return: the updated inquiry
         """
         try:
@@ -135,11 +136,12 @@ class StellarAccountLineageManager():
             sentry_sdk.capture_exception(e)
             raise e
 
-    def update_lineage(self, id):
+    def update_lineage(self, id, status):
         """
         Updates an lineage with the given id.
 
         :param id: the id of the lineage to update
+        :param status: the status of the lineage to update
         :return: the updated lineage
         """
         try:
@@ -152,7 +154,7 @@ class StellarAccountLineageManager():
             lineage = self.get_queryset(id=id)
             
             return lineage.update(
-                status = "RE_LINEAGE",
+                status = status,
                 updated_at = date_obj
             )
             
