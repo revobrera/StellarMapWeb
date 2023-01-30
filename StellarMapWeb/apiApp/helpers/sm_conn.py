@@ -1,7 +1,11 @@
 import json
-
+import aiohttp
+import asyncio
 import requests
+import sentry_sdk
+
 from django.http import HttpResponse
+
 
 
 class SiteChecker:
@@ -89,4 +93,47 @@ class StellarMapHTTPHelpers:
             response = requests.get(url)
             return self.handle_response(response)
         except requests.exceptions.RequestException as e:
+            raise ValueError(f'Error: {e}')
+
+    
+class AsyncStellarMapHTTPHelpers:
+    """
+    A class to handle external HTTP requests for the StellarMap application using asyncio.
+    """
+
+    def __init__(self):
+        self.url = None
+
+    async def add_url(self, url: str) -> None:
+        """
+        Add the full URL for the API endpoint.
+        :param url: str
+        """
+        self.url = url
+
+    async def handle_response(self, response) -> dict:
+        """
+        Handle the response from the API.
+        :param response: aiohttp.ClientResponse
+        :return: dict
+        """
+        try:
+            response.raise_for_status()
+            json_response = await response.json()
+            return json_response
+        except aiohttp.ClientError as e:
+            sentry_sdk.capture_exception(e)
+            raise ValueError(f'HTTP Error: {e}')
+
+    async def get(self) -> dict:
+        """
+        Perform a GET request.
+        :return: dict
+        """
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(self.url) as response:
+                    return await self.handle_response(response)
+        except asyncio.TimeoutError as e:
+            sentry_sdk.capture_exception(e)
             raise ValueError(f'Error: {e}')
