@@ -1,6 +1,6 @@
 import sentry_sdk
 from .helpers.sm_datetime import StellarMapDateTimeHelpers
-from .models import StellarAccountInquiryHistory, StellarAccountLineage
+from .models import StellarAccountInquiryHistory, StellarAccountLineage, ManagementCronHealthHistory
 
 class StellarAccountInquiryHistoryManager():
     """
@@ -159,5 +159,99 @@ class StellarAccountLineageManager():
             )
             
         except Exception as e:
+            sentry_sdk.capture_exception(e)
+            raise e
+
+
+class ManagementCronHealthHistoryManager():
+
+    def get_queryset(self, **kwargs):
+        """
+        Returns a queryset filtered by the given keyword arguments.
+        
+        :param kwargs: keyword arguments to filter the queryset by
+        :return: a filtered queryset
+        
+        """
+        
+        try:
+            return ManagementCronHealthHistory.objects.filter(**kwargs).first()
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            raise e
+
+    def create_cron_health(self, request, *args, **kwargs):
+        """
+        Creates a cron_health with the given information
+        
+        :param request: the request object
+        :param args: additional positional arguments
+        :param kwargs: additional key-value arguments
+        :return: the created cron_health
+        """
+
+        try:
+            # get datetime object
+            dt_helpers = StellarMapDateTimeHelpers()
+            dt_helpers.set_datetime_obj()
+            date_obj = dt_helpers.get_datetime_obj()
+
+            # add the created_at field to the request
+            request.data['created_at'] = date_obj
+
+            return ManagementCronHealthHistory.objects.create(**request.data)
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            raise e
+
+    def update_cron_health(self, id, status):
+        """
+        Updates an cron_health with the given id.
+
+        :param id: the id of the cron_health to update
+        :param status: the status of the cron_health to update
+        :return: the updated cron_health
+        """
+        try:
+            # get datetime object
+            dt_helpers = StellarMapDateTimeHelpers()
+            dt_helpers.set_datetime_obj()
+            date_obj = dt_helpers.get_datetime_obj()
+
+            # get the cron_health instance
+            cron_health = self.get_queryset(id=id)
+            
+            return cron_health.update(
+                status = status,
+                updated_at = date_obj
+            )
+            
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            raise e
+
+    def get_latest_record(self, cron_name):
+        """
+        Returns the most recent record for the given cron_name.
+
+        :param cron_name: the name of the cron job
+        :return: the most recent record for the cron_name
+        """
+        try:
+            return ManagementCronHealthHistory.objects.filter(cron_name=cron_name).latest('created_at')
+        except ManagementCronHealthHistory.DoesNotExist:
+            return None
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            raise e
+
+    def get_distinct_cron_names(self):
+        try:
+            # query all latest distinct cron names
+            cron_names = ManagementCronHealthHistory.objects.values("cron_name").distinct()
+            cron_names = [cron_name['cron_name'] for cron_name in cron_names]
+            return cron_names
+        except Exception as e:
+            # log the error to Sentry
             sentry_sdk.capture_exception(e)
             raise e
