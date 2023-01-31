@@ -1,10 +1,11 @@
-from decouple import config
+from decouple import Config, RepositoryEnv
 from fabric import task
 
-env_file = 'StellarMapWeb/StellarMapWeb/.env'
+DOTENV_FILE = 'StellarMapWeb/StellarMapWeb/.env'
+env_config = Config(RepositoryEnv(DOTENV_FILE))
 
-ENV = config('ENV', cast=str, source=env_file)
-VENV_PATH = config('VENV_PATH', cast=str, source=env_file)
+ENV = env_config.get('ENV')
+VENV_PATH = env_config.get('VENV_PATH')
 
 @task
 def activate_venv(c):
