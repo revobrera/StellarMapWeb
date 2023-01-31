@@ -1,11 +1,18 @@
-from decouple import Config, RepositoryEnv
+import os
+
+import django
+from django.conf import settings
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'StellarMapWeb.settings')
+import django
+
+django.setup()
+
+from decouple import config
 from fabric import task
 
-DOTENV_FILE = 'StellarMapWeb/.env'
-env_config = Config(RepositoryEnv(DOTENV_FILE))
-
-ENV = env_config.get('ENV')
-VENV_PATH = env_config.get('VENV_PATH')
+ENV = config('ENV')
+VENV_PATH = config('VENV_PATH')
 
 @task
 def activate_venv(c):
