@@ -1,11 +1,7 @@
 import os
-
-import django
-from django.conf import settings
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'StellarMapWeb.settings')
-import django
 
+import django
 django.setup()
 
 from decouple import config
@@ -13,6 +9,7 @@ from fabric import task
 
 ENV = config('ENV')
 VENV_PATH = config('VENV_PATH')
+APP_PATH = config('APP_PATH')
 
 @task
 def activate_venv(c):
@@ -23,7 +20,9 @@ def activate_venv(c):
 
 @task
 def git_commands(c):
+    c.run('git stash')
     c.run('git fetch --all')
+    c.run('git checkout master')
     c.run('git pull origin master')
 
 @task
@@ -52,11 +51,13 @@ def reboot_app(c):
 
 @task
 def run_all_commands(c):
-    activate_venv(c)
-    git_commands(c)
-    setup_req(c)
-    setup_db(c)
-    setup_config(c)
-    setup_crontab(c)
-    reboot_app(c)
+
+    with lcd(APP_PATH):
+        activate_venv(c)
+        git_commands(c)
+        setup_req(c)
+        setup_db(c)
+        setup_config(c)
+        setup_crontab(c)
+        reboot_app(c)
     
