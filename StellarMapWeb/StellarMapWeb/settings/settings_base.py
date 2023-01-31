@@ -44,7 +44,6 @@ sentry_sdk.init(
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-APP_PATH = config('APP_PATH')
 
 # Calculate the path to the root directory of the Django project
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -152,7 +151,7 @@ DATABASES = {
             'connection': {
                 'auth_provider': PlainTextAuthProvider(CLIENT_ID, CLIENT_SECRET),
                 'cloud': {
-                    'secure_connect_bundle': '/'.join([str(APP_PATH), 'secure-connect-stellarmapdb.zip']),
+                    'secure_connect_bundle': 'secure-connect-stellarmapdb.zip',
                 },
                 'consistency': ConsistencyLevel.LOCAL_ONE,
                 'retry_connect': True
