@@ -95,10 +95,10 @@ class StellarAccountLineage(DjangoCassandraModel):
     network_name = cassandra_columns.Text(max_length=9)
     home_domain = cassandra_columns.Text(max_length=71)
     xlm_balance = cassandra_columns.Float()
-    horizon_accounts_doc_api_href = cassandra_columns.Text()
-    horizon_accounts_operations_doc_api_href = cassandra_columns.Text()
-    horizon_accounts_effects_doc_api_href = cassandra_columns.Text()
-    stellar_expert_explorer_account_doc_api_href = cassandra_columns.Text()
+    horizon_accounts_doc_api_href = cassandra_columns.Text() # "https://horizon.stellar.org/accounts/{stellar_account}"
+    horizon_accounts_operations_doc_api_href = cassandra_columns.Text() # "https://horizon.stellar.org/operations/{stellar_account}"
+    horizon_accounts_effects_doc_api_href = cassandra_columns.Text() # https://horizon.stellar.org/accounts/{stellar_account}/effects
+    stellar_expert_explorer_account_doc_api_href = cassandra_columns.Text() # https://api.stellar.expert/explorer/{network_name}/account/{stellar_account}
     status = cassandra_columns.Text(max_length=63)
     created_at = cassandra_columns.DateTime()
     updated_at = cassandra_columns.DateTime()
@@ -111,3 +111,37 @@ class StellarAccountLineage(DjangoCassandraModel):
     class Meta:
         get_pk_field = "id"
 
+
+class ManagementCronHealthHistory(DjangoCassandraModel):
+    """
+    A model that holds information on the status of each cron job in the system.
+    The initial status of each cron job is set to "HEALTHY". In case of errors,
+    the status will be prefixed with "ERROR_". Before executing a cron job, the
+    most recent record entry is checked to verify its status. If the status is
+    not healthy, the cron job will not execute. This mechanism is in place to
+    support the tenacity library, which implements exponential backoff in case
+    of repeated errors and stops the cron job execution once the maximum number
+    of retries is reached.
+
+    Attributes:
+        id (uuid.UUID): A unique identifier for the record, generated using uuid4 by default.
+        cron_name (str): The name of the cron job. The max length is 71.
+        status (str): The health status of the cron job. The default status is "HEALTHY", and if there is an error, it is prefixed with "ERROR_". The max length is 63.
+        created_at (datetime.datetime): The creation time of the record.
+        updated_at (datetime.datetime): The last update time of the record.
+    """
+    __keyspace__ = CASSANDRA_DB_NAME
+    id = cassandra_columns.UUID(primary_key=True, default=uuid.uuid4)
+    cron_name = cassandra_columns.Text(max_length=71)
+    status = cassandra_columns.Text(max_length=63)
+    reason = cassandra_columns.Text()
+    created_at = cassandra_columns.DateTime()
+    updated_at = cassandra_columns.DateTime()
+
+    def __str__(self):
+        """ Method to display cron name and status in the admin django interface.
+        """
+        return 'Cron Name: ' + self.cron_name + ' | Status: ' + self.status
+
+    class Meta:
+        get_pk_field = "id"
