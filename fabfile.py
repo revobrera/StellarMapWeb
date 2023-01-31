@@ -1,7 +1,7 @@
 from decouple import Config, RepositoryEnv
 from fabric import task
 
-DOTENV_FILE = 'StellarMapWeb/StellarMapWeb/.env'
+DOTENV_FILE = 'StellarMapWeb/.env'
 env_config = Config(RepositoryEnv(DOTENV_FILE))
 
 ENV = env_config.get('ENV')
