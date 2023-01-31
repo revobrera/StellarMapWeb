@@ -1,17 +1,17 @@
-import sys
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'StellarMapWeb.settings')
+import sys
 
 import django
-django.setup()
-
 from decouple import config
 from fabric import task
 
 ENV = config('ENV')
 VENV_PATH = config('VENV_PATH')
 APP_PATH = config('APP_PATH')
+
 sys.path.append(APP_PATH)
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'StellarMapWeb.settings')
+django.setup()
 
 @task
 def activate_venv(c):
