@@ -56,11 +56,14 @@ class StellarMapCronHelpers:
 
             # set all these cron status' to UNHEALTHY due to exponential algorithm failing
             for cron_name in cron_names:
-                request_data = {
-                    'cron_name': cron_name,
-                    'status': 'UNHEALTHY_DUE_TO_RATE_LIMITING_FROM_EXTERNAL_API_SERVER'
-                }
-                ManagementCronHealthHistoryManager().create_cron_health(request=request_data)
+
+                # exclude cron_health_check
+                if cron_name != 'cron_health_check':
+                    request_data = {
+                        'cron_name': cron_name,
+                        'status': 'UNHEALTHY_DUE_TO_RATE_LIMITING_FROM_EXTERNAL_API_SERVER'
+                    }
+                    ManagementCronHealthHistoryManager().create_cron_health(request=request_data)
         except Exception as e:
             # Log the error to Sentry
             sentry_sdk.capture_exception(e)
