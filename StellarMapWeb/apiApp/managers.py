@@ -238,7 +238,7 @@ class ManagementCronHealthHistoryManager():
         :return: the most recent record for the cron_name
         """
         try:
-            return ManagementCronHealthHistory.objects.filter(cron_name=cron_name).latest('created_at')
+            return ManagementCronHealthHistory.objects.filter(cron_name=cron_name).order_by('-created_at')[:1]
         except ManagementCronHealthHistory.DoesNotExist:
             return None
         except Exception as e:
