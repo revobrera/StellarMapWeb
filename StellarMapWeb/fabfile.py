@@ -4,6 +4,8 @@ import sys
 import django
 from decouple import config
 from fabric import task
+from fabric.api import local, settings, abort, cd
+from fabric.contrib.console import confirm
 
 ENV = config('ENV')
 VENV_PATH = config('VENV_PATH')
@@ -14,50 +16,58 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'StellarMapWeb.settings')
 django.setup()
 
 @task
-def activate_venv(c):
+def activate_venv():
     if ENV == 'production':
-        c.run(f'source {VENV_PATH}/bin/activate')
+        local(f'source {VENV_PATH}/bin/activate')
     else:
-        c.run(f'source {VENV_PATH}/Scripts/activate')
+        local(f'source {VENV_PATH}/Scripts/activate')
 
 @task
-def git_commands(c):
-    c.run('git stash')
-    c.run('git fetch --all')
-    c.run('git checkout master')
-    c.run('git pull origin master')
+def git_commands():
+    local('git stash')
+    local('git fetch --all')
+    local('git checkout master')
+    local('git pull origin master')
 
 @task
-def setup_req(c):
-    c.run('pip install -r ../requirements.txt')
+def setup_req():
+    local('pip install -r ../requirements.txt')
 
 @task
-def setup_db(c):
-    c.run('python manage.py sync_cassandra')
+def setup_db():
+    local('python manage.py sync_cassandra')
 
 @task
-def setup_config(c):
-    c.run('python manage.py collectstatic --noinput')
-    c.run('python manage.py check --deploy')
-    c.run('python manage.py test --verbosity 2')
+def setup_config():
+    local('python manage.py collectstatic --noinput')
+    local('python manage.py check --deploy')
 
 @task
-def setup_crontab(c):
+def setup_crontab():
     cron_file = f"config/cron_{ENV}.txt"
-    c.run(f"crontab < {cron_file}")
+    local(f"crontab < {cron_file}")
 
 @task
-def reboot_app(c):
-    c.run('sudo systemctl restart nginx')
-    c.run('sudo systemctl restart gunicorn')
+def setup_test():
+    with settings(warn_only=True):
+        result = local('python manage.py test --verbosity 2', capture=True)
+    if result.failed and not confirm("Tests failed. Continue anyway?"):
+        abort("Aborting at user request.")
 
 @task
-def run_all_commands(c):
-    activate_venv(c)
-    git_commands(c)
-    setup_req(c)
-    setup_db(c)
-    setup_config(c)
-    setup_crontab(c)
-    reboot_app(c)
+def reboot_app():
+    local('sudo systemctl restart nginx')
+    local('sudo systemctl restart gunicorn')
+
+@task
+def prepare_deploy():
+    with cd(APP_PATH):
+        activate_venv()
+        git_commands()
+        setup_req()
+        setup_db()
+        setup_config()
+        setup_crontab()
+        setup_test()
+        reboot_app()
     
