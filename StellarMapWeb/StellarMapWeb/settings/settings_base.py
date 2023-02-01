@@ -151,7 +151,7 @@ DATABASES = {
             'connection': {
                 'auth_provider': PlainTextAuthProvider(CLIENT_ID, CLIENT_SECRET),
                 'cloud': {
-                    'secure_connect_bundle': 'secure-connect-stellarmapdb.zip',
+                    'secure_connect_bundle': os.path.join(BASE_DIR, 'secure-connect-stellarmapdb.zip'),
                 },
                 'consistency': ConsistencyLevel.LOCAL_ONE,
                 'retry_connect': True
