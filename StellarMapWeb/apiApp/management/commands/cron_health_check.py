@@ -10,29 +10,32 @@ class Command(BaseCommand):
         try:
             # Create an instance of StellarMapCronHelpers and StellarMapDateTimeHelpers
             cron_helpers = StellarMapCronHelpers(cron_name='cron_health_check')
-            date_helpers = StellarMapDateTimeHelpers()
+            if cron_helpers.check_cron_health is True:
 
-            # Get the health status of all crons
-            cron_status = cron_helpers.check_all_crons_health()
+                date_helpers = StellarMapDateTimeHelpers()
 
-            # Set the current datetime
-            date_helpers.set_datetime_obj()
+                # Get the health status of all crons
+                cron_status = cron_helpers.check_all_crons_health()
 
-            # get the current datetime obj
-            the_current_date_time_obj = date_helpers.get_datetime_obj()
+                # Set the current datetime
+                date_helpers.set_datetime_obj()
 
-            for cron_name, status in cron_status.items():
-                # Check if the cron's status contains the string "UNHEALTHY_"
-                if 'UNHEALTHY_' in status:
-                    cron_helpers.set_crons_unhealthy()
-                else:
-                    # Get the created_at time of the latest record of the cron
-                    created_at = cron_status[cron_name]['created_at']
-                    time_difference = the_current_date_time_obj - created_at
+                # get the current datetime obj
+                the_current_date_time_obj = date_helpers.get_datetime_obj()
 
-                    # Check if the difference between the current time and the created_at time is greater than 1.7 hours
-                    if time_difference.total_seconds() >= (1.7 * 60 * 60):
-                        cron_helpers.set_crons_healthy()
+                for cron_name, status in cron_status.items():
+                    # Check if the cron's status contains the string "UNHEALTHY_"
+                    if 'UNHEALTHY_' in status:
+                        cron_helpers.set_crons_unhealthy()
+                    else:
+                        # Get the created_at time of the latest record of the cron
+                        created_at = cron_status[cron_name]['created_at']
+                        time_difference = the_current_date_time_obj - created_at
+
+                        # Check if the difference between the current time and the created_at time is greater than 1.7 hours
+                        if time_difference.total_seconds() >= (1.7 * 60 * 60):
+                            cron_helpers.set_crons_healthy()
+
         except Exception as e:
             sentry_sdk.capture_exception(e)
 
