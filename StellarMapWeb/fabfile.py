@@ -38,7 +38,7 @@ def setup_config():
 
 def setup_crontab():
     cron_file = f"config/cron_{ENV}.txt"
-    local(f"sudo crontab < {cron_file}")
+    local(f"crontab < {cron_file}")
 
 def setup_test():
     with settings(warn_only=True):
