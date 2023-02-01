@@ -16,7 +16,10 @@ class Command(BaseCommand):
             cron_status = cron_helpers.check_all_crons_health()
 
             # Set the current datetime
-            date_helpers.datetime_obj = date_helpers.get_datetime_obj()
+            date_helpers.set_datetime_obj()
+
+            # get the current datetime obj
+            the_current_date_time_obj = date_helpers.get_datetime_obj()
 
             for cron_name, status in cron_status.items():
                 # Check if the cron's status contains the string "UNHEALTHY_"
@@ -25,7 +28,7 @@ class Command(BaseCommand):
                 else:
                     # Get the created_at time of the latest record of the cron
                     created_at = cron_status[cron_name]['created_at']
-                    time_difference = date_helpers.datetime_obj - created_at
+                    time_difference = the_current_date_time_obj - created_at
 
                     # Check if the difference between the current time and the created_at time is greater than 1.7 hours
                     if time_difference.total_seconds() >= (1.7 * 60 * 60):
