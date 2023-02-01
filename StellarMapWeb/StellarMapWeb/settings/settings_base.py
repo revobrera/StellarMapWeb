@@ -254,7 +254,7 @@ LOGGING = {
         'file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/stellarmap/django.log',
+            'filename': 'logs/django.log',
             'formatter': 'verbose'
         },
     },
