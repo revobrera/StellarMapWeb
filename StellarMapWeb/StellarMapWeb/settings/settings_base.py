@@ -46,8 +46,9 @@ sentry_sdk.init(
 # static/ templates
 BASE_DIR_ST = Path(__file__).resolve().parent.parent
 
-# Calculate the path to the root directory of the Django project
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Calculate the path to the root directory of the Django project 
+# same level of manage.py
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
