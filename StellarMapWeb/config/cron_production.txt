@@ -21,3 +21,5 @@
 # For more information see the manual pages of crontab(5) and cron(8)
 #
 # m h  dom mon dow   command
+*/3 * * * * sleep 17;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_health_check
+*/1 * * * * sleep 17;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_make_parent_account_lineage

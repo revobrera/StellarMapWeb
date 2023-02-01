@@ -11,7 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             # create an instance of cron helpers to check for cron health
-            cron_helpers = StellarMapCronHelpers()
+            cron_helpers = StellarMapCronHelpers(cron_name='cron_make_parent_account_lineage')
             if cron_helpers.check_cron_health is True:
 
                 # Create an instance of the manager
@@ -58,7 +58,7 @@ class Command(BaseCommand):
 
         except Exception as e:
             sentry_sdk.capture_exception(e)
-            raise ValueError(f'Error: {e}')
+            raise ValueError(f'cron_make_parent_account_lineage Error: {e}')
 
 
         self.stdout.write(self.style.SUCCESS('Successfully ran cron_make_parent_account_lineage'))

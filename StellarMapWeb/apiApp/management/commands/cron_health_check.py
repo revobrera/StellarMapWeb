@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             # Create an instance of StellarMapCronHelpers and StellarMapDateTimeHelpers
-            cron_helpers = StellarMapCronHelpers()
+            cron_helpers = StellarMapCronHelpers(cron_name='cron_health_check')
             date_helpers = StellarMapDateTimeHelpers()
 
             # Get the health status of all crons
