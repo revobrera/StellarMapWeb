@@ -50,6 +50,8 @@ BASE_DIR_ST = Path(__file__).resolve().parent.parent
 # same level of manage.py
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+LOG_PATH = config('LOG_PATH')
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -256,7 +258,7 @@ LOGGING = {
         'file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/stellarmap/django.log',
+            'filename': LOG_PATH,
             'formatter': 'verbose'
         },
     },
