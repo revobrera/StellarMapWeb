@@ -43,10 +43,11 @@ sentry_sdk.init(
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# static/ templates
+BASE_DIR_ST = Path(__file__).resolve().parent.parent
 
 # Calculate the path to the root directory of the Django project
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -95,7 +96,7 @@ ROOT_URLCONF = 'StellarMapWeb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR_ST, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -136,7 +137,7 @@ CASSANDRA_FALLBACK_ORDER_BY_PYTHON = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/'.join([str(BASE_DIR), 'db.sqlite3']),
+        'NAME': '/'.join([str(BASE_DIR_ST), 'db.sqlite3']),
         'SUPPORTS_TRANSACTIONS': True,
     },
     'cassandra': {
@@ -223,7 +224,7 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = '/home/revobrera/StellarMapWeb/StellarMapWeb/static'
 STATIC_URL = '/static/'
 
-VENV_PATH = os.path.dirname(BASE_DIR)
+VENV_PATH = os.path.dirname(BASE_DIR_ST)
 
 # load static files
 STATICFILES_DIRS = [
