@@ -38,11 +38,11 @@ def setup_config():
 
 def setup_crontab():
     cron_file = f"config/cron_{ENV}.txt"
-    local(f"crontab < {cron_file}")
+    local(f"sudo crontab < {cron_file}")
 
 def setup_test():
     with settings(warn_only=True):
-        result = local('python manage.py test --verbosity 2', capture=True)
+        result = local('python manage.py test', capture=True)
     if result.failed and not confirm("Tests failed. Continue anyway?"):
         abort("Aborting at user request.")
 
