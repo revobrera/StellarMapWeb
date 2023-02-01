@@ -239,8 +239,6 @@ class ManagementCronHealthHistoryManager():
         """
         try:
             return ManagementCronHealthHistory.objects.filter(cron_name=cron_name).order_by('-created_at')[:1]
-        except ManagementCronHealthHistory.DoesNotExist:
-            return None
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e
