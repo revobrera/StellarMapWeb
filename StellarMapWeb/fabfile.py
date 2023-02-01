@@ -29,21 +29,21 @@ def git_commands(c):
 
 @task
 def setup_req(c):
-    c.run('pip install -r StellarMapWeb/requirements.txt')
+    c.run('pip install -r ../requirements.txt')
 
 @task
 def setup_db(c):
-    c.run('python StellarMapWeb/manage.py sync_cassandra')
+    c.run('python manage.py sync_cassandra')
 
 @task
 def setup_config(c):
-    c.run('python StellarMapWeb/manage.py collectstatic --noinput')
-    c.run('python StellarMapWeb/manage.py check --deploy')
-    c.run('python StellarMapWeb/manage.py test --verbosity 2')
+    c.run('python manage.py collectstatic --noinput')
+    c.run('python manage.py check --deploy')
+    c.run('python manage.py test --verbosity 2')
 
 @task
 def setup_crontab(c):
-    cron_file = f"StellarMapWeb/config/cron_{ENV}.txt"
+    cron_file = f"config/cron_{ENV}.txt"
     c.run(f"crontab < {cron_file}")
 
 @task
@@ -53,13 +53,11 @@ def reboot_app(c):
 
 @task
 def run_all_commands(c):
-
-    with lcd(APP_PATH):
-        activate_venv(c)
-        git_commands(c)
-        setup_req(c)
-        setup_db(c)
-        setup_config(c)
-        setup_crontab(c)
-        reboot_app(c)
+    activate_venv(c)
+    git_commands(c)
+    setup_req(c)
+    setup_db(c)
+    setup_config(c)
+    setup_crontab(c)
+    reboot_app(c)
     

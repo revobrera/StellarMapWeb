@@ -104,9 +104,9 @@ class StellarAccountLineage(DjangoCassandraModel):
     updated_at = cassandra_columns.DateTime()
 
     def __str__(self):
-        """ Method to display active, creator account, Stellar account, network and status in the admin django interface.
+        """ Method to display Stellar account, network and status in the admin django interface.
         """
-        return 'Active: ' + self.account_active + ' | Creator Account: ' + self.stellar_creator_account + ' | Stellar Account: ' + self.stellar_account + ' | network: ' + self.network_name + ' | status: ' + self.status
+        return 'Stellar Account: ' + self.stellar_account + ' | network: ' + self.network_name + ' | status: ' + self.status
 
     class Meta:
         get_pk_field = "id"
