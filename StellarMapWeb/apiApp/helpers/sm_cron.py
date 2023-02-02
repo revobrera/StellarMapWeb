@@ -54,15 +54,14 @@ class StellarMapCronHelpers:
     def set_crons_unhealthy(self):
         try:
             # query all latest distinct cron names
-            cron_names = ManagementCronHealthHistoryManager().get_distinct_cron_names()
+            cron_names_df_dict = ManagementCronHealthHistoryManager().get_distinct_cron_names()
 
             # set all these cron status' to UNHEALTHY due to exponential algorithm failing
-            for cron_name in cron_names:
-
+            for row in cron_names_df_dict:
                 # exclude cron_health_check
-                if cron_name != 'cron_health_check':
+                if row['cron_name'] != 'cron_health_check':
                     request_data = {
-                        'cron_name': cron_name,
+                        'cron_name': row['cron_name'],
                         'status': 'UNHEALTHY_DUE_TO_RATE_LIMITING_FROM_EXTERNAL_API_SERVER'
                     }
                     ManagementCronHealthHistoryManager().create_cron_health(request=request_data)
@@ -73,11 +72,11 @@ class StellarMapCronHelpers:
 
     def set_crons_healthy(self):
         try:
-            cron_names = ManagementCronHealthHistoryManager().get_distinct_cron_names()
+            cron_names_df_dict = ManagementCronHealthHistoryManager().get_distinct_cron_names()
 
-            for cron_name in cron_names:
+            for row in cron_names_df_dict:
                 request_data = {
-                    'cron_name': cron_name,
+                    'cron_name': row['cron_name'],
                     'status': 'HEALTHY'
                 }
                 ManagementCronHealthHistoryManager().create_cron_health(request=request_data)
@@ -87,10 +86,11 @@ class StellarMapCronHelpers:
 
     def check_all_crons_health(self):
         try:
-            cron_names = ManagementCronHealthHistoryManager().get_distinct_cron_names()
+            cron_names_df_dict = ManagementCronHealthHistoryManager().get_distinct_cron_names()
             cron_health = {}
 
-            for cron_name in cron_names:
+            for row in cron_names_df_dict:
+                cron_name = row['cron_name']
                 latest_record = ManagementCronHealthHistoryManager().get_latest_record(cron_name=cron_name)
                 cron_health[cron_name] = {'status': latest_record.status, 'created_at': latest_record.created_at}
 

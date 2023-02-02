@@ -1,6 +1,12 @@
+import pandas as pd
 import sentry_sdk
+from decouple import config
+from django.db import connections
+
 from .helpers.sm_datetime import StellarMapDateTimeHelpers
-from .models import StellarAccountInquiryHistory, StellarAccountLineage, ManagementCronHealthHistory
+from .models import (ManagementCronHealthHistory, StellarAccountInquiryHistory,
+                     StellarAccountLineage)
+
 
 class StellarAccountInquiryHistoryManager():
     """
@@ -246,9 +252,23 @@ class ManagementCronHealthHistoryManager():
     def get_distinct_cron_names(self):
         try:
             # query all latest distinct cron names
-            cron_names = ManagementCronHealthHistory.objects.values("cron_name").distinct()
-            cron_names = [cron_name['cron_name'] for cron_name in cron_names]
-            return cron_names
+            # cron_names = ManagementCronHealthHistory.objects.values("cron_name").distinct()
+            
+            CASSANDRA_DB_NAME = config('CASSANDRA_DB_NAME')
+            connection = connections["cassandra"]
+            session = connection.connection.session
+            session.set_keyspace(CASSANDRA_DB_NAME)
+
+            cql_query = "SELECT cron_name FROM management_cron_health_history limit 171;"
+            result_df = pd.DataFrame(session.execute(cql_query))
+
+            # using pandas to drop duplicates
+            result_df = result_df.drop_duplicates()
+
+            # convert to dictionary and orient as records
+            cron_names_dict = result_df.to_dict('records')
+
+            return cron_names_dict
         except Exception as e:
             # log the error to Sentry
             sentry_sdk.capture_exception(e)
