@@ -28,11 +28,11 @@ class StellarMapCronHelpers:
 
             # check most recent record of the cron based on name
             cron_health = ManagementCronHealthHistoryManager()
-            cron_health.get_latest_record(cron_name=self.cron_name)
+            cron_health_qs = cron_health.get_latest_record(cron_name=self.cron_name)
 
-            if cron_health:
+            if cron_health_qs:
                 # if cron health exists and HEALTHY
-                if cron_health.status == 'HEALTHY':
+                if cron_health_qs.status == 'HEALTHY':
                     return True
                 else:
                     # stop cron from executing
