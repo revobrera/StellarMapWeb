@@ -12,7 +12,7 @@ class Command(BaseCommand):
         try:
             # create an instance of cron helpers to check for cron health
             cron_helpers = StellarMapCronHelpers(cron_name='cron_make_parent_account_lineage')
-            if cron_helpers.check_cron_health is True:
+            if cron_helpers.check_cron_health() is True:
 
                 # Create an instance of the manager
                 inquiry_manager = StellarAccountInquiryHistoryManager()
