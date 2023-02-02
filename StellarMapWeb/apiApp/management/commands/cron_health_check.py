@@ -23,7 +23,7 @@ class Command(BaseCommand):
                 # get the current datetime obj
                 the_current_date_time_obj = date_helpers.get_datetime_obj()
 
-                for cron_name, status in cron_status.items():
+                for cron_name, status in cron_status:
                     # Check if the cron's status contains the string "UNHEALTHY_"
                     if 'UNHEALTHY_' in status:
                         cron_helpers.set_crons_unhealthy()
