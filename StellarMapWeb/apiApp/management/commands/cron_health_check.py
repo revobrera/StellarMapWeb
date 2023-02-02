@@ -10,7 +10,7 @@ class Command(BaseCommand):
         try:
             # Create an instance of StellarMapCronHelpers and StellarMapDateTimeHelpers
             cron_helpers = StellarMapCronHelpers(cron_name='cron_health_check')
-            if cron_helpers.check_cron_health is True:
+            if cron_helpers.check_cron_health() is True:
 
                 date_helpers = StellarMapDateTimeHelpers()
 
