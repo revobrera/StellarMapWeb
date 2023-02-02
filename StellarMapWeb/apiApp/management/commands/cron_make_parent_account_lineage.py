@@ -22,39 +22,40 @@ class Command(BaseCommand):
                     status__in=['PENDING_MAKE_PARENT_LINEAGE', 'RE_INQUIRY']
                 )
 
-                # updated status in StellarAccountInquiryHistory
-                inquiry_manager.update_inquiry(id=inq_queryset.id, status='IN_PROGRESS_MAKE_PARENT_LINEAGE')
-            
-                # Create an instance of StellarAccountLineageManager
-                lineage_manager = StellarAccountLineageManager()
-
-                # Query 1 record from StellarAccountLineage
-                lin_queryset = lineage_manager.get_queryset(
-                    stellar_account=inq_queryset.stellar_account,
-                    network_name=inq_queryset.network_name
-                )
-
-                try:
-                    PENDING = 'PENDING_HORIZON_API_DATASETS'
-                    if lin_queryset:
-                        # TODO: update datetime only if 3 hours passed
-                        lineage_manager.update_lineage(id=lin_queryset.id, status=PENDING)
-                    else:
-                        request = HttpRequest()
-                        request.data = {
-                            'stellar_account': inq_queryset.stellar_account,
-                            'network_name': inq_queryset.network_name,
-                            'status': PENDING
-                        }
-
-                        lineage_manager.create_lineage(request)
-
+                if inq_queryset:
                     # updated status in StellarAccountInquiryHistory
-                    inquiry_manager.update_inquiry(id=inq_queryset.id, status='DONE_MAKE_PARENT_LINEAGE')
+                    inquiry_manager.update_inquiry(id=inq_queryset.id, status='IN_PROGRESS_MAKE_PARENT_LINEAGE')
+                
+                    # Create an instance of StellarAccountLineageManager
+                    lineage_manager = StellarAccountLineageManager()
 
-                except Exception as e:
-                    sentry_sdk.capture_exception(e)
-                    raise ValueError(f'Error: {e}. Attempting to enter parent account in StellarAccountLineage')
+                    # Query 1 record from StellarAccountLineage
+                    lin_queryset = lineage_manager.get_queryset(
+                        stellar_account=inq_queryset.stellar_account,
+                        network_name=inq_queryset.network_name
+                    )
+
+                    try:
+                        PENDING = 'PENDING_HORIZON_API_DATASETS'
+                        if lin_queryset:
+                            # TODO: update datetime only if 3 hours passed
+                            lineage_manager.update_lineage(id=lin_queryset.id, status=PENDING)
+                        else:
+                            request = HttpRequest()
+                            request.data = {
+                                'stellar_account': inq_queryset.stellar_account,
+                                'network_name': inq_queryset.network_name,
+                                'status': PENDING
+                            }
+
+                            lineage_manager.create_lineage(request)
+
+                        # updated status in StellarAccountInquiryHistory
+                        inquiry_manager.update_inquiry(id=inq_queryset.id, status='DONE_MAKE_PARENT_LINEAGE')
+
+                    except Exception as e:
+                        sentry_sdk.capture_exception(e)
+                        raise ValueError(f'Error: {e}. Attempting to enter parent account in StellarAccountLineage')
 
         except Exception as e:
             sentry_sdk.capture_exception(e)
