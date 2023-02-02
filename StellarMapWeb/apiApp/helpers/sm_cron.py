@@ -1,4 +1,5 @@
 import sentry_sdk
+from apiApp.models import ManagementCronHealthHistory
 from apiApp.managers import ManagementCronHealthHistoryManager
 
 class StellarMapCronHelpers:
