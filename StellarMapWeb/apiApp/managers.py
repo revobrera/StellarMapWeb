@@ -244,7 +244,7 @@ class ManagementCronHealthHistoryManager():
         :return: the most recent record for the cron_name
         """
         try:
-            return ManagementCronHealthHistory.objects.filter(cron_name=cron_name).order_by('-created_at')[:1]
+            return ManagementCronHealthHistory.objects.filter(cron_name=cron_name).order_by('-created_at').first()
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e
