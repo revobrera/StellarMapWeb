@@ -180,7 +180,7 @@ class ManagementCronHealth(DjangoCassandraModel):
     """
     __keyspace__ = CASSANDRA_DB_NAME
     id = cassandra_columns.UUID(primary_key=True, default=uuid.uuid4)
-    cron_name = cassandra_columns.Text(max_length=71)
+    cron_name = cassandra_columns.Text(primary_key=True, max_length=71)
     status = cassandra_columns.Text(max_length=63)
     reason = cassandra_columns.Text()
     created_at = cassandra_columns.DateTime()
