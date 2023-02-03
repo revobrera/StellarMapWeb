@@ -1,6 +1,5 @@
 import sentry_sdk
-from apiApp.models import ManagementCronHealthHistory
-from apiApp.managers import ManagementCronHealthHistoryManager
+from apiApp.managers import ManagementCronHealthManager
 
 class StellarMapCronHelpers:
     def __init__(self, cron_name, status='HEALTHY'):
@@ -28,7 +27,7 @@ class StellarMapCronHelpers:
         try:
 
             # check most recent record of the cron based on name
-            cron_health = ManagementCronHealthHistoryManager()
+            cron_health = ManagementCronHealthManager()
             cron_health_qs = cron_health.get_latest_record(cron_name=self.cron_name)
 
             for latest_cron_record in cron_health_qs:
@@ -46,7 +45,7 @@ class StellarMapCronHelpers:
                         'cron_name': self.cron_name,
                         'status': self.status
                     }
-                    ManagementCronHealthHistoryManager().create_cron_health(request=request_data)
+                    ManagementCronHealthManager().create_cron_health(request=request_data)
                     return True
         except Exception as e:
             sentry_sdk.capture_exception(e)
@@ -55,7 +54,7 @@ class StellarMapCronHelpers:
     def set_crons_unhealthy(self):
         try:
             # query all latest distinct cron names
-            cron_names_df_dict = ManagementCronHealthHistoryManager().get_distinct_cron_names()
+            cron_names_df_dict = ManagementCronHealthManager().get_distinct_cron_names()
 
             # set all these cron status' to UNHEALTHY due to exponential algorithm failing
             for row in cron_names_df_dict:
@@ -65,7 +64,7 @@ class StellarMapCronHelpers:
                         'cron_name': row['cron_name'],
                         'status': 'UNHEALTHY_DUE_TO_RATE_LIMITING_FROM_EXTERNAL_API_SERVER'
                     }
-                    ManagementCronHealthHistoryManager().create_cron_health(request=request_data)
+                    ManagementCronHealthManager().create_cron_health(request=request_data)
         except Exception as e:
             # Log the error to Sentry
             sentry_sdk.capture_exception(e)
@@ -73,26 +72,26 @@ class StellarMapCronHelpers:
 
     def set_crons_healthy(self):
         try:
-            cron_names_df_dict = ManagementCronHealthHistoryManager().get_distinct_cron_names()
+            cron_names_df_dict = ManagementCronHealthManager().get_distinct_cron_names()
 
             for row in cron_names_df_dict:
                 request_data = {
                     'cron_name': row['cron_name'],
                     'status': 'HEALTHY'
                 }
-                ManagementCronHealthHistoryManager().create_cron_health(request=request_data)
+                ManagementCronHealthManager().create_cron_health(request=request_data)
         except Exception as e:
             sentry_sdk.capture_exception(e)
 
 
     def check_all_crons_health(self):
         try:
-            cron_names_df_dict = ManagementCronHealthHistoryManager().get_distinct_cron_names()
+            cron_names_df_dict = ManagementCronHealthManager().get_distinct_cron_names()
             cron_health = {}
 
             for row in cron_names_df_dict:
                 cron_name = row['cron_name']
-                latest_record = ManagementCronHealthHistoryManager().get_latest_record(cron_name=cron_name)
+                latest_record = ManagementCronHealthManager().get_latest_record(cron_name=cron_name)
                 cron_health[cron_name] = {'status': latest_record.status, 'created_at': latest_record.created_at}
 
             return cron_health

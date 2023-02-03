@@ -1,11 +1,11 @@
 import pandas as pd
 import sentry_sdk
+from apiApp.helpers.sm_conn import AsyncCassandraConnectionsHelpers
+from apiApp.helpers.sm_datetime import StellarMapDateTimeHelpers
+from apiApp.models import (ManagementCronHealthHistory, ManagementCronHealth,
+                           StellarAccountInquiryHistory, StellarAccountLineage)
 from decouple import config
 from django.db import connections
-
-from .helpers.sm_datetime import StellarMapDateTimeHelpers
-from .models import (ManagementCronHealthHistory, StellarAccountInquiryHistory,
-                     StellarAccountLineage)
 
 
 class StellarAccountInquiryHistoryManager():
@@ -236,7 +236,7 @@ class ManagementCronHealthHistoryManager():
             sentry_sdk.capture_exception(e)
             raise e
 
-    def get_latest_record(self, cron_name):
+    async def get_latest_record(self, cron_name):
         """
         Returns the most recent record for the given cron_name.
 
@@ -245,28 +245,153 @@ class ManagementCronHealthHistoryManager():
         """
         try:
             return ManagementCronHealthHistory.objects.filter(cron_name=cron_name).order_by('-created_at').first()
+            # conn_helpers = AsyncCassandraConnectionsHelpers()
+            # cql_query = "SELECT cron_name, status, created_at FROM management_cron_health_history limit 171;"
+
+            # await conn_helpers.set_cql_query(cql_query)
+            # await conn_helpers.connect()
+            # await conn_helpers.execute_cql()
+
+            # result_df = conn_helpers.result_df
+
+            # # convert to dictionary and orient as records
+            # latest_record_dict = result_df.to_dict('records')
+
+            # await conn_helpers.close_connection()
+
+            # return latest_record_dict
+            
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e
 
-    def get_distinct_cron_names(self):
+    async def get_distinct_cron_names(self):
         try:
             # query all latest distinct cron names
-            # cron_names = ManagementCronHealthHistory.objects.values("cron_name").distinct()
-            
-            CASSANDRA_DB_NAME = config('CASSANDRA_DB_NAME')
-            connection = connections["cassandra"]
-            session = connection.connection.session
-            session.set_keyspace(CASSANDRA_DB_NAME)
-
+            conn_helpers = AsyncCassandraConnectionsHelpers()
             cql_query = "SELECT cron_name FROM management_cron_health_history limit 171;"
-            result_df = pd.DataFrame(session.execute(cql_query))
+
+            await conn_helpers.set_cql_query(cql_query)
+            await conn_helpers.connect()
+            await conn_helpers.execute_cql()
+
+            result_df = conn_helpers.result_df
 
             # using pandas to drop duplicates
             result_df = result_df.drop_duplicates()
 
             # convert to dictionary and orient as records
             cron_names_dict = result_df.to_dict('records')
+
+            await conn_helpers.close_connection()
+
+            return cron_names_dict
+        except Exception as e:
+            # log the error to Sentry
+            sentry_sdk.capture_exception(e)
+            raise e
+
+
+class ManagementCronHealthManager():
+
+    def get_queryset(self, **kwargs):
+        """
+        Returns a queryset filtered by the given keyword arguments.
+        
+        :param kwargs: keyword arguments to filter the queryset by
+        :return: a filtered queryset
+        
+        """
+        
+        try:
+            return ManagementCronHealth.objects.filter(**kwargs).first()
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            raise e
+
+    def create_cron_health(self, request, *args, **kwargs):
+        """
+        Creates a cron_health with the given information
+        
+        :param request: the request object
+        :param args: additional positional arguments
+        :param kwargs: additional key-value arguments
+        :return: the created cron_health
+        """
+
+        try:
+            # get datetime object
+            dt_helpers = StellarMapDateTimeHelpers()
+            dt_helpers.set_datetime_obj()
+            date_obj = dt_helpers.get_datetime_obj()
+
+            # add the created_at field to the request
+            request.data['created_at'] = date_obj
+
+            return ManagementCronHealth.objects.create(**request.data)
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            raise e
+
+    def update_cron_health(self, id, status):
+        """
+        Updates an cron_health with the given id.
+
+        :param id: the id of the cron_health to update
+        :param status: the status of the cron_health to update
+        :return: the updated cron_health
+        """
+        try:
+            # get datetime object
+            dt_helpers = StellarMapDateTimeHelpers()
+            dt_helpers.set_datetime_obj()
+            date_obj = dt_helpers.get_datetime_obj()
+
+            # get the cron_health instance
+            cron_health = self.get_queryset(id=id)
+            
+            return cron_health.update(
+                status = status,
+                updated_at = date_obj
+            )
+            
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            raise e
+
+    async def get_latest_record(self, cron_name):
+        """
+        Returns the most recent record for the given cron_name.
+
+        :param cron_name: the name of the cron job
+        :return: the most recent record for the cron_name
+        """
+        try:
+            return ManagementCronHealth.objects.filter(cron_name=cron_name).order_by('-created_at').first()
+           
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            raise e
+
+    async def get_distinct_cron_names(self):
+        try:
+            # query all latest distinct cron names
+            conn_helpers = AsyncCassandraConnectionsHelpers()
+            cql_query = "SELECT cron_name FROM management_cron_health_history limit 171;"
+
+            await conn_helpers.set_cql_query(cql_query)
+            await conn_helpers.connect()
+            await conn_helpers.execute_cql()
+
+            result_df = conn_helpers.result_df
+
+            # using pandas to drop duplicates
+            result_df = result_df.drop_duplicates()
+
+            # convert to dictionary and orient as records
+            cron_names_dict = result_df.to_dict('records')
+
+            await conn_helpers.close_connection()
 
             return cron_names_dict
         except Exception as e:
