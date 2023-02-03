@@ -183,7 +183,7 @@ class ManagementCronHealth(DjangoCassandraModel):
     cron_name = cassandra_columns.Text(max_length=71)
     status = cassandra_columns.Text(max_length=63)
     reason = cassandra_columns.Text()
-    created_at = cassandra_columns.DateTime()
+    created_at = cassandra_columns.DateTime(primary_key=True, clustering_order="DESC")
     updated_at = cassandra_columns.DateTime()
 
     def __str__(self):
@@ -194,4 +194,3 @@ class ManagementCronHealth(DjangoCassandraModel):
     class Meta:
         managed = False 
         db_table = 'management_cron_health'
-        get_pk_field = "id"
