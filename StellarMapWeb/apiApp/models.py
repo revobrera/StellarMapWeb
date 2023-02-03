@@ -192,5 +192,6 @@ class ManagementCronHealth(DjangoCassandraModel):
         return 'Cron Name: ' + self.cron_name + ' | Status: ' + self.status
 
     class Meta:
-        unique_together = (('id', 'cron_name'), 'created_at')
+        managed = False 
+        db_table = 'management_cron_health'
         get_pk_field = "id"
