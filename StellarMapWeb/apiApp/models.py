@@ -194,3 +194,4 @@ class ManagementCronHealth(DjangoCassandraModel):
     class Meta:
         managed = False 
         db_table = 'management_cron_health'
+        get_pk_field = "id"
