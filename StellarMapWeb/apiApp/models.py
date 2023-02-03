@@ -167,8 +167,8 @@ class ManagementCronHealth(DjangoCassandraModel):
         >>>     reason text,
         >>>     created_at timestamp,
         >>>     updated_at timestamp,
-        >>>     PRIMARY KEY((id, cron_name), created_at)
-        >>> ) WITH CLUSTERING ORDER BY (created_at DESC);
+        >>>     PRIMARY KEY (id, cron_name, created_at)
+        >>> ) WITH CLUSTERING ORDER BY (cron_name ASC, created_at DESC)
 
 
     Attributes:

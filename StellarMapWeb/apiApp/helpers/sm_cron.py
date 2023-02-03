@@ -30,8 +30,8 @@ class StellarMapCronHelpers:
             cron_health = ManagementCronHealthManager()
             cron_health_qs = cron_health.get_latest_record(cron_name=self.cron_name)
 
-            for latest_cron_record in cron_health_qs:
-                if latest_cron_record:
+            if cron_health_qs:
+                for latest_cron_record in cron_health_qs:
                     # if cron health exists and HEALTHY
                     if latest_cron_record.status == 'HEALTHY':
                         return True
@@ -39,14 +39,14 @@ class StellarMapCronHelpers:
                         # stop cron from executing
                         return False
 
-                else:
-                    # create initial cron record
-                    request_data = {
-                        'cron_name': self.cron_name,
-                        'status': self.status
-                    }
-                    ManagementCronHealthManager().create_cron_health(request=request_data)
-                    return True
+            else:
+                # create initial cron record
+                request_data = {
+                    'cron_name': self.cron_name,
+                    'status': self.status
+                }
+                ManagementCronHealthManager().create_cron_health(request=request_data)
+                return True
         except Exception as e:
             sentry_sdk.capture_exception(e)
             return False
