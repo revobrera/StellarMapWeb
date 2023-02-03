@@ -159,7 +159,7 @@ class ManagementCronHealth(DjangoCassandraModel):
     of retries is reached.
 
     Note: 
-        Manually executed CQL to use order by DESC on created_at
+        CQL to use order by DESC on created_at
         >>> CREATE TABLE management_cron_health (
         >>>     id UUID,
         >>>     cron_name text,
@@ -187,8 +187,6 @@ class ManagementCronHealth(DjangoCassandraModel):
     updated_at = cassandra_columns.DateTime()
 
     class Meta:
-        managed = False
-        ordering = ("-created_at",)
         db_table = 'management_cron_health'
         get_pk_field = "id"
 
