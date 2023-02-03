@@ -28,17 +28,16 @@ class StellarMapCronHelpers:
 
             # check most recent record of the cron based on name
             cron_health = ManagementCronHealthManager()
-            cron_health_qs = cron_health.get_latest_record(cron_name=self.cron_name)
+            cron_health_mod = cron_health.get_latest_record(cron_name=self.cron_name)
 
-            if cron_health_qs:
-                for latest_cron_record in cron_health_qs:
-                    # if cron health exists and HEALTHY
-                    if latest_cron_record.status == 'HEALTHY':
-                        return True
-                    else:
-                        # stop cron from executing
-                        return False
-
+            if cron_health_mod is not None:
+                # if cron health exists and HEALTHY
+                if cron_health_mod.status == 'HEALTHY':
+                    return True
+                else:
+                    # stop cron from executing
+                    return False
+            
             else:
                 # create initial cron record
                 request_data = {
@@ -89,10 +88,11 @@ class StellarMapCronHelpers:
             cron_names_df_dict = ManagementCronHealthManager().get_distinct_cron_names()
             cron_health = {}
 
-            for row in cron_names_df_dict:
-                cron_name = row['cron_name']
-                latest_record = ManagementCronHealthManager().get_latest_record(cron_name=cron_name)
-                cron_health[cron_name] = {'status': latest_record.status, 'created_at': latest_record.created_at}
+            if cron_names_df_dict:
+                for row in cron_names_df_dict:
+                    cron_name = row['cron_name']
+                    latest_record = ManagementCronHealthManager().get_latest_record(cron_name=cron_name)
+                    cron_health[cron_name] = {'status': latest_record.status, 'created_at': latest_record.created_at}
 
             return cron_health
         except Exception as e:
