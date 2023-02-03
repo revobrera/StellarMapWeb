@@ -378,15 +378,15 @@ class ManagementCronHealthManager():
             sentry_sdk.capture_exception(e)
             raise e
 
-    async def get_distinct_cron_names(self):
+    def get_distinct_cron_names(self):
         try:
             # query all latest distinct cron names
             conn_helpers = AsyncCassandraConnectionsHelpers()
             cql_query = "SELECT cron_name FROM management_cron_health_history limit 171;"
 
-            await conn_helpers.set_cql_query(cql_query)
-            await conn_helpers.connect()
-            await conn_helpers.execute_cql()
+            conn_helpers.set_cql_query(cql_query)
+            conn_helpers.connect()
+            conn_helpers.execute_cql()
 
             result_df = conn_helpers.result_df
 
@@ -396,7 +396,7 @@ class ManagementCronHealthManager():
             # convert to dictionary and orient as records
             cron_names_dict = result_df.to_dict('records')
 
-            await conn_helpers.close_connection()
+            conn_helpers.close_connection()
 
             return cron_names_dict
         except Exception as e:
