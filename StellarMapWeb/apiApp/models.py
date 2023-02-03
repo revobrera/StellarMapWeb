@@ -145,3 +145,51 @@ class ManagementCronHealthHistory(DjangoCassandraModel):
 
     class Meta:
         get_pk_field = "id"
+
+
+class ManagementCronHealth(DjangoCassandraModel):
+    """
+    A model that holds information on the status of each cron job in the system.
+    The initial status of each cron job is set to "HEALTHY". In case of errors,
+    the status will be prefixed with "ERROR_". Before executing a cron job, the
+    most recent record entry is checked to verify its status. If the status is
+    not healthy, the cron job will not execute. This mechanism is in place to
+    support the tenacity library, which implements exponential backoff in case
+    of repeated errors and stops the cron job execution once the maximum number
+    of retries is reached.
+
+    Note: 
+        Manually executed CQL to use order by DESC on created_at
+        >>> CREATE TABLE management_cron_health (
+        >>>     id UUID,
+        >>>     cron_name text,
+        >>>     status text,
+        >>>     reason text,
+        >>>     created_at timestamp,
+        >>>     updated_at timestamp,
+        >>>     PRIMARY KEY((id, cron_name), created_at)
+        >>> ) WITH CLUSTERING ORDER BY (created_at DESC);
+
+
+    Attributes:
+        id (uuid.UUID): A unique identifier for the record, generated using uuid4 by default.
+        cron_name (str): The name of the cron job. The max length is 71.
+        status (str): The health status of the cron job. The default status is "HEALTHY", and if there is an error, it is prefixed with "ERROR_". The max length is 63.
+        created_at (datetime.datetime): The creation time of the record.
+        updated_at (datetime.datetime): The last update time of the record.
+    """
+    __keyspace__ = CASSANDRA_DB_NAME
+    id = cassandra_columns.UUID(primary_key=True, default=uuid.uuid4)
+    cron_name = cassandra_columns.Text(max_length=71)
+    status = cassandra_columns.Text(max_length=63)
+    reason = cassandra_columns.Text()
+    created_at = cassandra_columns.DateTime()
+    updated_at = cassandra_columns.DateTime()
+
+    def __str__(self):
+        """ Method to display cron name and status in the admin django interface.
+        """
+        return 'Cron Name: ' + self.cron_name + ' | Status: ' + self.status
+
+    class Meta:
+        get_pk_field = "id"

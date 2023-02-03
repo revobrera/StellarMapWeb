@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from .models import (ManagementCronHealthHistory, StellarAccountInquiryHistory,
-                     StellarAccountLineage)
+from .models import (ManagementCronHealth, ManagementCronHealthHistory,
+                     StellarAccountInquiryHistory, StellarAccountLineage)
 
 
 # Register your models here.
@@ -15,8 +15,12 @@ class RequestDemoAdmin(admin.ModelAdmin):
     list_display = [field.name for field in
     StellarAccountLineage._meta.get_fields()]
 
-
 @admin.register(ManagementCronHealthHistory)
 class RequestDemoAdmin(admin.ModelAdmin):
     list_display = [field.name for field in
     ManagementCronHealthHistory._meta.get_fields()]
+
+@admin.register(ManagementCronHealth)
+class RequestDemoAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in
+    ManagementCronHealth._meta.get_fields()]

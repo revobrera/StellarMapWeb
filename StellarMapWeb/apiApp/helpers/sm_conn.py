@@ -1,11 +1,13 @@
-import json
-import aiohttp
 import asyncio
+import json
+
+import aiohttp
+import pandas as pd
 import requests
 import sentry_sdk
-
+from cassandra.cluster import Cluster
+from django.conf import settings
 from django.http import HttpResponse
-
 
 
 class SiteChecker:
@@ -137,3 +139,28 @@ class AsyncStellarMapHTTPHelpers:
         except asyncio.TimeoutError as e:
             sentry_sdk.capture_exception(e)
             raise ValueError(f'Error: {e}')
+            
+
+class AsyncCassandraConnectionsHelpers:
+    def __init__(self):
+        self.CASSANDRA_DB_NAME = settings.CASSANDRA_DB_NAME
+        self.cluster = Cluster()
+        self.session = self.cluster.connect()
+        self.session.set_keyspace(self.CASSANDRA_DB_NAME)
+        self.cql_query = None
+        self.result_df = None
+
+    async def set_cql_query(self, cql):
+        self.cql_query = cql
+
+    async def execute_cql(self):
+        try:
+            result = await self.session.execute_async(self.cql_query)
+            self.result_df = pd.DataFrame(result)
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            raise e
+
+    async def close_connection(self):
+        self.session.cluster.shutdown()
+        self.session.shutdown()

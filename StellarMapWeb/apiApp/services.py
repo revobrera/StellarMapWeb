@@ -3,7 +3,7 @@ import sentry_sdk
 from django.http import HttpRequest
 from django.conf import settings
 from tenacity import retry, wait_exponential, stop_after_attempt
-from apiApp.managers import ManagementCronHealthHistoryManager
+from apiApp.managers import ManagementCronHealthManager
 
 class AstraDocument:
     def init(self):
@@ -58,6 +58,6 @@ class AstraDocument:
                 'reason': f"{e}"
             }
 
-            ManagementCronHealthHistoryManager.objects.create_cron_health(request)
+            ManagementCronHealthManager.objects.create_cron_health(request)
 
 
