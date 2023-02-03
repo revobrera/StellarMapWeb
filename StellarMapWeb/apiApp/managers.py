@@ -359,7 +359,7 @@ class ManagementCronHealthManager():
             sentry_sdk.capture_exception(e)
             raise e
 
-    async def get_latest_record(self, cron_name):
+    def get_latest_record(self, cron_name):
         """
         Returns the most recent record for the given cron_name.
 
@@ -367,7 +367,12 @@ class ManagementCronHealthManager():
         :return: the most recent record for the cron_name
         """
         try:
-            return ManagementCronHealth.objects.filter(cron_name=cron_name).order_by('-created_at').first()
+            # return ManagementCronHealth.objects.filter(cron_name=cron_name).order_by('-created_at').first()
+            # The 'created_at' attribute is part of the composite primary key.
+            # Since the model was defined with a clustering order of "DESC",
+            # the first record retrieved for a specific 'cron_name' will be the
+            # most recent one.
+            return ManagementCronHealth.objects.filter(cron_name=cron_name).first()
            
         except Exception as e:
             sentry_sdk.capture_exception(e)
