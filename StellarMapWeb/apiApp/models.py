@@ -180,18 +180,19 @@ class ManagementCronHealth(DjangoCassandraModel):
     """
     __keyspace__ = CASSANDRA_DB_NAME
     id = cassandra_columns.UUID(primary_key=True, default=uuid.uuid4)
-    cron_name = cassandra_columns.Text(primary_key=True, max_length=71)
+    cron_name = cassandra_columns.Text(required=True, max_length=71)
     status = cassandra_columns.Text(max_length=63)
     reason = cassandra_columns.Text()
-    created_at = cassandra_columns.DateTime(primary_key=True, clustering_order="DESC")
+    created_at = cassandra_columns.DateTime(required=True, clustering_order="DESC")
     updated_at = cassandra_columns.DateTime()
+
+    class Meta:
+        managed = False
+        ordering = ("-created_at",)
+        db_table = 'management_cron_health'
+        get_pk_field = "id"
 
     def __str__(self):
         """ Method to display cron name and status in the admin django interface.
         """
         return 'Cron Name: ' + self.cron_name + ' | Status: ' + self.status
-
-    class Meta:
-        managed = False 
-        db_table = 'management_cron_health'
-        get_pk_field = "id"
