@@ -23,18 +23,19 @@ class Command(BaseCommand):
                 # get the current datetime obj
                 the_current_date_time_obj = date_helpers.get_datetime_obj()
 
-                for cron_name, status in cron_status:
-                    # Check if the cron's status contains the string "UNHEALTHY_"
-                    if 'UNHEALTHY_' in status:
-                        cron_helpers.set_crons_unhealthy()
-                    else:
-                        # Get the created_at time of the latest record of the cron
-                        created_at = cron_status[cron_name]['created_at']
-                        time_difference = the_current_date_time_obj - created_at
+                if cron_status is not None:
+                    for cron_name, status in cron_status:
+                        # Check if the cron's status contains the string "UNHEALTHY_"
+                        if 'UNHEALTHY_' in status:
+                            cron_helpers.set_crons_unhealthy()
+                        else:
+                            # Get the created_at time of the latest record of the cron
+                            created_at = cron_status[cron_name]['created_at']
+                            time_difference = the_current_date_time_obj - created_at
 
-                        # Check if the difference between the current time and the created_at time is greater than 1.7 hours
-                        if time_difference.total_seconds() >= (1.7 * 60 * 60):
-                            cron_helpers.set_crons_healthy()
+                            # Check if the difference between the current time and the created_at time is greater than 1.7 hours
+                            if time_difference.total_seconds() >= (1.7 * 60 * 60):
+                                cron_helpers.set_crons_healthy()
 
         except Exception as e:
             sentry_sdk.capture_exception(e)
