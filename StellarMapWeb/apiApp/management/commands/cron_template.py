@@ -3,7 +3,7 @@ from tenacity import retry, stop_after_attempt
 
 from django.db.models import Q
 from django.core.management.base import BaseCommand
-from apiApp.managers import StellarAccountInquiryHistoryManager, StellarAccountLineageManager
+from apiApp.managers import UserInquirySearchHistoryManager, StellarCreatorAccountLineageManager
 from apiApp.helpers.sm_conn import AsyncStellarMapHTTPHelpers
 from apiApp.helpers.env import EnvHelpers
 from decouple import config
@@ -17,7 +17,7 @@ class Command(BaseCommand):
         @retry(reraise=True, stop=stop_after_attempt(17))
         async def make_child_lineage():
             # Create an instance of the manager
-            inquiry_manager = StellarAccountInquiryHistoryManager()
+            inquiry_manager = UserInquirySearchHistoryManager()
 
             # Query 1 record with status PENDING or RE_INQUIRY
             queryset = inquiry_manager.get_queryset(
@@ -40,8 +40,8 @@ class Command(BaseCommand):
             try:
                 req_response = await req.get()
 
-                # store records in StellarAccountLineage
-                lineage_manager = StellarAccountLineageManager()
+                # store records in StellarCreatorAccountLineage
+                lineage_manager = StellarCreatorAccountLineageManager()
 
                 lin_queryset = lineage_manager.get_queryset(
                     stellar_account=queryset.stellar_account,
