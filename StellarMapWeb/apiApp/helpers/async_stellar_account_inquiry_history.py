@@ -1,4 +1,4 @@
-from apiApp.models import StellarAccountInquiryHistory
+from apiApp.models import UserInquirySearchHistory
 from django.db import transaction
 
 
@@ -30,7 +30,7 @@ class AsyncStellarInquiryCreator:
             - network_name (str): The network name the Stellar account belongs to.
         
         Returns:
-            - inquiry (StellarAccountInquiryHistory): The newly created inquiry object.
+            - inquiry (UserInquirySearchHistory): The newly created inquiry object.
         """
         try:
             async with transaction.atomic():
@@ -39,7 +39,7 @@ class AsyncStellarInquiryCreator:
                 # operations in an atomic transaction, and in case of an exception,
                 # the transaction will be rolled back and the database state will be preserved.
 
-                inquiry = StellarAccountInquiryHistory(stellar_account=stellar_account, network_name=network_name, status=status)
+                inquiry = UserInquirySearchHistory(stellar_account=stellar_account, network_name=network_name, status=status)
                 await inquiry.save()
 
             return inquiry

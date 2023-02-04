@@ -3,19 +3,19 @@ import sentry_sdk
 from apiApp.helpers.sm_conn import AsyncCassandraConnectionsHelpers
 from apiApp.helpers.sm_datetime import StellarMapDateTimeHelpers
 from apiApp.models import (ManagementCronHealthHistory, ManagementCronHealth,
-                           StellarAccountInquiryHistory, StellarAccountLineage)
+                           UserInquirySearchHistory, StellarCreatorAccountLineage)
 from decouple import config
 from django.db import connections
 
 
-class StellarAccountInquiryHistoryManager():
+class UserInquirySearchHistoryManager():
     """
-    Manager class for the StellarAccountInquiryHistory model.
+    Manager class for the UserInquirySearchHistory model.
     
     Usage:
     ```
     # create an instance of the manager
-    inquiry_manager = StellarAccountInquiryHistoryManager()
+    inquiry_manager = UserInquirySearchHistoryManager()
     
     # create an inquiry
     inquiry = inquiry_manager.create_inquiry(
@@ -45,7 +45,7 @@ class StellarAccountInquiryHistoryManager():
         """
         
         try:
-            return StellarAccountInquiryHistory.objects.filter(**kwargs).first()
+            return UserInquirySearchHistory.objects.filter(**kwargs).first()
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e
@@ -69,7 +69,7 @@ class StellarAccountInquiryHistoryManager():
             # add the created_at field to the request
             request.data['created_at'] = date_obj
 
-            return StellarAccountInquiryHistory.objects.create(**request.data)
+            return UserInquirySearchHistory.objects.create(**request.data)
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e
@@ -101,7 +101,7 @@ class StellarAccountInquiryHistoryManager():
             raise e
 
 
-class StellarAccountLineageManager():
+class StellarCreatorAccountLineageManager():
 
     def get_queryset(self, **kwargs):
         """
@@ -113,7 +113,7 @@ class StellarAccountLineageManager():
         """
         
         try:
-            return StellarAccountLineage.objects.filter(**kwargs).first()
+            return StellarCreatorAccountLineage.objects.filter(**kwargs).first()
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e
@@ -137,7 +137,7 @@ class StellarAccountLineageManager():
             # add the created_at field to the request
             request.data['created_at'] = date_obj
 
-            return StellarAccountLineage.objects.create(**request.data)
+            return StellarCreatorAccountLineage.objects.create(**request.data)
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e

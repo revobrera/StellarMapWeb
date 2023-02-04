@@ -1,7 +1,7 @@
 from django_cassandra_engine.rest.serializers import \
     DjangoCassandraModelSerializer
 from rest_framework import serializers
-from apiApp.models import BaseModel, StellarAccountInquiryHistory, StellarAccountLineage
+from apiApp.models import BaseModel, UserInquirySearchHistory, StellarCreatorAccountLineage
 
 
 class BaseModelSerializer(DjangoCassandraModelSerializer):
@@ -9,14 +9,14 @@ class BaseModelSerializer(DjangoCassandraModelSerializer):
         model = BaseModel
         fields = "__all__"
 
-class StellarAccountInquiryHistorySerializer(BaseModelSerializer):
+class UserInquirySearchHistorySerializer(BaseModelSerializer):
     class Meta:
-        model = StellarAccountInquiryHistory
+        model = UserInquirySearchHistory
         fields = "__all__"
 
-class StellarAccountLineageSerializer(BaseModelSerializer):
+class StellarCreatorAccountLineageSerializer(BaseModelSerializer):
     xlm_balance = serializers.FloatField()
 
     class Meta:
-        model = StellarAccountLineage
+        model = StellarCreatorAccountLineage
         fields = "__all__"

@@ -1,7 +1,7 @@
 import sentry_sdk
 from django.http import HttpRequest
 from django.core.management.base import BaseCommand
-from apiApp.managers import StellarAccountInquiryHistoryManager, StellarAccountLineageManager
+from apiApp.managers import UserInquirySearchHistoryManager, StellarCreatorAccountLineageManager
 from apiApp.helpers.sm_cron import StellarMapCronHelpers
 
 class Command(BaseCommand):
@@ -15,7 +15,7 @@ class Command(BaseCommand):
             if cron_helpers.check_cron_health() is True:
 
                 # Create an instance of the manager
-                inquiry_manager = StellarAccountInquiryHistoryManager()
+                inquiry_manager = UserInquirySearchHistoryManager()
 
                 # Query 1 record with status PENDING or RE_INQUIRY
                 inq_queryset = inquiry_manager.get_queryset(
@@ -23,13 +23,13 @@ class Command(BaseCommand):
                 )
 
                 if inq_queryset:
-                    # updated status in StellarAccountInquiryHistory
+                    # updated status in UserInquirySearchHistory
                     inquiry_manager.update_inquiry(id=inq_queryset.id, status='IN_PROGRESS_MAKE_PARENT_LINEAGE')
                 
-                    # Create an instance of StellarAccountLineageManager
-                    lineage_manager = StellarAccountLineageManager()
+                    # Create an instance of StellarCreatorAccountLineageManager
+                    lineage_manager = StellarCreatorAccountLineageManager()
 
-                    # Query 1 record from StellarAccountLineage
+                    # Query 1 record from StellarCreatorAccountLineage
                     lin_queryset = lineage_manager.get_queryset(
                         stellar_account=inq_queryset.stellar_account,
                         network_name=inq_queryset.network_name
@@ -50,12 +50,12 @@ class Command(BaseCommand):
 
                             lineage_manager.create_lineage(request)
 
-                        # updated status in StellarAccountInquiryHistory
+                        # updated status in UserInquirySearchHistory
                         inquiry_manager.update_inquiry(id=inq_queryset.id, status='DONE_MAKE_PARENT_LINEAGE')
 
                     except Exception as e:
                         sentry_sdk.capture_exception(e)
-                        raise ValueError(f'Error: {e}. Attempting to enter parent account in StellarAccountLineage')
+                        raise ValueError(f'Error: {e}. Attempting to enter parent account in StellarCreatorAccountLineage')
 
         except Exception as e:
             sentry_sdk.capture_exception(e)

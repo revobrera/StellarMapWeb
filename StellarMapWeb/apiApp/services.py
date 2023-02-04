@@ -23,7 +23,7 @@ class AstraDocument:
         horizon_accounts_effects --> horizon_accounts_effects_doc_api_href
         stellar_expert_explorer_account --> stellar_expert_explorer_account_doc_api_href
 
-        The attributes name is mapped to the attributes found in StellarAccountLineage which is linked to the API endpoint
+        The attributes name is mapped to the attributes found in StellarCreatorAccountLineage which is linked to the API endpoint
 
         horizon_accounts_doc_api_href --> "https://horizon.stellar.org/accounts/{stellar_account}"
         horizon_accounts_operations_doc_api_href --> "https://horizon.stellar.org/operations/{stellar_account}"

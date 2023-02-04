@@ -17,11 +17,11 @@ from .helpers.async_stellar_account_inquiry_history import \
 from .helpers.sm_conn import SiteChecker
 from .helpers.env import EnvHelpers
 from .helpers.lineage_creator_accounts import LineageHelpers
-from .models import StellarAccountInquiryHistory
+from .models import UserInquirySearchHistory
 from .serializers import (BaseModelSerializer,
-                          StellarAccountInquiryHistorySerializer,
-                          StellarAccountLineageSerializer)
-from .managers import StellarAccountInquiryHistoryManager
+                          UserInquirySearchHistorySerializer,
+                          StellarCreatorAccountLineageSerializer)
+from .managers import UserInquirySearchHistoryManager
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -98,7 +98,7 @@ def lineage_stellar_account(request, network, stellar_account_address):
     return Response(data_json)
 
 
-class StellarAccountInquiryHistoryViewSet_OLDER(APIView):
+class UserInquirySearchHistoryViewSet_OLDER(APIView):
     """
     A viewset for handling the creation of inquiries for Stellar accounts.
     """
@@ -137,7 +137,7 @@ class StellarAccountInquiryHistoryViewSet_OLDER(APIView):
         # create inquiry
         try:
             # inquire account
-            queryset = StellarAccountInquiryHistory.objects.filter(
+            queryset = UserInquirySearchHistory.objects.filter(
                 stellar_account=request.data['stellar_account'],
                 network_name=request.data['network_name']
             ).first()
@@ -154,7 +154,7 @@ class StellarAccountInquiryHistoryViewSet_OLDER(APIView):
                 queryset.update(**payload)
                 context['message']='Stellar Account Address found and updated status: RE_INQUIRY'
             else:
-                inquiry_qs = StellarAccountInquiryHistory(
+                inquiry_qs = UserInquirySearchHistory(
                     stellar_account=request.data['stellar_account'],
                     network_name=request.data['network_name'],
                     status=request.data['status']
@@ -166,35 +166,35 @@ class StellarAccountInquiryHistoryViewSet_OLDER(APIView):
             return Response(context)
 
         except Exception as e:
-            logger.error("Error with executing POST request on StellarAccountInquiryHistoryViewSet_OLDER")
+            logger.error("Error with executing POST request on UserInquirySearchHistoryViewSet_OLDER")
             logger.error(e)
 
 
-class StellarAccountInquiryHistoryViewSet(ViewSet):
+class UserInquirySearchHistoryViewSet(ViewSet):
     def list(self, request):
-        queryset = StellarAccountInquiryHistory.objects.all()
-        serializer = StellarAccountInquiryHistorySerializer(queryset, many=True)
+        queryset = UserInquirySearchHistory.objects.all()
+        serializer = UserInquirySearchHistorySerializer(queryset, many=True)
         return Response(serializer.data)
 
 
-class StellarAccountInquiryHistoryListCreateAPIView(ListCreateAPIView):
-    queryset = StellarAccountInquiryHistory.objects.all()
-    serializer_class = StellarAccountInquiryHistorySerializer
+class UserInquirySearchHistoryListCreateAPIView(ListCreateAPIView):
+    queryset = UserInquirySearchHistory.objects.all()
+    serializer_class = UserInquirySearchHistorySerializer
     permission_classes = ()
 
 
-class StellarAccountInquiryHistoryListAPIView(ListAPIView):
-    queryset = StellarAccountInquiryHistory.objects.all()
-    serializer_class = StellarAccountInquiryHistorySerializer
+class UserInquirySearchHistoryListAPIView(ListAPIView):
+    queryset = UserInquirySearchHistory.objects.all()
+    serializer_class = UserInquirySearchHistorySerializer
     permission_classes = ()
 
-class StellarAccountInquiryHistoryModelViewSet(viewsets.ModelViewSet):
-    queryset = StellarAccountInquiryHistory.objects.all()
-    serializer_class = StellarAccountInquiryHistorySerializer
+class UserInquirySearchHistoryModelViewSet(viewsets.ModelViewSet):
+    queryset = UserInquirySearchHistory.objects.all()
+    serializer_class = UserInquirySearchHistorySerializer
 
     def create(self, request, *args, **kwargs):
         # query stellar account in db
-        inquiry_manager = StellarAccountInquiryHistoryManager()
+        inquiry_manager = UserInquirySearchHistoryManager()
 
         queryset = inquiry_manager.get_queryset(
             stellar_account=request.data['stellar_account'],
