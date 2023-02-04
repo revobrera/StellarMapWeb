@@ -52,10 +52,10 @@ class StellarAccountInquiryHistory(DjangoCassandraModel):
 
     __keyspace__ = CASSANDRA_DB_NAME
     id = cassandra_columns.UUID(primary_key=True, default=uuid.uuid4)
-    stellar_account = cassandra_columns.Text(max_length=56)
-    network_name = cassandra_columns.Text(max_length=9)
+    stellar_account = cassandra_columns.Text(primary_key=True, max_length=56)
+    network_name = cassandra_columns.Text(primary_key=True, max_length=9)
     status = cassandra_columns.Text(max_length=63)
-    created_at = cassandra_columns.DateTime()
+    created_at = cassandra_columns.DateTime(primary_key=True, clustering_order="DESC")
     updated_at = cassandra_columns.DateTime()
 
     def __str__(self):
@@ -90,9 +90,9 @@ class StellarAccountLineage(DjangoCassandraModel):
     id = cassandra_columns.UUID(primary_key=True, default=uuid.uuid4)
     account_active = cassandra_columns.Text(max_length=30)
     stellar_creator_account = cassandra_columns.Text(max_length=56)
-    stellar_account = cassandra_columns.Text(max_length=56)
+    stellar_account = cassandra_columns.Text(primary_key=True, max_length=56)
     stellar_account_created_at = cassandra_columns.DateTime()
-    network_name = cassandra_columns.Text(max_length=9)
+    network_name = cassandra_columns.Text(primary_key=True, max_length=9)
     home_domain = cassandra_columns.Text(max_length=71)
     xlm_balance = cassandra_columns.Float()
     horizon_accounts_doc_api_href = cassandra_columns.Text() # "https://horizon.stellar.org/accounts/{stellar_account}"
@@ -100,7 +100,7 @@ class StellarAccountLineage(DjangoCassandraModel):
     horizon_accounts_effects_doc_api_href = cassandra_columns.Text() # https://horizon.stellar.org/accounts/{stellar_account}/effects
     stellar_expert_explorer_account_doc_api_href = cassandra_columns.Text() # https://api.stellar.expert/explorer/{network_name}/account/{stellar_account}
     status = cassandra_columns.Text(max_length=63)
-    created_at = cassandra_columns.DateTime()
+    created_at = cassandra_columns.DateTime(primary_key=True, clustering_order="DESC")
     updated_at = cassandra_columns.DateTime()
 
     def __str__(self):
