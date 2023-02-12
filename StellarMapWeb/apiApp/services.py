@@ -4,7 +4,6 @@ import requests
 import sentry_sdk
 from apiApp.managers import ManagementCronHealthManager
 from decouple import config
-from django.conf import settings
 from django.http import HttpRequest
 from tenacity import retry, stop_after_attempt, wait_exponential
 
@@ -22,7 +21,11 @@ class AstraDocument:
             "Content-Type": "application/json"
         }
         self.collections_name = "default"
+        self.document_id = "default"
 
+    def set_document_id(self, document_id):
+        self.document_id = document_id
+    
     def set_collections_name(self, collections_name):
         """
         The name of the collections mapped to the attributes:
@@ -41,7 +44,7 @@ class AstraDocument:
         
         """
         self.collections_name = collections_name
-        self.url = f"https://{ASTRA_DB_ID}-{ASTRA_DB_REGION}.apps.astra.datastax.com/api/rest/v2/namespaces/{ASTRA_DB_KEYSPACE}/collections/{collections_name}"
+        self.url = f"https://{ASTRA_DB_ID}-{ASTRA_DB_REGION}.apps.astra.datastax.com/api/rest/v2/namespaces/{ASTRA_DB_KEYSPACE}/collections/{self.collections_name}/{self.document_id}"
 
     @retry(wait=wait_exponential(multiplier=1, max=7), stop=stop_after_attempt(7))
     def patch_document(self, stellar_account, network_name, external_url, raw_data, cron_name):
@@ -52,7 +55,7 @@ class AstraDocument:
             "raw_data": raw_data
         }
         try:
-            response = requests.patch(f"{self.url}/{self}", headers=self.headers, json=data)
+            response = requests.patch(f"{self.url}", headers=self.headers, json=data)
             if response.status_code == 200:
                 response_dict = json.loads(response)
                 document_id = response_dict['documentId']

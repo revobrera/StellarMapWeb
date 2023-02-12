@@ -1,4 +1,5 @@
 import json
+import uuid
 
 import sentry_sdk
 from apiApp.helpers.sm_cron import StellarMapCronHelpers
@@ -9,6 +10,7 @@ from apiApp.services import AstraDocument
 from django.core.management.base import BaseCommand
 from django.http import HttpRequest
 from apiApp.helpers.env import EnvHelpers
+from apiApp.helpers.sm_utils import StellarMapParsingUtilityHelpers
 
 
 class Command(BaseCommand):
@@ -80,10 +82,26 @@ class Command(BaseCommand):
                             # get env horizon url
                             base_horiz_acc = f"{horizon_url}{account_id}" 
 
+                            # set documentid 
+                            doc_id = ''
+                            if lin_queryset.horizon_accounts_doc_api_href is not None:
+                                util_helpers = StellarMapParsingUtilityHelpers()
+                                doc_id = util_helpers.get_documentid_from_url_address(url_address=lin_queryset.horizon_accounts_doc_api_href)
+                            else:
+                                doc_id = str(uuid.uuid4())
+
                             # store and patch in cassandra document api
                             astra_doc = AstraDocument()
+                            astra_doc.set_document_id(document_id=doc_id)
                             astra_doc.set_collections_name(collections_name='horizon_accounts')
-                            document_href = astra_doc.patch_document(stellar_account=account_id, network_name=network_name, external_url=base_horiz_acc, raw_data=accounts_json, cron_name=cron_name)
+                            document_href = astra_doc.patch_document(
+                                stellar_account=account_id,
+                                network_name=network_name,
+                                external_url=base_horiz_acc,
+                                raw_data=accounts_json,
+                                cron_name=cron_name,
+                                document_id=doc_id
+                            )
 
                             # store document href on db
                             request = HttpRequest()
@@ -112,10 +130,26 @@ class Command(BaseCommand):
                             # get env horizon url
                             base_horiz_ops = f"{horizon_url}{account_id}" 
 
+                            # set documentid
+                            doc_id = ''
+                            if lin_queryset.horizon_accounts_operations_doc_api_href is not None:
+                                util_helpers = StellarMapParsingUtilityHelpers()
+                                doc_id = util_helpers.get_documentid_from_url_address(url_address=lin_queryset.horizon_accounts_operations_doc_api_href)
+                            else:
+                                doc_id = str(uuid.uuid4())
+
                             # store and patch in cassandra document api
                             astra_doc = AstraDocument()
+                            astra_doc.set_document_id(document_id=doc_id)
                             astra_doc.set_collections_name(collections_name='horizon_operations')
-                            document_href = astra_doc.patch_document(stellar_account=account_id, network_name=network_name, external_url=base_horiz_ops, raw_data=operations_json, cron_name=cron_name)
+                            document_href = astra_doc.patch_document(
+                                stellar_account=account_id,
+                                network_name=network_name,
+                                external_url=base_horiz_ops,
+                                raw_data=operations_json,
+                                cron_name=cron_name,
+                                document_id=doc_id
+                            )
 
                             # store document href on db
                             request = HttpRequest()
@@ -142,12 +176,28 @@ class Command(BaseCommand):
                             effects_json = json.dumps(effects_list)
 
                             # get env horizon url
-                            base_horiz_eff = f"{horizon_url}{account_id}" 
+                            base_horiz_eff = f"{horizon_url}{account_id}"
+
+                            # set documentid 
+                            doc_id = ''
+                            if lin_queryset.horizon_accounts_effects_doc_api_href is not None:
+                                util_helpers = StellarMapParsingUtilityHelpers()
+                                doc_id = util_helpers.get_documentid_from_url_address(url_address=lin_queryset.horizon_accounts_effects_doc_api_href)
+                            else:
+                                doc_id = str(uuid.uuid4())
 
                             # store and patch in cassandra document api
                             astra_doc = AstraDocument()
+                            astra_doc.set_document_id(document_id=doc_id)
                             astra_doc.set_collections_name(collections_name='horizon_effects')
-                            document_href = astra_doc.patch_document(stellar_account=account_id, network_name=network_name, external_url=base_horiz_eff, raw_data=effects_json, cron_name=cron_name)
+                            document_href = astra_doc.patch_document(
+                                stellar_account=account_id,
+                                network_name=network_name,
+                                external_url=base_horiz_eff,
+                                raw_data=effects_json,
+                                cron_name=cron_name,
+                                document_id=doc_id
+                            )
 
                             # store document href on db
                             request = HttpRequest()
