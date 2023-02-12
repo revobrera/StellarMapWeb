@@ -1,7 +1,7 @@
 import sentry_sdk
 from apiApp.helpers.sm_cron import StellarMapCronHelpers
 from stellar_sdk import Server
-from tenacity import retry, stop_after_attempt, wait_random_exponential, retry_error_callback
+from tenacity import retry, stop_after_attempt, wait_random_exponential
 
 
 class StellarMapHorizonAPIHelpers:
