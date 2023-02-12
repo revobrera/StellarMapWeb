@@ -74,7 +74,7 @@ class StellarMapHorizonAPIHelpers:
         """
         try:
             # Fetch base account
-            base_account = self.server.accounts().call()
+            base_account = self.server.load_account(account_id=self.account_id)
             return base_account
         except Exception as e:
             sentry_sdk.capture_exception(e)
