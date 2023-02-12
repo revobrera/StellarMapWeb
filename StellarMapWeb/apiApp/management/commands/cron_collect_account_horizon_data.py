@@ -83,7 +83,7 @@ class Command(BaseCommand):
                             # store and patch in cassandra document api
                             astra_doc = AstraDocument()
                             astra_doc.set_collections_name(collections_name='horizon_accounts')
-                            document_href = astra_doc.patch_document(stellar_account=account_id, network_name=network_name, external_url=base_horiz_acc, raw_data=accounts_json)
+                            document_href = astra_doc.patch_document(stellar_account=account_id, network_name=network_name, external_url=base_horiz_acc, raw_data=accounts_json, cron_name=cron_name)
 
                             # store document href on db
                             request = HttpRequest()
@@ -115,7 +115,7 @@ class Command(BaseCommand):
                             # store and patch in cassandra document api
                             astra_doc = AstraDocument()
                             astra_doc.set_collections_name(collections_name='horizon_operations')
-                            document_href = astra_doc.patch_document(stellar_account=account_id, network_name=network_name, external_url=base_horiz_ops, raw_data=operations_json)
+                            document_href = astra_doc.patch_document(stellar_account=account_id, network_name=network_name, external_url=base_horiz_ops, raw_data=operations_json, cron_name=cron_name)
 
                             # store document href on db
                             request = HttpRequest()
@@ -147,7 +147,7 @@ class Command(BaseCommand):
                             # store and patch in cassandra document api
                             astra_doc = AstraDocument()
                             astra_doc.set_collections_name(collections_name='horizon_effects')
-                            document_href = astra_doc.patch_document(stellar_account=account_id, network_name=network_name, external_url=base_horiz_eff, raw_data=effects_json)
+                            document_href = astra_doc.patch_document(stellar_account=account_id, network_name=network_name, external_url=base_horiz_eff, raw_data=effects_json, cron_name=cron_name)
 
                             # store document href on db
                             request = HttpRequest()
