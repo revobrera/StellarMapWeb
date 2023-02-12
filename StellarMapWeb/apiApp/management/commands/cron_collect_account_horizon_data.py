@@ -91,19 +91,18 @@ class Command(BaseCommand):
                             astra_doc = AstraDocument()
                             astra_doc.set_document_id(document_id=doc_id)
                             astra_doc.set_collections_name(collections_name='horizon_accounts')
-                            document_href = astra_doc.patch_document(
+                            res_dict = astra_doc.patch_document(
                                 stellar_account=account_id,
                                 network_name=network_name,
                                 external_url=base_horiz_acc,
                                 raw_data=accounts_json,
-                                cron_name=cron_name,
-                                document_id=doc_id
+                                cron_name=cron_name
                             )
 
                             # store document href on db
                             request = HttpRequest()
                             request.data = {
-                                'horizon_accounts_doc_api_href': document_href,
+                                'horizon_accounts_doc_api_href': res_dict.get("href"),
                                 'status': 'DONE_COLLECTING_HORIZON_API_DATASETS_ACCOUNTS'
                             }
 
@@ -139,19 +138,18 @@ class Command(BaseCommand):
                             astra_doc = AstraDocument()
                             astra_doc.set_document_id(document_id=doc_id)
                             astra_doc.set_collections_name(collections_name='horizon_operations')
-                            document_href = astra_doc.patch_document(
+                            res_dict = astra_doc.patch_document(
                                 stellar_account=account_id,
                                 network_name=network_name,
                                 external_url=base_horiz_ops,
                                 raw_data=operations_json,
-                                cron_name=cron_name,
-                                document_id=doc_id
+                                cron_name=cron_name
                             )
 
                             # store document href on db
                             request = HttpRequest()
                             request.data = {
-                                'horizon_accounts_operations_doc_api_href': document_href,
+                                'horizon_accounts_operations_doc_api_href': res_dict.get("href"),
                                 'status': 'DONE_COLLECTING_HORIZON_API_DATASETS_OPERATIONS'
                             }
 
@@ -187,19 +185,18 @@ class Command(BaseCommand):
                             astra_doc = AstraDocument()
                             astra_doc.set_document_id(document_id=doc_id)
                             astra_doc.set_collections_name(collections_name='horizon_effects')
-                            document_href = astra_doc.patch_document(
+                            res_dict = astra_doc.patch_document(
                                 stellar_account=account_id,
                                 network_name=network_name,
                                 external_url=base_horiz_eff,
                                 raw_data=effects_json,
-                                cron_name=cron_name,
-                                document_id=doc_id
+                                cron_name=cron_name
                             )
 
                             # store document href on db
                             request = HttpRequest()
                             request.data = {
-                                'horizon_accounts_effects_doc_api_href': document_href,
+                                'horizon_accounts_effects_doc_api_href': res_dict.get("href"),
                                 'status': 'DONE_HORIZON_API_DATASETS'
                             }
 
