@@ -37,7 +37,11 @@ class Command(BaseCommand):
 
                 # Query 1 record with status starting with IN_PROGRESS_COLLECTING if in progress
                 lin_in_progress_qs = lineage_manager.get_queryset(
-                    status__startswith='IN_PROGRESS_COLLECTING'
+                    status__in=[
+                        'IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_ACCOUNTS',
+                        'IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_OPERATIONS',
+                        'IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_EFFECTS'
+                        ]
                 )
 
                 # Due to rate limiting from the API server, we will only work on 1 pull at a time
