@@ -3,9 +3,14 @@ import json
 import requests
 import sentry_sdk
 from apiApp.managers import ManagementCronHealthManager
+from decouple import config
 from django.conf import settings
 from django.http import HttpRequest
 from tenacity import retry, stop_after_attempt, wait_exponential
+
+ASTRA_DB_ID = config('ASTRA_DB_ID')
+ASTRA_DB_REGION = config('ASTRA_DB_REGION')
+ASTRA_DB_KEYSPACE = config('ASTRA_DB_KEYSPACE')
 
 
 class AstraDocument:
@@ -35,7 +40,7 @@ class AstraDocument:
         
         """
         self.collections_name = collections_name
-        self.url = f"https://{settings.ASTRA_DB_ID}-{settings.ASTRA_DB_REGION}.apps.astra.datastax.com/api/rest/v2/namespaces/{settings.ASTRA_DB_KEYSPACE}/collections/{collections_name}"
+        self.url = f"https://{ASTRA_DB_ID}-{ASTRA_DB_REGION}.apps.astra.datastax.com/api/rest/v2/namespaces/{ASTRA_DB_KEYSPACE}/collections/{collections_name}"
 
     @retry(wait=wait_exponential(multiplier=1, max=7), stop=stop_after_attempt(7))
     def patch_document(self, stellar_account, network_name, external_url, raw_data, cron_name):
