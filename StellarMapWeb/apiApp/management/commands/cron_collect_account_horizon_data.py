@@ -74,7 +74,7 @@ class Command(BaseCommand):
                             # call horizon accounts
                             sm_horizon_helpers = StellarMapHorizonAPIHelpers(horizon_url=horizon_url, account_id=account_id)
                             sm_horizon_helpers.set_cron_name(cron_name=cron_name)
-                            accounts_json = sm_horizon_helpers.get_base_accounts()
+                            accounts_dict = sm_horizon_helpers.get_base_accounts()
 
                             # get env horizon url
                             base_horiz_acc = f"{horizon_url}{account_id}" 
@@ -95,7 +95,7 @@ class Command(BaseCommand):
                                 stellar_account=account_id,
                                 network_name=network_name,
                                 external_url=base_horiz_acc,
-                                raw_data=accounts_json,
+                                raw_data=accounts_dict,
                                 cron_name=cron_name
                             )
 
@@ -118,10 +118,10 @@ class Command(BaseCommand):
                             # call horizon operations
                             sm_horizon_helpers = StellarMapHorizonAPIHelpers(horizon_url=horizon_url, account_id=account_id)
                             sm_horizon_helpers.set_cron_name(cron_name=cron_name)
-                            operations_list = sm_horizon_helpers.get_account_operations()
+                            operations_dict = sm_horizon_helpers.get_account_operations()
 
                             # converts dictionary to json
-                            operations_json = json.dumps(operations_list)
+                            # operations_json = json.dumps(operations_list)
 
                             # get env horizon url
                             base_horiz_ops = f"{horizon_url}{account_id}" 
@@ -142,7 +142,7 @@ class Command(BaseCommand):
                                 stellar_account=account_id,
                                 network_name=network_name,
                                 external_url=base_horiz_ops,
-                                raw_data=operations_json,
+                                raw_data=operations_dict,
                                 cron_name=cron_name
                             )
 
@@ -165,10 +165,10 @@ class Command(BaseCommand):
                             # call horizon effects
                             sm_horizon_helpers = StellarMapHorizonAPIHelpers(horizon_url=horizon_url, account_id=account_id)
                             sm_horizon_helpers.set_cron_name(cron_name=cron_name)
-                            effects_list = sm_horizon_helpers.get_account_effects()
+                            effects_dict = sm_horizon_helpers.get_account_effects()
 
                             # converts dictionary to json
-                            effects_json = json.dumps(effects_list)
+                            # effects_json = json.dumps(effects_list)
 
                             # get env horizon url
                             base_horiz_eff = f"{horizon_url}{account_id}"
@@ -189,7 +189,7 @@ class Command(BaseCommand):
                                 stellar_account=account_id,
                                 network_name=network_name,
                                 external_url=base_horiz_eff,
-                                raw_data=effects_json,
+                                raw_data=effects_dict,
                                 cron_name=cron_name
                             )
 
