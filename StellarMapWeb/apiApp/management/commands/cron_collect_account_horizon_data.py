@@ -66,7 +66,7 @@ class Command(BaseCommand):
 
                         account_id = lin_queryset.stellar_account
                         if lin_queryset.status == 'PENDING_HORIZON_API_DATASETS':
-                            horizon_url = env_helpers.get_base_horizon_account()
+                            horizon_url = env_helpers.get_base_horizon()
 
                             # update status to IN_PROGRESS
                             lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_ACCOUNTS')
