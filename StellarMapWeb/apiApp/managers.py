@@ -140,9 +140,37 @@ class StellarCreatorAccountLineageManager():
             sentry_sdk.capture_exception(e)
             raise e
 
-    def update_lineage(self, id, status):
+    def update_lineage(self, id, request, *args, **kwargs):
         """
         Updates an lineage with the given id.
+
+        :param id: the id of the lineage to update
+        :param request: the request object
+        :param args: additional positional arguments
+        :param kwargs: additional key-value arguments
+        :return: the updated lineage
+        """
+        try:
+            # get datetime object
+            dt_helpers = StellarMapDateTimeHelpers()
+            dt_helpers.set_datetime_obj()
+            date_obj = dt_helpers.get_datetime_obj()
+
+            # get the lineage instance
+            lineage = self.get_queryset(id=id)
+
+            # add the updated_at field to the request
+            request.data['updated_at'] = date_obj
+
+            return lineage.update(**request.data)
+            
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            raise e
+
+    def update_status(self, id, status):
+        """
+        Updates an lineage's status with the given id.
 
         :param id: the id of the lineage to update
         :param status: the status of the lineage to update

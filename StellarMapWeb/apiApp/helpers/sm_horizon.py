@@ -65,6 +65,23 @@ class StellarMapHorizonAPIHelpers:
     @retry(wait=wait_random_exponential(multiplier=1, max=71),
        stop=stop_after_attempt(7),
        retry_error_callback=on_retry_failure)
+    def get_base_accounts(self):
+        """
+        Gets base account info.
+
+        :return: List of base account
+        :rtype: list
+        """
+        try:
+            # Fetch base account
+            base_account = self.server.accounts().call()
+            return base_account
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+    
+    @retry(wait=wait_random_exponential(multiplier=1, max=71),
+       stop=stop_after_attempt(7),
+       retry_error_callback=on_retry_failure)
     def get_account_operations(self):
         """
         Gets all operations for the account specified.

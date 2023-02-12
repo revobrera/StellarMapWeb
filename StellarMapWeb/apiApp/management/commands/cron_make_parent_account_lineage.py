@@ -39,7 +39,7 @@ class Command(BaseCommand):
                         PENDING = 'PENDING_HORIZON_API_DATASETS'
                         if lin_queryset:
                             # TODO: update datetime only if 3 hours passed
-                            lineage_manager.update_lineage(id=lin_queryset.id, status=PENDING)
+                            lineage_manager.update_status(id=lin_queryset.id, status=PENDING)
                         else:
                             request = HttpRequest()
                             request.data = {

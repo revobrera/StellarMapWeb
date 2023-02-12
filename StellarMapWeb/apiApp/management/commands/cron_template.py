@@ -50,7 +50,7 @@ class Command(BaseCommand):
 
                 
                 if lin_queryset:
-                    lineage_manager.update_lineage(id=lin_queryset.id)
+                    lineage_manager.update_status(id=lin_queryset.id, status='')
                 else:
                     lineage_manager.create_lineage(
                         # account_active=req_response.data[''],
