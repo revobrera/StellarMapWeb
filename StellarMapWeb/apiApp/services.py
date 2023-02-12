@@ -58,9 +58,14 @@ class AstraDocument:
             response = requests.patch(f"{self.url}", headers=self.headers, json=data)
             if response.status_code == 200:
                 response_dict = json.loads(response)
-                document_id = response_dict['documentId']
-                document_href = f"{self.url}/{document_id}"
-                return document_href
+                doc_id = response_dict['documentId']
+
+                return_dict = {
+                    "documentId": doc_id,
+                    "href": self.url
+                }
+                
+                return return_dict
             else:
                 raise Exception(f"Failed to patch document. Response: {response.content}")
         except Exception as e:
