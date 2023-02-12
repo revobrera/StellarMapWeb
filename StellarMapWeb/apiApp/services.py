@@ -61,8 +61,7 @@ class AstraDocument:
         try:
             response = requests.patch(f"{self.url}", headers=self.headers, json=payload_json)
             if response.status_code == 200:
-                response_dict = json.loads(response)
-                doc_id = response_dict['documentId']
+                doc_id = response.json().get("documentId")
 
                 return_dict = {
                     "documentId": doc_id,
