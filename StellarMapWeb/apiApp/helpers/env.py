@@ -60,6 +60,8 @@ class EnvHelpers:
         self.base_se_network_account = f"{self.base_se_network}/account/"
         self.base_se_network_dir = f"{self.base_se_network}/directory/"
         self.base_horizon_account = f"{self.base_horizon}/accounts/"
+        self.base_horizon_operations = f"{self.base_horizon}/operations/"
+        self.base_horizon_effects = f"{self.base_horizon}/effects/"
 
     def get_debug(self):
         return self.debug
@@ -93,3 +95,9 @@ class EnvHelpers:
 
     def get_base_horizon_account(self):
         return self.base_horizon_account
+
+    def get_base_horizon_operations(self):
+        return self.base_horizon_operations
+
+    def get_base_horizon_effects(self):
+        return self.base_horizon_effects

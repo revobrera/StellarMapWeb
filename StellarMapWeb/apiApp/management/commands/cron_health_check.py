@@ -25,8 +25,9 @@ class Command(BaseCommand):
 
                 if cron_status is not None:
                     for cron_name, status in cron_status:
-                        # Check if the cron's status contains the string "UNHEALTHY_"
+                        # Check if ANY cron's status contains the string "UNHEALTHY_"
                         if 'UNHEALTHY_' in status:
+                            # set all crons on the list as "UNHEALTHY_"
                             cron_helpers.set_crons_unhealthy()
                         else:
                             # Get the created_at time of the latest record of the cron

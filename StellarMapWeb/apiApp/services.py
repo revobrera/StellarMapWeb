@@ -1,9 +1,12 @@
+import json
+
 import requests
 import sentry_sdk
-from django.http import HttpRequest
-from django.conf import settings
-from tenacity import retry, wait_exponential, stop_after_attempt
 from apiApp.managers import ManagementCronHealthManager
+from django.conf import settings
+from django.http import HttpRequest
+from tenacity import retry, stop_after_attempt, wait_exponential
+
 
 class AstraDocument:
     def init(self):
@@ -35,7 +38,7 @@ class AstraDocument:
         self.url = f"https://{settings.ASTRA_DB_ID}-{settings.ASTRA_DB_REGION}.apps.astra.datastax.com/api/rest/v2/namespaces/{settings.ASTRA_DB_KEYSPACE}/collections/{collections_name}"
 
     @retry(wait=wait_exponential(multiplier=1, max=7), stop=stop_after_attempt(7))
-    def patch_document(self, _self, stellar_account, network_name, external_url, raw_data, cron_name):
+    def patch_document(self, stellar_account, network_name, external_url, raw_data, cron_name):
         data = {
             "stellar_account": stellar_account,
             "network_name": network_name,
@@ -43,9 +46,12 @@ class AstraDocument:
             "raw_data": raw_data
         }
         try:
-            response = requests.patch(f"{self.url}/{_self}", headers=self.headers, json=data)
+            response = requests.patch(f"{self.url}/{self}", headers=self.headers, json=data)
             if response.status_code == 200:
-                return response.json()["_self"]
+                response_dict = json.loads(response)
+                document_id = response_dict['documentId']
+                document_href = f"{self.url}/{document_id}"
+                return document_href
             else:
                 raise Exception(f"Failed to patch document. Response: {response.content}")
         except Exception as e:
@@ -54,7 +60,7 @@ class AstraDocument:
             request = HttpRequest()
             request.data = {
                 'cron_name': f"{cron_name}",
-                'status': f"UNHEALTHY_RATE_LIMITED_BY_EXT_API",
+                'status': f"UNHEALTHY_RATE_LIMITED_BY_CASSANDRA_DOCUMENT_API",
                 'reason': f"{e}"
             }
 
