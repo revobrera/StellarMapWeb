@@ -74,10 +74,7 @@ class Command(BaseCommand):
                             # call horizon accounts
                             sm_horizon_helpers = StellarMapHorizonAPIHelpers(horizon_url=horizon_url, account_id=account_id)
                             sm_horizon_helpers.set_cron_name(cron_name=cron_name)
-                            accounts_list = sm_horizon_helpers.get_base_accounts()
-
-                            # converts dictionary to json
-                            accounts_json = json.dumps(accounts_list)
+                            accounts_json = sm_horizon_helpers.get_base_accounts()
 
                             # get env horizon url
                             base_horiz_acc = f"{horizon_url}{account_id}" 

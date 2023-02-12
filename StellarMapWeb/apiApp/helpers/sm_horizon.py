@@ -70,7 +70,7 @@ class StellarMapHorizonAPIHelpers:
         Gets base account info.
 
         :return: List of base account
-        :rtype: list
+        :rtype: json
         """
         try:
             # Fetch base account
