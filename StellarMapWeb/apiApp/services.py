@@ -11,13 +11,14 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 ASTRA_DB_ID = config('ASTRA_DB_ID')
 ASTRA_DB_REGION = config('ASTRA_DB_REGION')
 ASTRA_DB_KEYSPACE = config('ASTRA_DB_KEYSPACE')
+ASTRA_DB_APPLICATION_TOKEN = config('ASTRA_DB_APPLICATION_TOKEN')
 
 
 class AstraDocument:
     def init(self):
         self.url = ''
         self.headers = {
-            "X-Cassandra-Token": settings.ASTRA_DB_APPLICATION_TOKEN,
+            "X-Cassandra-Token": ASTRA_DB_APPLICATION_TOKEN,
             "Content-Type": "application/json"
         }
         self.collections_name = "default"
