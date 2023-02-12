@@ -54,8 +54,12 @@ class AstraDocument:
             "external_url": external_url,
             "raw_data": raw_data
         }
+
+        # convert dictionary to json
+        payload_json = json.dumps(data)
+
         try:
-            response = requests.patch(f"{self.url}", headers=self.headers, json=data)
+            response = requests.patch(f"{self.url}", headers=self.headers, json=payload_json)
             if response.status_code == 200:
                 response_dict = json.loads(response)
                 doc_id = response_dict['documentId']
