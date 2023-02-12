@@ -54,34 +54,36 @@ class Command(BaseCommand):
                         # No specific use case at the moment to retrieve data from Stellar.Expert. 
                         # If a use case arises, the request call can be added to the if condition below.
                         
-                        sm_horizon_helpers = StellarMapHorizonAPIHelpers()
-                        sm_horizon_helpers.set_cron_name(cron_name=cron_name)
-
                         # set environment
                         env_helpers = EnvHelpers()
-                        if lin_queryset.network_name == 'public':
+                        network_name = lin_queryset.network_name
+                        if network_name == 'public':
                             env_helpers.set_public_network()
                         else:
                             env_helpers.set_testnet_network()
 
+                        account_id = lin_queryset.stellar_account
                         if lin_queryset.status == 'PENDING_HORIZON_API_DATASETS':
+                            horizon_url = env_helpers.get_base_horizon_account()
 
                             # update status to IN_PROGRESS
                             lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_ACCOUNTS')
 
                             # call horizon accounts
+                            sm_horizon_helpers = StellarMapHorizonAPIHelpers(horizon_url=horizon_url, account_id=account_id)
+                            sm_horizon_helpers.set_cron_name(cron_name=cron_name)
                             accounts_list = sm_horizon_helpers.get_base_accounts()
 
                             # converts dictionary to json
                             accounts_json = json.dumps(accounts_list)
 
                             # get env horizon url
-                            base_horiz_acc = f"{env_helpers.get_base_horizon_account()}{lin_queryset.stellar_account}" 
+                            base_horiz_acc = f"{horizon_url}{account_id}" 
 
                             # store and patch in cassandra document api
                             astra_doc = AstraDocument()
                             astra_doc.set_collections_name(collections_name='horizon_accounts')
-                            document_href = astra_doc.patch_document(stellar_account=lin_queryset.stellar_account, network_name=lin_queryset.network_name, external_url=base_horiz_acc, raw_data=accounts_json)
+                            document_href = astra_doc.patch_document(stellar_account=account_id, network_name=network_name, external_url=base_horiz_acc, raw_data=accounts_json)
 
                             # store document href on db
                             request = HttpRequest()
@@ -94,23 +96,26 @@ class Command(BaseCommand):
                             lineage_manager.update_lineage(id=lin_queryset.id, request=request)
 
                         elif lin_queryset.status == 'DONE_COLLECTING_HORIZON_API_DATASETS_ACCOUNTS':
+                            horizon_url = env_helpers.get_base_horizon_operations()
 
                             # update status to IN_PROGRESS
                             lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_OPERATIONS')
 
                             # call horizon operations
+                            sm_horizon_helpers = StellarMapHorizonAPIHelpers(horizon_url=horizon_url, account_id=account_id)
+                            sm_horizon_helpers.set_cron_name(cron_name=cron_name)
                             operations_list = sm_horizon_helpers.get_account_operations()
 
                             # converts dictionary to json
                             operations_json = json.dumps(operations_list)
 
                             # get env horizon url
-                            base_horiz_ops = f"{env_helpers.get_base_horizon_operations()}{lin_queryset.stellar_account}" 
+                            base_horiz_ops = f"{horizon_url}{account_id}" 
 
                             # store and patch in cassandra document api
                             astra_doc = AstraDocument()
                             astra_doc.set_collections_name(collections_name='horizon_operations')
-                            document_href = astra_doc.patch_document(stellar_account=lin_queryset.stellar_account, network_name=lin_queryset.network_name, external_url=base_horiz_ops, raw_data=operations_json)
+                            document_href = astra_doc.patch_document(stellar_account=account_id, network_name=network_name, external_url=base_horiz_ops, raw_data=operations_json)
 
                             # store document href on db
                             request = HttpRequest()
@@ -123,23 +128,26 @@ class Command(BaseCommand):
                             lineage_manager.update_lineage(id=lin_queryset.id, request=request)
 
                         elif lin_queryset.status == 'DONE_COLLECTING_HORIZON_API_DATASETS_OPERATIONS':
+                            horizon_url = env_helpers.get_base_horizon_effects()
 
                             # update status to IN_PROGRESS
                             lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_EFFECTS')
 
                             # call horizon effects
+                            sm_horizon_helpers = StellarMapHorizonAPIHelpers(horizon_url=horizon_url, account_id=account_id)
+                            sm_horizon_helpers.set_cron_name(cron_name=cron_name)
                             effects_list = sm_horizon_helpers.get_account_effects()
 
                             # converts dictionary to json
                             effects_json = json.dumps(effects_list)
 
                             # get env horizon url
-                            base_horiz_eff = f"{env_helpers.get_base_horizon_effects()}{lin_queryset.stellar_account}" 
+                            base_horiz_eff = f"{horizon_url}{account_id}" 
 
                             # store and patch in cassandra document api
                             astra_doc = AstraDocument()
                             astra_doc.set_collections_name(collections_name='horizon_effects')
-                            document_href = astra_doc.patch_document(stellar_account=lin_queryset.stellar_account, network_name=lin_queryset.network_name, external_url=base_horiz_eff, raw_data=effects_json)
+                            document_href = astra_doc.patch_document(stellar_account=account_id, network_name=network_name, external_url=base_horiz_eff, raw_data=effects_json)
 
                             # store document href on db
                             request = HttpRequest()
