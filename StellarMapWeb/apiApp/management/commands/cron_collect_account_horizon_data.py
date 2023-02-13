@@ -77,7 +77,7 @@ class Command(BaseCommand):
                             accounts_dict = sm_horizon_helpers.get_base_accounts()
 
                             # get env horizon url
-                            base_horiz_acc = f"{horizon_url}{account_id}" 
+                            base_horiz_acc = f"{horizon_url}/{account_id}" 
 
                             # set documentid 
                             doc_id = ''
@@ -124,7 +124,7 @@ class Command(BaseCommand):
                             # operations_json = json.dumps(operations_list)
 
                             # get env horizon url
-                            base_horiz_ops = f"{horizon_url}{account_id}" 
+                            base_horiz_ops = f"{horizon_url}/{account_id}" 
 
                             # set documentid
                             doc_id = ''
@@ -171,7 +171,7 @@ class Command(BaseCommand):
                             # effects_json = json.dumps(effects_list)
 
                             # get env horizon url
-                            base_horiz_eff = f"{horizon_url}{account_id}"
+                            base_horiz_eff = f"{horizon_url}/{account_id}"
 
                             # set documentid 
                             doc_id = ''
