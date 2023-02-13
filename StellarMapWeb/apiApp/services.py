@@ -59,7 +59,7 @@ class AstraDocument:
         payload_json = json.dumps(data)
 
         try:
-            response = requests.patch(f"{self.url}", headers=self.headers, json=payload_json)
+            response = requests.patch(f"{self.url}", headers=self.headers, data=payload_json)
             if response.status_code == 200:
                 doc_id = response.json().get("documentId")
 
@@ -81,6 +81,6 @@ class AstraDocument:
                 'reason': f"{e}"
             }
 
-            ManagementCronHealthManager.objects.create_cron_health(request)
+            ManagementCronHealthManager().create_cron_health(request)
 
 
