@@ -229,9 +229,9 @@ class ManagementCronHealthManager():
             date_obj = dt_helpers.get_datetime_obj()
 
             # add the created_at field to the request
-            request['created_at'] = date_obj
+            request.data['created_at'] = date_obj
 
-            return ManagementCronHealth.objects.create(**request)
+            return ManagementCronHealth.objects.create(**request.data)
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e
