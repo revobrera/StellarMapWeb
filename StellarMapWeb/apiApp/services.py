@@ -14,7 +14,7 @@ ASTRA_DB_APPLICATION_TOKEN = config('ASTRA_DB_APPLICATION_TOKEN')
 
 
 class AstraDocument:
-    def init(self):
+    def __init__(self):
         self.url = ''
         self.headers = {
             "X-Cassandra-Token": ASTRA_DB_APPLICATION_TOKEN,
