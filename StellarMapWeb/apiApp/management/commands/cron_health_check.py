@@ -28,8 +28,7 @@ class Command(BaseCommand):
 
             if cron_status is not None:
                 
-                # loop through all latest cron jobs and check if 
-                
+                # loop through all latest cron jobs
                 for cron_name, status in cron_status:
                     # Get the created_at time of the latest record of the cron
                     created_at = cron_status[cron_name]['created_at']

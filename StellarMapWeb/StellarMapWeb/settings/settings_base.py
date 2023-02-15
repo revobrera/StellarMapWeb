@@ -158,7 +158,8 @@ DATABASES = {
                     'secure_connect_bundle': os.path.join(BASE_DIR, 'secure-connect-stellarmapdb.zip'),
                 },
                 'consistency': ConsistencyLevel.LOCAL_ONE,
-                'retry_connect': True
+                'retry_connect': True,
+                'protocol_version': 4
                 # + All connection options for cassandra.cluster.Cluster()
             },
             'session': {
