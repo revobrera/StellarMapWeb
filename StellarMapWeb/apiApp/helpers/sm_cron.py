@@ -1,5 +1,7 @@
 import sentry_sdk
 from apiApp.managers import ManagementCronHealthManager
+from django.http import HttpRequest
+
 
 class StellarMapCronHelpers:
     def __init__(self, cron_name, status='HEALTHY'):
@@ -40,11 +42,12 @@ class StellarMapCronHelpers:
             
             else:
                 # create initial cron record
-                request_data = {
+                request = HttpRequest()
+                request.data = {
                     'cron_name': self.cron_name,
                     'status': self.status
                 }
-                ManagementCronHealthManager().create_cron_health(request=request_data)
+                ManagementCronHealthManager().create_cron_health(request=request)
                 return True
         except Exception as e:
             sentry_sdk.capture_exception(e)
@@ -59,11 +62,12 @@ class StellarMapCronHelpers:
             for elmnt in cron_names_list:
                 # exclude cron_health_check
                 if elmnt != 'cron_health_check':
-                    request_data = {
+                    request = HttpRequest()
+                    request.data = {
                         'cron_name': elmnt,
                         'status': 'UNHEALTHY_DUE_TO_RATE_LIMITING_FROM_EXTERNAL_API_SERVER'
                     }
-                    ManagementCronHealthManager().create_cron_health(request=request_data)
+                    ManagementCronHealthManager().create_cron_health(request=request)
 
         except Exception as e:
             # Log the error to Sentry
@@ -75,11 +79,12 @@ class StellarMapCronHelpers:
             cron_names_list = ManagementCronHealthManager().get_distinct_cron_names()
 
             for elmnt in cron_names_list:
-                request_data = {
+                request = HttpRequest()
+                request.data = {
                     'cron_name': elmnt,
                     'status': 'HEALTHY'
                 }
-                ManagementCronHealthManager().create_cron_health(request=request_data)
+                ManagementCronHealthManager().create_cron_health(request=request)
         except Exception as e:
             sentry_sdk.capture_exception(e)
 
