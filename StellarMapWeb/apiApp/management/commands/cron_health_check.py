@@ -29,9 +29,9 @@ class Command(BaseCommand):
             if cron_status is not None:
                 
                 # loop through all latest cron jobs
-                for cron_name, status in cron_status:
+                for cron in cron_status:
                     # Get the created_at time of the latest record of the cron
-                    created_at = cron_status[cron_name]['created_at']
+                    created_at = cron_status[cron]['created_at']
                     time_difference = the_current_date_time_obj - created_at
 
                     # The cron job that encounters rate limiting should be the 
@@ -44,6 +44,8 @@ class Command(BaseCommand):
                     # Check if the difference between the current time 
                     # and the created_at time is greater than 1.7 hours.
                     # Set all crons to "HEALTHY" to re-initiate them. 
+
+                    status = cron_status[cron]['status']
                     if 'UNHEALTHY_' in status and time_difference.total_seconds() >= (1.7 * 60 * 60):
                         cron_helpers.set_crons_healthy()
 
