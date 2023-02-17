@@ -1,5 +1,5 @@
 import sentry_sdk
-from apiApp.helpers.sm_conn import AsyncCassandraConnectionsHelpers
+from apiApp.helpers.sm_conn import CassandraConnectionsHelpers
 from apiApp.helpers.sm_datetime import StellarMapDateTimeHelpers
 from apiApp.models import (ManagementCronHealth,
                            StellarCreatorAccountLineage,
@@ -284,7 +284,7 @@ class ManagementCronHealthManager():
     def get_distinct_cron_names(self):
         try:
             # query all latest distinct cron names
-            conn_helpers = AsyncCassandraConnectionsHelpers()
+            conn_helpers = CassandraConnectionsHelpers()
             cql_query = "SELECT cron_name FROM management_cron_health limit 171;"
 
             conn_helpers.set_cql_query(cql_query)

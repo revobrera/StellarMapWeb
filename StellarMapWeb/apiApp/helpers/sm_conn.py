@@ -150,7 +150,7 @@ class AsyncStellarMapHTTPHelpers:
             raise ValueError(f'Error: {e}')
             
 
-class AsyncCassandraConnectionsHelpers:
+class CassandraConnectionsHelpers:
     def __init__(self):
         self.cloud_config = {
             'secure_connect_bundle': f"{APP_PATH}/secure-connect-stellarmapdb.zip"
@@ -161,17 +161,17 @@ class AsyncCassandraConnectionsHelpers:
         self.session = self.cluster.connect(CASSANDRA_DB_NAME)
         self.cql_query = None
 
-    async def set_cql_query(self, cql):
+    def set_cql_query(self, cql):
         self.cql_query = cql
 
-    async def execute_cql(self):
+    def execute_cql(self):
         try:
-            rows = await self.session.execute_async(self.cql_query)
+            rows = self.session.execute(self.cql_query)
             return rows
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e
 
-    async def close_connection(self):
+    def close_connection(self):
         self.session.cluster.shutdown()
         self.session.shutdown()
