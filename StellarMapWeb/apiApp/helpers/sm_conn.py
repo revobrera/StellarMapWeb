@@ -5,12 +5,19 @@ import aiohttp
 import pandas as pd
 import requests
 import sentry_sdk
+from cassandra.auth import PlainTextAuthProvider
 from cassandra.cluster import Cluster
+from cassandra.query import dict_factory
 from decouple import config
 from django.conf import settings
 from django.http import HttpResponse
 
+APP_PATH = config('APP_PATH')
 CASSANDRA_DB_NAME = config('CASSANDRA_DB_NAME')
+CASSANDRA_HOST = config('CASSANDRA_HOST')
+CLIENT_ID = config('CLIENT_ID')
+CLIENT_SECRET = config('CLIENT_SECRET')
+
 
 class SiteChecker:
     """A class for checking the reachability of URLs."""
@@ -145,20 +152,22 @@ class AsyncStellarMapHTTPHelpers:
 
 class AsyncCassandraConnectionsHelpers:
     def __init__(self):
-        self.CASSANDRA_DB_NAME = CASSANDRA_DB_NAME
-        self.cluster = Cluster()
-        self.session = self.cluster.connect()
-        self.session.set_keyspace(self.CASSANDRA_DB_NAME)
+        self.cloud_config = {
+            'secure_connect_bundle': f"{APP_PATH}/secure-connect-stellarmapdb.zip"
+        }
+
+        self.auth_provider = PlainTextAuthProvider(CLIENT_ID, CLIENT_SECRET)
+        self.cluster = Cluster(cloud=self.cloud_config, auth_provider=self.auth_provider, protocol_version=4)
+        self.session = self.cluster.connect(CASSANDRA_DB_NAME)
         self.cql_query = None
-        self.result_df = None
 
     async def set_cql_query(self, cql):
         self.cql_query = cql
 
     async def execute_cql(self):
         try:
-            result = await self.session.execute_async(self.cql_query)
-            self.result_df = pd.DataFrame(result)
+            rows = await self.session.execute_async(self.cql_query)
+            return rows
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e

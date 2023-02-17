@@ -285,23 +285,25 @@ class ManagementCronHealthManager():
         try:
             # query all latest distinct cron names
             conn_helpers = AsyncCassandraConnectionsHelpers()
-            cql_query = "SELECT cron_name FROM management_cron_health_history limit 171;"
+            cql_query = "SELECT cron_name FROM management_cron_health limit 171;"
 
             conn_helpers.set_cql_query(cql_query)
-            conn_helpers.connect()
-            conn_helpers.execute_cql()
+            rows = conn_helpers.execute_cql()
 
-            result_df = conn_helpers.result_df
+            cron_names = []
+            # iterate through all the rows and append element to list
+            for row in rows:
+                cron_names.append(row["cron_name"])
+            
+            # set() stores only unique cron names 
+            unique_cron_names = set(cron_names)
 
-            # using pandas to drop duplicates
-            result_df = result_df.drop_duplicates()
-
-            # convert to dictionary and orient as records
-            cron_names_dict = result_df.to_dict('records')
+            # convert set back to list []
+            unique_cron_names_list = list(unique_cron_names)
 
             conn_helpers.close_connection()
 
-            return cron_names_dict
+            return unique_cron_names_list
         except Exception as e:
             # log the error to Sentry
             sentry_sdk.capture_exception(e)
