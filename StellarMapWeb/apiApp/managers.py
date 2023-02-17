@@ -293,7 +293,7 @@ class ManagementCronHealthManager():
             cron_names = []
             # iterate through all the rows and append element to list
             for row in rows:
-                cron_names.append(row["cron_name"])
+                cron_names.append(row.cron_name)
             
             # set() stores only unique cron names 
             unique_cron_names = set(cron_names)
