@@ -30,18 +30,21 @@ class StellarMapCronHelpers:
 
             # check most recent record of the cron based on name
             cron_health = ManagementCronHealthManager()
-            cron_health_mod = cron_health.get_latest_record(cron_name=self.cron_name)
+            cron_health_df = cron_health.get_latest_record(cron_name=self.cron_name)
 
-            if cron_health_mod is not None:
-                # if cron health exists and HEALTHY
-                if cron_health_mod.status == 'HEALTHY':
-                    return True
-                else:
-                    # stop cron from executing
-                    return False
-            
+            # check if the df is empty
+            if bool(cron_health_df):
+                # df is not empty; iterate through the rows of the DataFrame
+                for idx, row in cron_health_df.iterrows():
+                    # if cron health exists and HEALTHY
+                    if row['status'] == 'HEALTHY':
+                        return True
+                    else:
+                        # stop cron from executing
+                        return False
+
             else:
-                # create initial cron record
+                # df is empty; create initial cron record
                 request = HttpRequest()
                 request.data = {
                     'cron_name': self.cron_name,
@@ -97,8 +100,13 @@ class StellarMapCronHelpers:
             if cron_names_list:
                 for elmnt in cron_names_list:
                     cron_name = elmnt
-                    latest_record = ManagementCronHealthManager().get_latest_record(cron_name=cron_name)
-                    cron_health[cron_name] = {'status': latest_record.status, 'created_at': latest_record.created_at}
+                    latest_record_df = ManagementCronHealthManager().get_latest_record(cron_name=cron_name)
+
+                    # check if the df is empty
+                    if bool(latest_record_df):
+                        # df is not empty; iterate through the rows of the DataFrame
+                        for idx, row in latest_record_df.iterrows():
+                            cron_health[row['cron_name']] = {'status': row['status'], 'created_at': row['created_at']}
 
             return cron_health
         except Exception as e:
