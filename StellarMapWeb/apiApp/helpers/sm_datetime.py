@@ -4,7 +4,7 @@ from datetime import datetime
 class StellarMapDateTimeHelpers:
     def __init__(self):
         self.__datetime_obj = None
-        self.__date_str = None
+        self.__date_only_str = None
 
     def get_datetime_obj(self):
         """
@@ -13,7 +13,7 @@ class StellarMapDateTimeHelpers:
         return self.__datetime_obj
 
     def get_date_str(self):
-        return self.__date_str
+        return self.__date_only_str
 
     def set_datetime_obj(self):
         # config NY time
@@ -21,9 +21,10 @@ class StellarMapDateTimeHelpers:
         datetime_NY = datetime.now(tz_NY)
 
         # create datetime string
-        self.__date_str = datetime_NY.strftime("%Y-%m-%d %H:%M:%S")
+        __date_str = datetime_NY.strftime("%Y-%m-%d %H:%M:%S")
+        self.__date_only_str = datetime_NY.strftime("%Y-%m-%d")
 
         # create datetime object and NOT string
-        self.__datetime_obj = datetime.strptime(self.__date_str, "%Y-%m-%d %H:%M:%S")
+        self.__datetime_obj = datetime.strptime(__date_str, "%Y-%m-%d %H:%M:%S")
         
     datetime_obj = property(get_datetime_obj, set_datetime_obj)
