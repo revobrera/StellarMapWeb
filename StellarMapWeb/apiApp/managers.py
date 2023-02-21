@@ -1,8 +1,11 @@
+from datetime import datetime
+
+import pandas as pd
+import pytz
 import sentry_sdk
 from apiApp.helpers.sm_conn import CassandraConnectionsHelpers
 from apiApp.helpers.sm_datetime import StellarMapDateTimeHelpers
-from apiApp.models import (ManagementCronHealth,
-                           StellarCreatorAccountLineage,
+from apiApp.models import (ManagementCronHealth, StellarCreatorAccountLineage,
                            UserInquirySearchHistory)
 
 
@@ -264,7 +267,7 @@ class ManagementCronHealthManager():
 
     def get_latest_record(self, cron_name):
         """
-        Returns the most recent record for the given cron_name.
+        Returns the most recent record today for the given cron_name.
 
         :param cron_name: the name of the cron job
         :return: the most recent record for the cron_name
@@ -275,8 +278,22 @@ class ManagementCronHealthManager():
             # Since the model was defined with a clustering order of "DESC",
             # the first record retrieved for a specific 'cron_name' will be the
             # most recent one.
-            return ManagementCronHealth.objects.filter(cron_name=cron_name).first()
-           
+            # return ManagementCronHealth.objects.filter(cron_name=cron_name).first()
+
+            date_helpers = StellarMapDateTimeHelpers()
+            date_helpers.set_datetime_obj()
+            the_current_date_str = date_helpers.get_date_str()
+
+            conn_helpers = CassandraConnectionsHelpers()
+            cql_query = f"SELECT * FROM management_cron_health WHERE cron_name={cron_name} and created_at >= '{the_current_date_str} 00:00:00' AND created_at <= '{the_current_date_str} 23:59:59' LIMIT 1 ALLOW FILTERING;"
+
+            conn_helpers.set_cql_query(cql_query)
+            rows = conn_helpers.execute_cql()
+
+            data_df = pd.DataFrame(rows)
+
+            # returns a dataframe
+            return data_df
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e
