@@ -284,6 +284,15 @@ class ManagementCronHealthManager():
             date_helpers.set_datetime_obj()
             the_current_date_str = date_helpers.get_date_str()
 
+            if isinstance(cron_name, list):
+                cron_name = cron_name[0]
+                sentry_sdk.capture_message('cron_name is a list')
+            elif isinstance(cron_name, str):
+                sentry_sdk.capture_message('cron_name is a string')
+            else:
+                sentry_sdk.capture_message("cron_name is neither a list nor a string")
+
+
             conn_helpers = CassandraConnectionsHelpers()
             cql_query = f"SELECT * FROM management_cron_health WHERE cron_name={cron_name} and created_at >= '{the_current_date_str} 00:00:00' AND created_at <= '{the_current_date_str} 23:59:59' LIMIT 1 ALLOW FILTERING;"
 
