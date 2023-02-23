@@ -110,7 +110,7 @@ class Command(BaseCommand):
                             lineage_manager.update_lineage(id=lin_queryset.id, request=request)
 
                         elif lin_queryset.status == 'DONE_COLLECTING_HORIZON_API_DATASETS_ACCOUNTS':
-                            horizon_url = env_helpers.get_base_horizon_operations()
+                            horizon_url = env_helpers.get_base_horizon()
 
                             # update status to IN_PROGRESS
                             lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_OPERATIONS')
@@ -157,7 +157,7 @@ class Command(BaseCommand):
                             lineage_manager.update_lineage(id=lin_queryset.id, request=request)
 
                         elif lin_queryset.status == 'DONE_COLLECTING_HORIZON_API_DATASETS_OPERATIONS':
-                            horizon_url = env_helpers.get_base_horizon_effects()
+                            horizon_url = env_helpers.get_base_horizon()
 
                             # update status to IN_PROGRESS
                             lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_EFFECTS')
