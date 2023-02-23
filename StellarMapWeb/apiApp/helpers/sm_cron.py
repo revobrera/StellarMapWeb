@@ -33,7 +33,7 @@ class StellarMapCronHelpers:
             cron_health_df = cron_health.get_latest_record(cron_name=self.cron_name)
 
             # check if the df is empty
-            if bool(cron_health_df):
+            if not cron_health_df.empty:
                 # df is not empty; iterate through the rows of the DataFrame
                 for idx, row in cron_health_df.iterrows():
                     # if cron health exists and HEALTHY
@@ -103,7 +103,7 @@ class StellarMapCronHelpers:
                     latest_record_df = ManagementCronHealthManager().get_latest_record(cron_name=cron_name)
 
                     # check if the df is empty
-                    if bool(latest_record_df):
+                    if not latest_record_df.empty:
                         # df is not empty; iterate through the rows of the DataFrame
                         for idx, row in latest_record_df.iterrows():
                             cron_health[row['cron_name']] = {'status': row['status'], 'created_at': row['created_at']}
