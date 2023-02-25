@@ -67,7 +67,6 @@ class Command(BaseCommand):
                         account_id = lin_queryset.stellar_account
                         if lin_queryset.status == 'PENDING_HORIZON_API_DATASETS':
                             horizon_url = env_helpers.get_base_horizon()
-                            ext_horizon_url = env_helpers.get_base_horizon_account()
 
                             # update status to IN_PROGRESS
                             lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_ACCOUNTS')
@@ -77,8 +76,8 @@ class Command(BaseCommand):
                             sm_horizon_helpers.set_cron_name(cron_name=cron_name)
                             accounts_dict = sm_horizon_helpers.get_base_accounts()
 
-                            # get external horizon url
-                            ext_horiz_acc = f"{ext_horizon_url}{account_id}"
+                            # build external horizon url
+                            ext_horiz_acc = f"{horizon_url}/accounts/{account_id}"
 
                             # set documentid 
                             doc_id = ''
@@ -112,7 +111,6 @@ class Command(BaseCommand):
 
                         elif lin_queryset.status == 'DONE_COLLECTING_HORIZON_API_DATASETS_ACCOUNTS':
                             horizon_url = env_helpers.get_base_horizon()
-                            ext_horizon_url = env_helpers.get_base_horizon_operations()
 
                             # update status to IN_PROGRESS
                             lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_OPERATIONS')
@@ -125,8 +123,8 @@ class Command(BaseCommand):
                             # converts dictionary to json
                             # operations_json = json.dumps(operations_list)
 
-                            # get external horizon url
-                            ext_horiz_ops = f"{ext_horizon_url}{account_id}"
+                            # build external horizon url
+                            ext_horiz_ops = f"{horizon_url}/accounts/{account_id}/operations"
 
                             # set documentid
                             doc_id = ''
@@ -160,7 +158,6 @@ class Command(BaseCommand):
 
                         elif lin_queryset.status == 'DONE_COLLECTING_HORIZON_API_DATASETS_OPERATIONS':
                             horizon_url = env_helpers.get_base_horizon()
-                            ext_horizon_url = env_helpers.get_base_horizon_effects()
 
                             # update status to IN_PROGRESS
                             lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_EFFECTS')
@@ -173,8 +170,8 @@ class Command(BaseCommand):
                             # converts dictionary to json
                             # effects_json = json.dumps(effects_list)
 
-                            # get external horizon url
-                            ext_horiz_eff = f"{ext_horizon_url}{account_id}"
+                            # build external horizon url
+                            ext_horiz_eff = f"{horizon_url}/accounts/{account_id}/effects"
 
                             # set documentid 
                             doc_id = ''
