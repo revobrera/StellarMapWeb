@@ -12,10 +12,10 @@ class StellarMapParsingUtilityHelpers:
     def get_documentid_from_url_address(url_address):
 
         # Compile the regular expression pattern
-        pattern = re.compile(r'[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}')
+        pattern = r'[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}'
         
         # Match the documentid against the pattern
-        res = pattern.match(url_address)
+        result = re.findall(pattern, url_address, re.X)
         
-        document_id = res.group(1)
+        document_id = result[1]
         return document_id
