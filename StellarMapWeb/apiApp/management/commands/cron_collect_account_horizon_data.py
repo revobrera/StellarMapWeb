@@ -67,6 +67,7 @@ class Command(BaseCommand):
                         account_id = lin_queryset.stellar_account
                         if lin_queryset.status == 'PENDING_HORIZON_API_DATASETS':
                             horizon_url = env_helpers.get_base_horizon()
+                            ext_horizon_url = env_helpers.get_base_horizon_account()
 
                             # update status to IN_PROGRESS
                             lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_ACCOUNTS')
@@ -76,8 +77,8 @@ class Command(BaseCommand):
                             sm_horizon_helpers.set_cron_name(cron_name=cron_name)
                             accounts_dict = sm_horizon_helpers.get_base_accounts()
 
-                            # get env horizon url
-                            base_horiz_acc = f"{horizon_url}/{account_id}" 
+                            # get external horizon url
+                            ext_horiz_acc = f"{ext_horizon_url}/{account_id}" 
 
                             # set documentid 
                             doc_id = ''
@@ -94,7 +95,7 @@ class Command(BaseCommand):
                             res_dict = astra_doc.patch_document(
                                 stellar_account=account_id,
                                 network_name=network_name,
-                                external_url=base_horiz_acc,
+                                external_url=ext_horiz_acc,
                                 raw_data=accounts_dict,
                                 cron_name=cron_name
                             )
@@ -111,6 +112,7 @@ class Command(BaseCommand):
 
                         elif lin_queryset.status == 'DONE_COLLECTING_HORIZON_API_DATASETS_ACCOUNTS':
                             horizon_url = env_helpers.get_base_horizon()
+                            ext_horizon_url = env_helpers.get_base_horizon_operations()
 
                             # update status to IN_PROGRESS
                             lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_OPERATIONS')
@@ -123,8 +125,8 @@ class Command(BaseCommand):
                             # converts dictionary to json
                             # operations_json = json.dumps(operations_list)
 
-                            # get env horizon url
-                            base_horiz_ops = f"{horizon_url}/{account_id}" 
+                            # get external horizon url
+                            ext_horiz_ops = f"{ext_horizon_url}/{account_id}" 
 
                             # set documentid
                             doc_id = ''
@@ -141,7 +143,7 @@ class Command(BaseCommand):
                             res_dict = astra_doc.patch_document(
                                 stellar_account=account_id,
                                 network_name=network_name,
-                                external_url=base_horiz_ops,
+                                external_url=ext_horiz_ops,
                                 raw_data=operations_dict,
                                 cron_name=cron_name
                             )
@@ -158,6 +160,7 @@ class Command(BaseCommand):
 
                         elif lin_queryset.status == 'DONE_COLLECTING_HORIZON_API_DATASETS_OPERATIONS':
                             horizon_url = env_helpers.get_base_horizon()
+                            ext_horizon_url = env_helpers.get_base_horizon_effects()
 
                             # update status to IN_PROGRESS
                             lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_COLLECTING_HORIZON_API_DATASETS_EFFECTS')
@@ -170,8 +173,8 @@ class Command(BaseCommand):
                             # converts dictionary to json
                             # effects_json = json.dumps(effects_list)
 
-                            # get env horizon url
-                            base_horiz_eff = f"{horizon_url}/{account_id}"
+                            # get external horizon url
+                            ext_horiz_eff = f"{ext_horizon_url}/{account_id}"
 
                             # set documentid 
                             doc_id = ''
@@ -188,7 +191,7 @@ class Command(BaseCommand):
                             res_dict = astra_doc.patch_document(
                                 stellar_account=account_id,
                                 network_name=network_name,
-                                external_url=base_horiz_eff,
+                                external_url=ext_horiz_eff,
                                 raw_data=effects_dict,
                                 cron_name=cron_name
                             )
