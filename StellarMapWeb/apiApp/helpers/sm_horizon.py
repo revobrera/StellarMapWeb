@@ -2,7 +2,7 @@ import sentry_sdk
 from apiApp.helpers.sm_cron import StellarMapCronHelpers
 from stellar_sdk import Server
 from tenacity import retry, stop_after_attempt, wait_random_exponential
-
+import json
 
 class StellarMapHorizonAPIHelpers:
     """
@@ -129,3 +129,39 @@ class StellarMapHorizonAPIHelpers:
             return txns
         except Exception as e:
             sentry_sdk.capture_exception(e)
+
+
+class StellarMapHorizonAPIParserHelpers:
+    """ 
+    Note: This class parses the Horizon JSON dataset that is embedded into a custom
+          StellarMap JSON formatted for Datastax Document API.
+    """
+    def set_datastax_response(self, datastax_response):
+        self.datastax_response = datastax_response
+
+    def parse_account_native_balance(self):
+        # parse the JSON
+        data = json.loads(self.datastax_response)
+
+        # check if 'balance' data property is present
+        if 'balance' in data['data']['raw_data']['balances']:
+            # get the balance value with asset type of "native" or asset code of "XLM"
+            for balance in data['data']['raw_data']['balances']:
+                if (balance['asset_type'] == 'native' or balance['asset_code'] == 'XLM'):
+                    return balance['balance']
+                else:
+                    return "No matching XLM asset_type or asset_code"
+        else:
+            return "No XLM balance"
+            
+    def parse_account_home_domain(self, datastax_response):
+        # parse the JSON
+        data = json.loads(self.datastax_response)
+
+        # check if 'home_domain' data property is present
+        if 'home_domain' in data['data']['raw_data']:
+            # get the home_domain value
+            return data['data']['raw_data']['home_domain']
+        else:
+            return "No home_domain"
+            

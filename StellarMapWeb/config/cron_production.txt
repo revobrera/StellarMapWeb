@@ -24,3 +24,4 @@
 */3 * * * * sleep 17;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_health_check
 */1 * * * * sleep 17;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_make_parent_account_lineage
 */1 * * * * sleep 17;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_collect_account_horizon_data
+*/1 * * * * sleep 117;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_collect_account_lineage_attributes

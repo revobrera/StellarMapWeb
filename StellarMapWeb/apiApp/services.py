@@ -70,7 +70,7 @@ class AstraDocument:
                 
                 return return_dict
             else:
-                raise Exception(f"Failed to patch document. Response: {response.content}")
+                raise Exception(f"Failed to PATCH document. Response: {response.content}")
         except Exception as e:
             sentry_sdk.capture_exception(e)
 
@@ -82,5 +82,20 @@ class AstraDocument:
             }
 
             ManagementCronHealthManager().create_cron_health(request)
+
+    def set_datastax_url(self, datastax_url):
+        self.datastax_url = datastax_url
+
+    @retry(wait=wait_exponential(multiplier=1, max=7), stop=stop_after_attempt(7))
+    def get_document(self):
+        try:
+            response = requests.get(f"{self.datastax_url}", headers=self.headers)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                raise Exception(f"Failed to GET document. Response: {response.content}")
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+        
 
 
