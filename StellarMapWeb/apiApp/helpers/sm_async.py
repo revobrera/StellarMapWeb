@@ -6,7 +6,7 @@ import requests
 import sentry_sdk
 
 class StellarMapAsyncHelpers:
-    @staticmethod
+
     def execute_async(self, *args, **kwargs):
         """
         Executes a task asynchronously using a thread pool executor.
@@ -25,7 +25,6 @@ class StellarMapAsyncHelpers:
         # Run the event loop until the task is complete
         loop.run_until_complete(future)
 
-    @classmethod
     async def add_task_to_threadpool(self, task_list, custom_function, *args, **kwargs):
         """
         This function runs a list of tasks asynchronously using a custom function.
