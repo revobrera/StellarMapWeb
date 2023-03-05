@@ -7,7 +7,7 @@ from django.http import HttpRequest
 
 class StellarMapCreatorAccountLineageHelpers:
 
-    def async_update_from_raw_data(self, lin_queryset):
+    def async_update_from_raw_data(self, client_session, lin_queryset, *args, **kwargs):
 
         try:
 
