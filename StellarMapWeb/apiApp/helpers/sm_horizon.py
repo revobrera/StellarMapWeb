@@ -148,7 +148,7 @@ class StellarMapHorizonAPIParserHelpers:
         if 'balances' in response_dict['data']['raw_data']:
             # iterate and check if balance data property is present
             for trnx in response_dict['data']['raw_data']['balances']:
-                if (trnx['asset_type'] == 'native' or trnx['asset_code'] == 'XLM') and (trnx['balance'] > 0):
+                if (trnx['asset_type'] == 'native') and (int(trnx['balance']) > 0):
                     return trnx['balance']
                 else:
                     # No matching XLM asset_type or asset_code
