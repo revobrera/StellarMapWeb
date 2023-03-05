@@ -142,28 +142,30 @@ class StellarMapHorizonAPIParserHelpers:
     def parse_account_native_balance(self):
         # parse the JSON
         # data = json.loads(self.datastax_response)
-        data = self.datastax_response
+        response_dict = self.datastax_response
 
-        # check if 'balance' data property is present
-        if 'balance' in data['data']['raw_data']['balances']:
-            # get the balance value with asset type of "native" or asset code of "XLM"
-            for balance in data['data']['raw_data']['balances']:
-                if (balance['asset_type'] == 'native' or balance['asset_code'] == 'XLM'):
-                    return balance['balance']
+        # check if 'balances' data property is present
+        if 'balances' in response_dict['data']['raw_data']:
+            # iterate and check if balance data property is present
+            for trnx in response_dict['data']['raw_data']['balances']:
+                if (trnx['asset_type'] == 'native' or trnx['asset_code'] == 'XLM') and (trnx['balance'] > 0):
+                    return trnx['balance']
                 else:
-                    return "No matching XLM asset_type or asset_code"
+                    # No matching XLM asset_type or asset_code
+                    return 0.00
         else:
-            return "No XLM balance"
+            # No XLM balance
+            return 0.0
             
     def parse_account_home_domain(self):
         # parse the JSON
         # data = json.loads(self.datastax_response)
-        data = self.datastax_response
+        response_dict = self.datastax_response
 
         # check if 'home_domain' data property is present
-        if 'home_domain' in data['data']['raw_data']:
+        if 'home_domain' in response_dict['data']['raw_data']:
             # get the home_domain value
-            return data['data']['raw_data']['home_domain']
+            return response_dict['data']['raw_data']['home_domain']
         else:
             return "No home_domain"
             
