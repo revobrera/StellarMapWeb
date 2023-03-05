@@ -141,7 +141,7 @@ class StellarMapHorizonAPIParserHelpers:
 
     def parse_account_native_balance(self):
         # parse the JSON
-        data = json.loads(self.datastax_response)
+        # data = json.loads(self.datastax_response)
 
         # check if 'balance' data property is present
         if 'balance' in data['data']['raw_data']['balances']:
@@ -156,7 +156,7 @@ class StellarMapHorizonAPIParserHelpers:
             
     def parse_account_home_domain(self, datastax_response):
         # parse the JSON
-        data = json.loads(self.datastax_response)
+        # data = json.loads(self.datastax_response)
 
         # check if 'home_domain' data property is present
         if 'home_domain' in data['data']['raw_data']:
