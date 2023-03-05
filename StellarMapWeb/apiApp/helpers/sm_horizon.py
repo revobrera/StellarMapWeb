@@ -155,7 +155,7 @@ class StellarMapHorizonAPIParserHelpers:
         else:
             return "No XLM balance"
             
-    def parse_account_home_domain(self, datastax_response):
+    def parse_account_home_domain(self):
         # parse the JSON
         # data = json.loads(self.datastax_response)
         data = self.datastax_response
