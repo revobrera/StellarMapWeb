@@ -119,6 +119,21 @@ class StellarCreatorAccountLineageManager():
             sentry_sdk.capture_exception(e)
             raise e
 
+    def get_all_queryset(self, **kwargs):
+        """
+        Returns a queryset filtered by the given keyword arguments.
+        
+        :param kwargs: keyword arguments to filter the queryset by
+        :return: a filtered queryset
+        
+        """
+        
+        try:
+            return StellarCreatorAccountLineage.objects.filter(**kwargs)
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            raise e
+
     def create_lineage(self, request, *args, **kwargs):
         """
         Creates an lineage with the given information
