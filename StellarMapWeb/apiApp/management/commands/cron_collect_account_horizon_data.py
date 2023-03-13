@@ -91,10 +91,10 @@ class Command(BaseCommand):
                             # Failed to PATCH document. Response: b'{"description":"Array paths contained in 
                             # square brackets, periods, single quotes, and backslash are not allowed in
                             # field names, invalid field config.memo_required","code":400}'
-                            for key in accounts_dict.keys():
+                            for key in accounts_dict['data']['raw_data'].keys():
                                 new_key = re.sub(r'[^\w]+', '_', key)
                                 if key != new_key:
-                                    accounts_dict[new_key] = accounts_dict.pop(key)
+                                    accounts_dict['data']['raw_data'][new_key] = accounts_dict['data']['raw_data'].pop(key)
 
                             # store and patch in cassandra document api
                             astra_doc = AstraDocument()
