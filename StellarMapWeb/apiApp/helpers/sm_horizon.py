@@ -176,6 +176,9 @@ class StellarMapHorizonAPIParserHelpers:
                 funder = record["funder"]
                 created_at = record["created_at"]
 
+                if funder is None:
+                    funder = 'No creator_account'
+
                 # convert horizon datetime str to cassandra datetime obj
                 datetime_helpers = StellarMapDateTimeHelpers()
                 datetime_helpers.set_horizon_datetime_str(horizon_datetime_str=created_at)
