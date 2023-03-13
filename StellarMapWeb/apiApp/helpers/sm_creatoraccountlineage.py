@@ -61,6 +61,9 @@ class StellarMapCreatorAccountLineageHelpers:
             api_parser.set_datastax_response(datastax_response=response_json)
             creator_dict = api_parser.parse_operations_creator_account(stellar_account=lin_queryset.stellar_account)
 
+            if creator_dict["funder"] is None:
+                creator_dict["funder"] = 'No creator_account'
+
             # update lineage record
             request = HttpRequest()
             request.data = {
