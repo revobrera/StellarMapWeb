@@ -166,7 +166,7 @@ class StellarMapHorizonAPIParserHelpers:
             # get the home_domain value
             return response_dict['data']['raw_data']['home_domain']
         else:
-            return "No home_domain"
+            return "no_element_home_domain"
         
     def parse_operations_creator_account(self, stellar_account):
         response_dict = self.datastax_response
