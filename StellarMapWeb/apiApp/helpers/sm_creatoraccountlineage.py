@@ -64,12 +64,17 @@ class StellarMapCreatorAccountLineageHelpers:
             if creator_dict is not None and "funder" in creator_dict:
                 funder = creator_dict["funder"]
                 if funder is None:
-                    creator_dict["funder"] = 'No creator_account'
+                    # creator_dict["funder"] = 'No creator_account'
+                    funder = 'No creator_account'
+                else:
+                    funder = creator_dict["funder"]
+            else: 
+                funder = 'No element funder'
 
             # update lineage record
             request = HttpRequest()
             request.data = {
-                'stellar_creator_account': creator_dict["funder"],
+                'stellar_creator_account': funder,
                 'stellar_account_created_at': creator_dict["created_at"],
                 'status': 'DONE_UPDATING_FROM_OPERATIONS_RAW_DATA'
             }
