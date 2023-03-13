@@ -1,8 +1,11 @@
+import json
+
 import sentry_sdk
 from apiApp.helpers.sm_cron import StellarMapCronHelpers
+from apiApp.helpers.sm_datetime import StellarMapDateTimeHelpers
 from stellar_sdk import Server
 from tenacity import retry, stop_after_attempt, wait_random_exponential
-import json
+
 
 class StellarMapHorizonAPIHelpers:
     """
@@ -173,8 +176,13 @@ class StellarMapHorizonAPIParserHelpers:
                 funder = record["funder"]
                 created_at = record["created_at"]
 
+                # convert horizon datetime str to cassandra datetime obj
+                datetime_helpers = StellarMapDateTimeHelpers()
+                datetime_helpers.set_horizon_datetime_str(horizon_datetime_str=created_at)
+                created_at_obj = datetime_helpers.convert_horizon_datetime_str_to_obj()
+
                 creator_dict = {
                     "funder": funder,
-                    "created_at": created_at
+                    "created_at": created_at_obj
                 }
                 return creator_dict
