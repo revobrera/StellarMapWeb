@@ -40,7 +40,6 @@ class StellarMapCreatorAccountLineageHelpers:
         except Exception as e:
             sentry_sdk.capture_exception(e)
 
-
     def async_update_from_operations_raw_data(self, client_session, lin_queryset, *args, **kwargs):
 
         try:
@@ -79,6 +78,39 @@ class StellarMapCreatorAccountLineageHelpers:
         except Exception as e:
             sentry_sdk.capture_exception(e)
 
+    def async_make_grandparent_account(self, client_session, lin_queryset, *args, **kwargs):
 
+        try:
 
+            # Create an instance of the manager
+            lineage_manager = StellarCreatorAccountLineageManager()
 
+            # update status to IN_PROGRESS
+            lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_MAKE_GRANDPARENT_LINEAGE')
+
+            # creator account queryset
+            new_lin_manager = StellarCreatorAccountLineageManager()
+            new_lin_queryset = new_lin_manager.get_queryset(
+                stellar_account=lin_queryset.stellar_creator_account,
+                network_name=lin_queryset.network_name
+            )
+
+            PENDING = 'PENDING_HORIZON_API_DATASETS'
+            if new_lin_queryset:
+                # update grandparent lineage record
+                # TODO: update datetime only if 3 hours passed
+                new_lin_manager.update_status(id=new_lin_queryset.id, status=PENDING)
+            else:
+                # create grandparent lineage record
+                request = HttpRequest()
+                request.data = {
+                    'stellar_account': lin_queryset.stellar_creator_account,
+                    'network_name': lin_queryset.network_name,
+                    'status': PENDING
+                }
+
+                new_lin_manager.create_lineage(request)
+            
+            lineage_manager.update_status(id=lin_queryset.id, status='DONE_MAKE_GRANDPARENT_LINEAGE')
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
