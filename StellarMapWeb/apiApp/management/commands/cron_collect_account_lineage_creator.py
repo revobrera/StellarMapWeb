@@ -9,12 +9,12 @@ from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     help = ('This management command is a scheduled task that populates the '
-        'home_domain and XLM balance Horizon API and persistently stores it in the database.')
+        'created_at and creator account Horizon API and persistently stores it in the database.')
 
     def handle(self, *args, **options):
         try:
             # create an instance of cron helpers to check for cron health
-            cron_helpers = StellarMapCronHelpers(cron_name='cron_collect_account_lineage_attributes')
+            cron_helpers = StellarMapCronHelpers(cron_name='cron_collect_account_lineage_creator')
             if cron_helpers.check_cron_health() is True:
 
                 # Create an instance of async
@@ -25,18 +25,18 @@ class Command(BaseCommand):
 
                 # Query all records matching status from StellarCreatorAccountLineage
                 lin_queryset = lineage_manager.get_all_queryset(
-                    status__in=['DONE_HORIZON_API_DATASETS']
+                    status__in=['DONE_UPDATING_FROM_RAW_DATA']
                 )
                 
                 # Create an instance of StellarMapCreatorAccountLineageHelpers
                 lineage_helpers = StellarMapCreatorAccountLineageHelpers()
 
                 # Run the async tasks with the custom function
-                async_helpers.execute_async(lin_queryset, lineage_helpers.async_update_from_accounts_raw_data)
+                async_helpers.execute_async(lin_queryset, lineage_helpers.async_update_from_operations_raw_data)
 
         except Exception as e:
             sentry_sdk.capture_exception(e)
-            raise ValueError(f'cron_collect_account_lineage_attributes Error: {e}')
+            raise ValueError(f'cron_collect_account_lineage_creator Error: {e}')
 
 
 

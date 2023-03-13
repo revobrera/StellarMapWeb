@@ -140,8 +140,6 @@ class StellarMapHorizonAPIParserHelpers:
         self.datastax_response = datastax_response
 
     def parse_account_native_balance(self):
-        # parse the JSON
-        # data = json.loads(self.datastax_response)
         response_dict = self.datastax_response
 
         # check if 'balances' data property is present
@@ -158,8 +156,6 @@ class StellarMapHorizonAPIParserHelpers:
             return 0.0
             
     def parse_account_home_domain(self):
-        # parse the JSON
-        # data = json.loads(self.datastax_response)
         response_dict = self.datastax_response
 
         # check if 'home_domain' data property is present
@@ -168,4 +164,17 @@ class StellarMapHorizonAPIParserHelpers:
             return response_dict['data']['raw_data']['home_domain']
         else:
             return "No home_domain"
-            
+        
+    def parse_operations_creator_account(self, stellar_account):
+        response_dict = self.datastax_response
+
+        for record in response_dict["_embedded"]["records"]:
+            if record["type"] == "create_account" and record["account"] == stellar_account:
+                funder = record["funder"]
+                created_at = record["created_at"]
+
+                creator_dict = {
+                    "funder": funder,
+                    "created_at": created_at
+                }
+                return creator_dict
