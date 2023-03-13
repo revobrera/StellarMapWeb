@@ -64,8 +64,8 @@ class StellarMapCreatorAccountLineageHelpers:
             # update lineage record
             request = HttpRequest()
             request.data = {
-                'stellar_creator_account': creator_dict.funder,
-                'stellar_account_created_at': creator_dict.created_at,
+                'stellar_creator_account': creator_dict["funder"],
+                'stellar_account_created_at': creator_dict["created_at"],
                 'status': 'DONE_UPDATING_FROM_OPERATIONS_RAW_DATA'
             }
 
