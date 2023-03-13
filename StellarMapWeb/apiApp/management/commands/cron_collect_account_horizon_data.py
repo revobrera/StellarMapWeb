@@ -1,16 +1,17 @@
 import json
+import re
 import uuid
 
 import sentry_sdk
+from apiApp.helpers.env import EnvHelpers
 from apiApp.helpers.sm_cron import StellarMapCronHelpers
 from apiApp.helpers.sm_horizon import StellarMapHorizonAPIHelpers
+from apiApp.helpers.sm_utils import StellarMapParsingUtilityHelpers
 from apiApp.managers import (StellarCreatorAccountLineageManager,
                              UserInquirySearchHistoryManager)
 from apiApp.services import AstraDocument
 from django.core.management.base import BaseCommand
 from django.http import HttpRequest
-from apiApp.helpers.env import EnvHelpers
-from apiApp.helpers.sm_utils import StellarMapParsingUtilityHelpers
 
 
 class Command(BaseCommand):
@@ -86,6 +87,14 @@ class Command(BaseCommand):
                                 doc_id = util_helpers.get_documentid_from_url_address(url_address=lin_queryset.horizon_accounts_doc_api_href)
                             else:
                                 doc_id = str(uuid.uuid4())
+
+                            # Failed to PATCH document. Response: b'{"description":"Array paths contained in 
+                            # square brackets, periods, single quotes, and backslash are not allowed in
+                            # field names, invalid field config.memo_required","code":400}'
+                            for key in accounts_dict.keys():
+                                new_key = re.sub(r'[^\w]+', '_', key)
+                                if key != new_key:
+                                    accounts_dict[new_key] = accounts_dict.pop(key)
 
                             # store and patch in cassandra document api
                             astra_doc = AstraDocument()

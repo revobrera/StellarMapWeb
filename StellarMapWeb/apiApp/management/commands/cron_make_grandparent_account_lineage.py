@@ -36,6 +36,3 @@ class Command(BaseCommand):
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise ValueError(f'cron_make_grandparent_account_lineage Error: {e}')
-
-
-
