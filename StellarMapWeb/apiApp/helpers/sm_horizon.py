@@ -168,7 +168,7 @@ class StellarMapHorizonAPIParserHelpers:
     def parse_operations_creator_account(self, stellar_account):
         response_dict = self.datastax_response
 
-        for record in response_dict["_embedded"]["records"]:
+        for record in response_dict['data']['raw_data']["_embedded"]["records"]:
             if record["type"] == "create_account" and record["account"] == stellar_account:
                 funder = record["funder"]
                 created_at = record["created_at"]
