@@ -102,9 +102,8 @@ class StellarMapCronHelpers:
 
                     # check if the df is empty
                     if not latest_record_df.empty:
-                        # df is not empty; iterate through the rows of the DataFrame
-                        for idx, row in latest_record_df.iterrows():
-                            cron_health[row['cron_name']] = {'status': row['status'], 'created_at': row['created_at']}
+                        # df is not empty; 
+                        cron_health[latest_record_df['cron_name']] = {'status': latest_record_df['status'], 'created_at': latest_record_df['created_at']}
 
             return cron_health
         except Exception as e:
