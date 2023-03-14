@@ -308,7 +308,7 @@ class ManagementCronHealthManager():
             data_df = pd.DataFrame(rows)
 
             # sort created_at descending
-            data_df_sorted = data_df.sort('created_at', ascending=False)
+            data_df_sorted = data_df.sort_values('created_at', ascending=False)
 
             # row 1
             row_1_df = data_df_sorted.iloc[0]
