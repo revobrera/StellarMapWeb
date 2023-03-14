@@ -300,15 +300,21 @@ class ManagementCronHealthManager():
             the_current_date_str = date_helpers.get_date_str()
 
             conn_helpers = CassandraConnectionsHelpers()
-            cql_query = f"SELECT * FROM management_cron_health WHERE cron_name='{cron_name}' AND created_at >= '{the_current_date_str} 00:00:00' AND created_at <= '{the_current_date_str} 23:59:59' LIMIT 1 ALLOW FILTERING;"
+            cql_query = f"SELECT * FROM management_cron_health WHERE cron_name='{cron_name}' AND created_at >= '{the_current_date_str} 00:00:00' AND created_at <= '{the_current_date_str} 23:59:59' LIMIT 9 ALLOW FILTERING;"
 
             conn_helpers.set_cql_query(cql_query)
             rows = conn_helpers.execute_cql()
 
             data_df = pd.DataFrame(rows)
 
+            # sort created_at descending
+            data_df_sorted = data_df.sort('created_at', ascending=False)
+
+            # row 1
+            row_1_df = data_df_sorted.iloc[0]
+
             # returns a dataframe
-            return data_df
+            return row_1_df
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e
