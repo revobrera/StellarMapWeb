@@ -307,14 +307,18 @@ class ManagementCronHealthManager():
 
             data_df = pd.DataFrame(rows)
 
-            # sort created_at descending
-            data_df_sorted = data_df.sort_values('created_at', ascending=False)
+            if not data_df.empty:
+                # sort created_at descending
+                data_df_sorted = data_df.sort_values('created_at', ascending=False)
 
-            # row 1
-            row_1_df = data_df_sorted.iloc[0]
+                # row 1
+                row_1_df = data_df_sorted.iloc[0]
 
-            # returns a dataframe
-            return row_1_df
+                # returns a dataframe
+                return row_1_df
+
+            # returns an empty dataframe
+            return pd.DataFrame()
         except Exception as e:
             sentry_sdk.capture_exception(e)
             raise e
