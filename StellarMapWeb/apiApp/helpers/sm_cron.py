@@ -34,14 +34,12 @@ class StellarMapCronHelpers:
 
             # check if the df is empty
             if not cron_health_df.empty:
-                # df is not empty; iterate through the rows of the DataFrame
-                for idx, row in cron_health_df.iterrows():
-                    # if cron health exists and HEALTHY
-                    if row['status'] == 'HEALTHY':
-                        return True
-                    else:
-                        # stop cron from executing
-                        return False
+                # if cron health exists and HEALTHY
+                if cron_health_df['status'] == 'HEALTHY':
+                    return True
+                else:
+                    # stop cron from executing
+                    return False
 
             else:
                 # df is empty; create initial cron record
