@@ -22,8 +22,8 @@
 #
 # m h  dom mon dow   command
 */3 * * * * sleep 17;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_health_check
-*/1 * * * * sleep 17;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_make_parent_account_lineage
+* * * * * sleep 33;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_make_parent_account_lineage
 */1 * * * * sleep 17;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_collect_account_horizon_data
-*/1 * * * * sleep 117;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_collect_account_lineage_attributes
-*/1 * * * * sleep 171;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_collect_account_lineage_creator
-*/1 * * * * sleep 7;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_make_grandparent_account_lineage
+* * * * * sleep 71;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_collect_account_lineage_attributes
+* * * * * sleep 71;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_collect_account_lineage_creator
+* * * * * sleep 33;   /home/revobrera/smenv/bin/python /home/revobrera/StellarMapWeb/StellarMapWeb/manage.py cron_make_grandparent_account_lineage
