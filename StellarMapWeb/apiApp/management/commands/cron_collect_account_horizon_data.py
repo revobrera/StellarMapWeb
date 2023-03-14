@@ -91,6 +91,7 @@ class Command(BaseCommand):
                             # Failed to PATCH document. Response: b'{"description":"Array paths contained in 
                             # square brackets, periods, single quotes, and backslash are not allowed in
                             # field names, invalid field config.memo_required","code":400}'
+                            raise ValueError(f'accounts_dict: {accounts_dict}')
                             for key in accounts_dict['data']['raw_data'].keys():
                                 new_key = re.sub(r'[^\w]+', '_', key)
                                 if key != new_key:
