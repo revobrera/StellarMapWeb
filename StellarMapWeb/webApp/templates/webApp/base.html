@@ -75,7 +75,8 @@
                         this.progressValue = 71;
 
                         // Create a new inquiry for the queried account
-                        await this.createInquiry(this.query_account, this.network_selected);
+                        // await this.createInquiry(this.query_account, this.network_selected);
+                        await this.getAccountGenealogy(this.query_account, this.network_selected);
                         
                     } else {
                         let jsonResponse = await response.json();
@@ -134,6 +135,36 @@
                     alert(e.message);
                 }
             },
+            async getAccountGenealogy(stellar_account, network_name) {
+                try {
+                    // Get the CSRF token from the cookie
+                    const csrf_token = document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+
+                    const body = JSON.stringify({
+                        "stellar_account": stellar_account,
+                        "network_name": network_name
+                    });
+                    const headers = {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrf_token
+                    };
+                    const genealogy_response = await fetch('/account-genealogy/', { method: 'GET', body, headers });
+
+                    if (!genealogy_response.ok) {
+                        // Get the error message from the response
+                        const error = await genealogy_response.json();
+                        throw new Error(error.message);
+                    }
+
+                    // Successful response, do something with the data
+                    this.account_genealogy_items = await genealogy_response.data();
+                    console.log(account_genealogy_items);
+                } catch (e) {
+                    // Handle error
+                    console.error(e);
+                    alert(e.message);
+                }
+            }
         }
     })
 </script>

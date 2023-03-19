@@ -1,27 +1,22 @@
 import json
 import logging
-from datetime import datetime
-import pytz
 
-from django.http import HttpResponse, JsonResponse
+from apiApp.helpers.sm_creatoraccountlineage import \
+    StellarMapCreatorAccountLineageHelpers
+from django.http import HttpResponse
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet, ViewSet
-from rest_framework import viewsets
-from apiApp.helpers.sm_datetime import StellarMapDateTimeHelpers
+from rest_framework.viewsets import ViewSet
 
-from .helpers.async_stellar_account_inquiry_history import \
-    AsyncStellarInquiryCreator
-from .helpers.sm_conn import SiteChecker
 from .helpers.env import EnvHelpers
 from .helpers.lineage_creator_accounts import LineageHelpers
-from .models import UserInquirySearchHistory
-from .serializers import (BaseModelSerializer,
-                          UserInquirySearchHistorySerializer,
-                          StellarCreatorAccountLineageSerializer)
+from .helpers.sm_conn import SiteChecker
 from .managers import UserInquirySearchHistoryManager
+from .models import UserInquirySearchHistory
+from .serializers import (UserInquirySearchHistorySerializer)
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -209,3 +204,36 @@ class UserInquirySearchHistoryModelViewSet(viewsets.ModelViewSet):
             inquiry_manager.create_inquiry(request)
             return Response({'message': f'Stellar Account Address {request.data["stellar_account"]} saved successfully'})
 
+
+class GetAccountGenealogy(APIView):
+
+    def get(self, request, *args, **kwargs):
+        
+        stellar_account=request.data['stellar_account']
+        network_name=request.data['network_name']
+
+        sm_lineage_helpers = StellarMapCreatorAccountLineageHelpers()
+        genealogy_df = sm_lineage_helpers.get_account_genealogy(stellar_account=stellar_account, network_name=network_name)
+
+        # format df as records
+        genealogy_records = genealogy_df.to_dict(orient='records')
+
+        # iterate through the df records and match it with the account_genealogy_fields
+        account_genealogy_items = []
+        for idx, record in enumerate(genealogy_records):
+            account_genealogy_item = {
+                'index': idx,
+                'stellar_creator_account': record['stellar_creator_account'],
+                'stellar_account_created_at': record['stellar_account_created_at'],
+                'stellar_account': record['stellar_account'],
+                'network_name': record['network_name'],
+                'home_domain': record['home_domain'],
+                'xlm_balance': record['xlm_balance'],
+                'stellar_expert': 'https://stellar.expert/explorer/'+ record['network_name'] + '/account/' + record['stellar_account'],
+                'status': record['status']
+            }
+            account_genealogy_items.append(account_genealogy_item)
+
+
+        # return for frontend vue account_genealogy_items
+        return account_genealogy_items
