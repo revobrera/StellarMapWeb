@@ -138,7 +138,11 @@ class StellarMapCreatorAccountLineageHelpers:
                 )
 
                 # if query returns a record
-                if (lin_queryset or lin_queryset.stellar_creator_account == 'no_element_funder'):
+                # or the root creator account with no_element_funder
+                # or creator account with
+                if (lin_queryset is not None
+                    or lin_queryset.stellar_creator_account == 'no_element_funder'
+                    or creator_account_in_loop != 'no_element_funder'):
 
                     # set creator_account and network variable from query
                     creator_account_in_loop = lin_queryset.stellar_creator_account
