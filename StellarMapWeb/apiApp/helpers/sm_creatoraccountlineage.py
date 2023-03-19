@@ -114,3 +114,51 @@ class StellarMapCreatorAccountLineageHelpers:
             lineage_manager.update_status(id=lin_queryset.id, status='DONE_MAKE_GRANDPARENT_LINEAGE')
         except Exception as e:
             sentry_sdk.capture_exception(e)
+
+    def get_account_genealogy(self, stellar_account, network_name):
+        try:
+            # loop until no records returned or stellar_creator_account is "no_element_funder"
+            # init variables
+            has_creator_account = True
+            creator_account_in_loop = stellar_account
+            network_in_loop = network_name
+            
+            # empty list
+            queryset_list = []
+
+            while (has_creator_account == True):
+                # query account queryset
+                lin_manager = StellarCreatorAccountLineageManager()
+                lin_queryset = lin_manager.get_queryset(
+                    stellar_account=creator_account_in_loop,
+                    network_name=network_in_loop
+                )
+
+                # if query returns a record
+                if (lin_queryset or lin_queryset.stellar_creator_account == 'no_element_funder'):
+
+                    # set creator_account and network variable from query
+                    creator_account_in_loop = lin_queryset.stellar_creator_account
+                    network_in_loop = lin_queryset.network_name
+                
+                    # append row to list
+                    queryset_list.append(lin_queryset)
+                
+                else:
+                    # exits loop
+                    has_creator_account = False
+                    creator_account_in_loop = ''
+                    network_in_loop = ''
+
+            # if queryset_list is not empty:
+                # convert queryset to list of dictionaries
+
+                # convert list of dictionaries to pandas dataframe
+                # return df
+            
+            # else
+                # return empty dataframe
+                    
+
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
