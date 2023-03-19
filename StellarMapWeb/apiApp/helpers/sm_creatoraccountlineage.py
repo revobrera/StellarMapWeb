@@ -3,6 +3,7 @@ from apiApp.helpers.sm_horizon import StellarMapHorizonAPIParserHelpers
 from apiApp.managers import StellarCreatorAccountLineageManager
 from apiApp.services import AstraDocument
 from django.http import HttpRequest
+import pandas as pd
 
 
 class StellarMapCreatorAccountLineageHelpers:
@@ -112,5 +113,75 @@ class StellarMapCreatorAccountLineageHelpers:
                 new_lin_manager.create_lineage(request)
             
             lineage_manager.update_status(id=lin_queryset.id, status='DONE_MAKE_GRANDPARENT_LINEAGE')
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+
+    def get_account_genealogy(self, stellar_account, network_name):
+        try:
+            # loop until no records returned or stellar_creator_account is "no_element_funder"
+            # init variables
+            has_creator_account = True
+            creator_account_in_loop = stellar_account
+            network_in_loop = network_name
+            
+            # empty list
+            queryset_list = []
+            row_dict = {}
+
+            while (has_creator_account == True):
+                # query account queryset
+                lin_manager = StellarCreatorAccountLineageManager()
+                lin_queryset = lin_manager.get_queryset(
+                    stellar_account=creator_account_in_loop,
+                    network_name=network_in_loop
+                )
+
+                # if query returns a record
+                if (lin_queryset or lin_queryset.stellar_creator_account == 'no_element_funder'):
+
+                    # set creator_account and network variable from query
+                    creator_account_in_loop = lin_queryset.stellar_creator_account
+                    network_in_loop = lin_queryset.network_name
+
+                    # queryset to dict
+                    '''
+                    {
+                        'id': UUID('51db8d0b-76a6-4961-9b3d-243f4f5479bb'), 
+                        'account_active': None, 
+                        'stellar_creator_account': 'GCGNWKCJ3KHRLPM3TM6N7D3W5YKDJFL6A2YCXFXNMRTZ4Q66MEMZ6FI2', 
+                        'stellar_account': 'GCF7F72LNF3ODSJIIWPJWEVWX33VT2SVZSUQ5NMDKDLK3N2NFCUAUHPT',
+                        'stellar_account_created_at': datetime.datetime(2019, 4, 16, 19, 51, 54),
+                        'network_name': 'public',
+                        'home_domain': 'no_element_home_domain',
+                        'xlm_balance': 0.0,
+                        'horizon_accounts_doc_api_href': '...horizon_accounts/a7a3affd-95d6-4de9-88d4-254acc9e3d8f',
+                        'horizon_accounts_operations_doc_api_href': '...horizon_operations/1419f099-ef61-4112-861b-1f94552fab53',
+                        'horizon_accounts_effects_doc_api_href': '...horizon_effects/3b993958-8d3b-4d59-9146-e41cda66054f',
+                        'stellar_expert_explorer_account_doc_api_href': None,
+                        'status': 'DONE_MAKE_GRANDPARENT_LINEAGE',
+                        'created_at': datetime.datetime(2023, 3, 14, 0, 31, 36),
+                        'updated_at': datetime.datetime(2023, 3, 14, 0, 36, 37)
+                    }
+                    '''
+                    row_dict = {field_name: getattr(lin_queryset, field_name) for field_name in lin_queryset._values.keys()}
+                
+                    # append row to list
+                    queryset_list.append(row_dict)
+                
+                else:
+                    # exits loop
+                    has_creator_account = False
+                    creator_account_in_loop = ''
+                    network_in_loop = ''
+
+            if queryset_list:
+                # list is not empty
+                # convert list of dictionaries to pandas dataframe with index
+                df = pd.DataFrame(queryset_list)
+                return df
+            
+            else:
+                return pd.DataFrame()
+
         except Exception as e:
             sentry_sdk.capture_exception(e)
