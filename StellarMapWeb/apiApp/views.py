@@ -207,13 +207,10 @@ class UserInquirySearchHistoryModelViewSet(viewsets.ModelViewSet):
 
 class GetAccountGenealogy(APIView):
 
-    def get(self, request, *args, **kwargs):
-        
-        stellar_account=request.data['stellar_account']
-        network_name=request.data['network_name']
+    def get(self, request, network, stellar_account_address):
 
         sm_lineage_helpers = StellarMapCreatorAccountLineageHelpers()
-        genealogy_df = sm_lineage_helpers.get_account_genealogy(stellar_account=stellar_account, network_name=network_name)
+        genealogy_df = sm_lineage_helpers.get_account_genealogy(stellar_account=stellar_account_address, network_name=network)
 
         # format df as records
         genealogy_records = genealogy_df.to_dict(orient='records')
