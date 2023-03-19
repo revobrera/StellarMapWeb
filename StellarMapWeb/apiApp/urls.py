@@ -6,6 +6,7 @@ from apiApp import views
 from apiApp.views import (UserInquirySearchHistoryListAPIView,
                           UserInquirySearchHistoryListCreateAPIView,
                           UserInquirySearchHistoryModelViewSet,
+                          GetAccountGenealogy,
                           UserInquirySearchHistoryViewSet,
                           UserInquirySearchHistoryViewSet_OLDER)
 
@@ -20,6 +21,7 @@ urlpatterns = [
     re_path(r'^lineage/network/(?P<network>[-\w]+)/stellar_address/(?P<stellar_account_address>[-\w]+)/$', views.lineage_stellar_account, name='lineage_stellar_account'),
     re_path(r'^inquiries/$', UserInquirySearchHistoryViewSet_OLDER.as_view(), name='UserInquirySearchHistoryViewSet_OLDER'),
     re_path(r'^stellar-inquiries/$', UserInquirySearchHistoryModelViewSet.as_view({'post': 'create'}), name='stellar-inquiries'),
+    re_path(r'^account-genealogy/$', GetAccountGenealogy.as_view({'get': 'get'}), name='account-genealogy'),
     re_path(
         r"^inquiries-viewset/$",
         UserInquirySearchHistoryViewSet.as_view({"get": "list"}),
