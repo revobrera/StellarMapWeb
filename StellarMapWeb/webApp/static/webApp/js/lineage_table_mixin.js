@@ -34,7 +34,7 @@ const lineage_table_mixin = {
       }
     },
     methods: {
-      async testMethod() {
+      testMethod() {
         // Do something here
         // await someAsyncFunction();
         console.log("This is a test method");
