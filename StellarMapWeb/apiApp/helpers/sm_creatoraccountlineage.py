@@ -118,7 +118,6 @@ class StellarMapCreatorAccountLineageHelpers:
 
     def get_account_genealogy(self, stellar_account, network_name):
         try:
-            import pdb; pdb.set_trace()
             # loop until no records returned or stellar_creator_account is "no_element_funder"
             # init variables
             has_creator_account = True
@@ -138,11 +137,7 @@ class StellarMapCreatorAccountLineageHelpers:
                 )
 
                 # if query returns a record
-                # or the root creator account with no_element_funder
-                # or creator account with
-                if (lin_queryset is not None
-                    or lin_queryset.stellar_creator_account == 'no_element_funder'
-                    or creator_account_in_loop != 'no_element_funder'):
+                if (lin_queryset is not None):
 
                     # set creator_account and network variable from query
                     creator_account_in_loop = lin_queryset.stellar_creator_account
