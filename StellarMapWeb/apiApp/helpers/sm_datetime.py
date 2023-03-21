@@ -1,6 +1,9 @@
-import pytz
 from datetime import datetime
+
+import pandas as pd
+import pytz
 from cassandra.util import datetime_from_timestamp
+
 
 class StellarMapDateTimeHelpers:
     def __init__(self):
@@ -49,4 +52,6 @@ class StellarMapDateTimeHelpers:
     
     def format_timestamp(self, timestamp):
         # Function to convert Cassandra DB Timestamp to ISO format
+        if pd.isna(timestamp):
+            return None
         return datetime.utcfromtimestamp(timestamp).isoformat()
