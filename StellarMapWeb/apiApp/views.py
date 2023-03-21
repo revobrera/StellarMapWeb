@@ -235,7 +235,7 @@ class GetAccountGenealogy(APIView):
         sm_dt_helpers = StellarMapDateTimeHelpers()
 
         # frontend vue account_genealogy_items
-        # Convert the dictionary to a JSON string, using the `serialize` function to handle Timestamp objects
-        account_genealogy_items_json = json.dumps(account_genealogy_items, default=sm_dt_helpers.serialize)
+        # Convert the dictionary to a JSON format, using the `format_timestamp` function to handle Cassandra Timestamp objects
+        account_genealogy_items_json = json.dumps(account_genealogy_items, default=sm_dt_helpers.format_timestamp)
 
         return account_genealogy_items_json

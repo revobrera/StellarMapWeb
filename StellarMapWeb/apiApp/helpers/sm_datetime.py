@@ -47,10 +47,6 @@ class StellarMapDateTimeHelpers:
 
         return cass_dt_obj
     
-    def serialize(self, obj):
-        # handle the conversion of Timestamp objects to strings
-        if isinstance(obj, datetime):
-            return obj.strftime('%Y-%m-%d %H:%M:%S')
-        elif pd.isna(obj):
-            return 'NaT'
-        return obj
+    def format_timestamp(self, timestamp):
+        # Function to convert Cassandra DB Timestamp to ISO format
+        return datetime.utcfromtimestamp(timestamp).isoformat()
