@@ -231,6 +231,8 @@ class GetAccountGenealogy(APIView):
             }
             account_genealogy_items.append(account_genealogy_item)
 
+        # frontend vue account_genealogy_items
+        # convert dictionary list to json
+        account_genealogy_items_json = json.dumps(account_genealogy_items)
 
-        # return for frontend vue account_genealogy_items
-        return account_genealogy_items
+        return account_genealogy_items_json
