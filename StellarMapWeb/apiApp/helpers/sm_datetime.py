@@ -46,3 +46,9 @@ class StellarMapDateTimeHelpers:
         cass_dt_obj = datetime_from_timestamp(timestamp)
 
         return cass_dt_obj
+    
+    def serialize(self, obj):
+        # handle the conversion of Timestamp objects to strings
+        if isinstance(obj, datetime):
+            return obj.strftime('%Y-%m-%d %H:%M:%S')
+        return obj

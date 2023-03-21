@@ -3,6 +3,7 @@ import logging
 
 from apiApp.helpers.sm_creatoraccountlineage import \
     StellarMapCreatorAccountLineageHelpers
+from apiApp.helpers.sm_datetime import StellarMapDateTimeHelpers
 from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
@@ -231,8 +232,10 @@ class GetAccountGenealogy(APIView):
             }
             account_genealogy_items.append(account_genealogy_item)
 
+        sm_dt_helpers = StellarMapDateTimeHelpers()
+
         # frontend vue account_genealogy_items
-        # convert dictionary list to json
-        account_genealogy_items_json = json.dumps(account_genealogy_items)
+        # Convert the dictionary to a JSON string, using the `serialize` function to handle Timestamp objects
+        account_genealogy_items_json = json.dumps(account_genealogy_items, default=sm_dt_helpers.serialize)
 
         return account_genealogy_items_json
