@@ -51,4 +51,6 @@ class StellarMapDateTimeHelpers:
         # handle the conversion of Timestamp objects to strings
         if isinstance(obj, datetime):
             return obj.strftime('%Y-%m-%d %H:%M:%S')
+        elif pd.isna(obj):
+            return 'NaT'
         return obj
