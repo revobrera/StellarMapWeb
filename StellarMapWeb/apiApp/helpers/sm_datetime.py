@@ -51,7 +51,7 @@ class StellarMapDateTimeHelpers:
         return cass_dt_obj
     
     def format_timestamp(self, timestamp):
-        # Function to convert Cassandra DB Timestamp to ISO format
+        # Function to convert Cassandra DB Timestamp to Cassandra DateTime object
         if pd.isna(timestamp):
             return None
-        return datetime.utcfromtimestamp(timestamp).isoformat()
+        return datetime_from_timestamp(timestamp)
