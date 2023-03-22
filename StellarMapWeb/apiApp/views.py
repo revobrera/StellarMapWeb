@@ -216,13 +216,16 @@ class GetAccountGenealogy(APIView):
         # format df as records
         genealogy_records = genealogy_df.to_dict(orient='records')
 
+        sm_dt_helpers = StellarMapDateTimeHelpers()
+        # use `format_timestamp` function to handle Cassandra Timestamp objects
+
         # iterate through the df records and match it with the account_genealogy_fields
         account_genealogy_items = []
         for idx, record in enumerate(genealogy_records):
             account_genealogy_item = {
                 'index': idx,
                 'stellar_creator_account': record['stellar_creator_account'],
-                'stellar_account_created_at': record['stellar_account_created_at'],
+                'stellar_account_created_at': sm_dt_helpers.format_timestamp(record['stellar_account_created_at']),
                 'stellar_account': record['stellar_account'],
                 'network_name': record['network_name'],
                 'home_domain': record['home_domain'],
@@ -232,10 +235,8 @@ class GetAccountGenealogy(APIView):
             }
             account_genealogy_items.append(account_genealogy_item)
 
-        sm_dt_helpers = StellarMapDateTimeHelpers()
-
         # frontend vue account_genealogy_items
-        # Convert the dictionary to a JSON format, using the `format_timestamp` function to handle Cassandra Timestamp objects
-        account_genealogy_items_json = json.dumps(account_genealogy_items, default=sm_dt_helpers.format_timestamp)
+        # Convert the dictionary to a JSON format
+        account_genealogy_items_json = json.dumps(account_genealogy_items)
 
         return account_genealogy_items_json
