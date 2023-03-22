@@ -213,11 +213,11 @@ class GetAccountGenealogy(APIView):
         sm_lineage_helpers = StellarMapCreatorAccountLineageHelpers()
         genealogy_df = sm_lineage_helpers.get_account_genealogy(stellar_account=stellar_account_address, network_name=network)
 
+        # convert column of timestamps to datetimes
+        genealogy_df.created_at = genealogy_df.created_at.apply(lambda x: x.date())
+        
         # format df as records
         genealogy_records = genealogy_df.to_dict(orient='records')
-
-        sm_dt_helpers = StellarMapDateTimeHelpers()
-        # use `format_timestamp` function to handle Cassandra Timestamp objects
 
         # iterate through the df records and match it with the account_genealogy_fields
         account_genealogy_items = []
@@ -225,7 +225,7 @@ class GetAccountGenealogy(APIView):
             account_genealogy_item = {
                 'index': idx,
                 'stellar_creator_account': record['stellar_creator_account'],
-                'stellar_account_created_at': sm_dt_helpers.format_timestamp(record['stellar_account_created_at']),
+                'stellar_account_created_at': record['stellar_account_created_at'],
                 'stellar_account': record['stellar_account'],
                 'network_name': record['network_name'],
                 'home_domain': record['home_domain'],
