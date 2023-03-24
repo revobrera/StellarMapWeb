@@ -154,7 +154,7 @@
                     }
 
                     // Successful response, do something with the data
-                    this.account_genealogy_items = await genealogy_response.json();
+                    this.account_genealogy_items = JSON.parse(await genealogy_response.json());
                     console.log(this.account_genealogy_items);
                 } catch (e) {
                     // Handle error
