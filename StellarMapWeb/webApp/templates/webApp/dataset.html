@@ -19,6 +19,15 @@
                                         responsive
                                         :tbody-transition-props="transProps">
 
+                                        <template v-slot:cell(network_name)="row">
+                                            <template v-if="row.item.network_name == 'public'">
+                                                <b-badge variant="success">public</b-badge>
+                                            </template>
+                                            <template v-else>
+                                                <b-badge variant="danger">{{ row.item.home_domain }}</b-badge>
+                                            </template>
+                                        </template>
+                                        
                                         <template v-slot:cell(home_domain)="row">
                                             <template v-if="row.item.home_domain == 'no_element_home_domain'">
                                                 <b-badge variant="danger">NO HOME DOMAIN</b-badge>
