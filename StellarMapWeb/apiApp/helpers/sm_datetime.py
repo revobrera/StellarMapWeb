@@ -49,9 +49,25 @@ class StellarMapDateTimeHelpers:
         cass_dt_obj = datetime_from_timestamp(timestamp)
 
         return cass_dt_obj
-    
-    def format_timestamp(self, timestamp):
-        # Function to convert Cassandra DB Timestamp to Cassandra DateTime object
-        if pd.isna(timestamp):
-            return None
-        return datetime_from_timestamp(timestamp)
+  
+    def convert_to_NY_datetime(self, df, column_name):
+        """
+        Convert the specified column of pandas dataframe from pandas Timestamps to NY timezone datetimes.
+
+        Args:
+            df (pandas.DataFrame): The input dataframe.
+            column_name (str): The name of the column to convert to NY timezone datetimes.
+
+        Returns:
+            pandas.DataFrame: The modified dataframe with the specified column converted to NY timezone datetimes in the format '%Y-%m-%d %H:%M:%S'.
+        """
+        # config NY time
+        tz_NY = pytz.timezone('America/New_York')
+
+        # convert column of timestamps to datetimes
+        df[column_name] = df[column_name].apply(lambda x: datetime.combine(x.date(), datetime.min.time()).replace(tzinfo=pytz.utc).astimezone(tz_NY))
+
+        # Convert datetimes to formatted strings
+        df[column_name] = df[column_name].apply(lambda x: x.strftime("%Y-%m-%d %H:%M:%S"))
+        
+        return df

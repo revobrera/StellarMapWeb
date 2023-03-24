@@ -214,10 +214,11 @@ class GetAccountGenealogy(APIView):
         genealogy_df = sm_lineage_helpers.get_account_genealogy(stellar_account=stellar_account_address, network_name=network)
 
         # convert column of timestamps to datetimes
-        genealogy_df.stellar_account_created_at = genealogy_df.stellar_account_created_at.apply(lambda x: x.date())
-        genealogy_df.created_at = genealogy_df.created_at.apply(lambda x: x.date())
-        genealogy_df.updated_at = genealogy_df.updated_at.apply(lambda x: x.date())
-        
+        sm_dt_helpers = StellarMapDateTimeHelpers()
+        genealogy_df = sm_dt_helpers.convert_to_NY_datetime(genealogy_df, 'stellar_account_created_at')
+        genealogy_df = sm_dt_helpers.convert_to_NY_datetime(genealogy_df, 'created_at')
+        genealogy_df = sm_dt_helpers.convert_to_NY_datetime(genealogy_df, 'updated_at')
+       
         # format df as records
         genealogy_records = genealogy_df.to_dict(orient='records')
 
