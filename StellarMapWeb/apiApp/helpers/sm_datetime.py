@@ -66,18 +66,15 @@ class StellarMapDateTimeHelpers:
         tz_NY = pytz.timezone('America/New_York')
 
         # convert column of timestamps to datetimes
-        # checks the year attribute of the datetime object x to see if it is within the supported range (1-9999), rather than comparing it with a date object.
-        # If the year is within the range, it combines the date with a minimum time value to create a datetime object. Otherwise, it returns None.
-        df[column_name] = df[column_name].apply(lambda x: datetime.combine(x.date(), datetime.min.time()) if x.year >= 1 and x.year <= 9999 else None)
-        
-        # Then, the function checks if x is not None and not NaT (pd.isna(x) returns False if x is not NaT). 
-        # If x is instance datetime, set the timezone to UTC and then converts it to the NY timezone using the astimezone() method
+        df[column_name] = pd.to_datetime(df[column_name], errors='coerce')
+
+        # remove NaN and infinity values
+        df = df[np.isfinite(df[column_name])]
+
+        # convert valid datetimes to NY timezone
         df[column_name] = df[column_name].apply(lambda x: x.replace(tzinfo=pytz.utc).astimezone(tz_NY) if isinstance(x, datetime) else None)
 
-        # Filter out NaN
-        df = df.dropna(subset=[column_name])
-
-        # Convert datetimes to formatted strings
+        # convert datetimes to formatted strings
         df[column_name] = df[column_name].apply(lambda x: x.strftime("%Y-%m-%d %H:%M:%S") if x is not None else None)
-        
+
         return df
