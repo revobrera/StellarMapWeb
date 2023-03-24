@@ -135,32 +135,6 @@
                     console.error(e);
                     alert(e.message);
                 }
-            },
-            async getAccountGenealogy(stellar_account, network_name) {
-                try {
-                    // Get the CSRF token from the cookie
-                    const csrf_token = document.cookie.replace(/(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-
-                    const headers = {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrf_token
-                    };
-                    const genealogy_response = await fetch('/account-genealogy/network/' + network_name + '/stellar_address/' + stellar_account + '/', { method: 'GET', headers });
-
-                    if (!genealogy_response.ok) {
-                        // Get the error message from the response
-                        const error = await genealogy_response.json();
-                        throw new Error(error.message);
-                    }
-
-                    // Successful response, do something with the data
-                    this.account_genealogy_items = JSON.parse(await genealogy_response.json());
-                    console.log(this.account_genealogy_items);
-                } catch (e) {
-                    // Handle error
-                    console.error(e);
-                    alert(e.message);
-                }
             }
         }
     })
