@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import numpy as np
 import pandas as pd
 import pytz
 from cassandra.util import datetime_from_timestamp
@@ -69,11 +70,15 @@ class StellarMapDateTimeHelpers:
         # If the year is within the range, it combines the date with a minimum time value to create a datetime object. Otherwise, it returns None.
         df[column_name] = df[column_name].apply(lambda x: datetime.combine(x.date(), datetime.min.time()) if x.year >= 1 and x.year <= 9999 else None)
         
-        # Then, the function checks if x is not None and not NaT (pd.isna(x) returns False if x is not NaT). If x is None or NaT, the function returns None instead.
-        # Otherwise, it sets the timezone to UTC and then converts it to the NY timezone using the astimezone() method
-        df[column_name] = df[column_name].apply(lambda x: x.replace(tzinfo=pytz.utc).astimezone(tz_NY) if x is not None and not pd.isna(x) else None)
+        # Then, the function checks if x is not None and not NaT (pd.isna(x) returns False if x is not NaT). 
+        # If x is None, NaT, or NaN, the function returns None instead.
+        # If x is not None, NaT, or NaN, it sets the timezone to UTC and then converts it to the NY timezone using the astimezone() method
+        df[column_name] = df[column_name].apply(lambda x: x.replace(tzinfo=pytz.utc).astimezone(tz_NY) if x is not None and not pd.isna(x) and not np.isinf(x) else None)
+
+        # Filter out NaN and infinity values
+        df = df.dropna(subset=[column_name])
 
         # Convert datetimes to formatted strings
-        df[column_name] = df[column_name].apply(lambda x: x.strftime("%Y-%m-%d %H:%M:%S") if x is not None else None)
+        df[column_name] = df[column_name].apply(lambda x: x.strftime("%Y-%m-%d %H:%M:%S"))
         
         return df
