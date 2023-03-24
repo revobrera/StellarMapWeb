@@ -69,8 +69,9 @@ class StellarMapDateTimeHelpers:
         # If the year is within the range, it combines the date with a minimum time value to create a datetime object. Otherwise, it returns None.
         df[column_name] = df[column_name].apply(lambda x: datetime.combine(x.date(), datetime.min.time()) if x.year >= 1 and x.year <= 9999 else None)
         
-        # Then, the function checks if the datetime object is not None, and if so, it sets the timezone to UTC and then converts it to the NY timezone using the astimezone() method
-        df[column_name] = df[column_name].apply(lambda x: x.replace(tzinfo=pytz.utc).astimezone(tz_NY) if x is not None else None)
+        # Then, the function checks if x is not None and not NaT (pd.isna(x) returns False if x is not NaT). If x is None or NaT, the function returns None instead.
+        # Otherwise, it sets the timezone to UTC and then converts it to the NY timezone using the astimezone() method
+        df[column_name] = df[column_name].apply(lambda x: x.replace(tzinfo=pytz.utc).astimezone(tz_NY) if x is not None and not pd.isna(x) else None)
 
         # Convert datetimes to formatted strings
         df[column_name] = df[column_name].apply(lambda x: x.strftime("%Y-%m-%d %H:%M:%S") if x is not None else None)
