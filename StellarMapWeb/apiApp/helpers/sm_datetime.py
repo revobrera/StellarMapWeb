@@ -65,9 +65,13 @@ class StellarMapDateTimeHelpers:
         tz_NY = pytz.timezone('America/New_York')
 
         # convert column of timestamps to datetimes
-        df[column_name] = df[column_name].apply(lambda x: datetime.combine(x.date(), datetime.min.time()).replace(tzinfo=pytz.utc).astimezone(tz_NY))
+        # checks if the date is within the supported range, and if so, converts it to a datetime object, else None
+        df[column_name] = df[column_name].apply(lambda x: datetime.combine(x.date(), datetime.min.time()) if datetime(1, 1, 1) <= x.date() <= datetime(9999, 12, 31) else None)
+        
+        # Then, the function checks if the datetime object is not None, and if so, it sets the timezone to UTC and then converts it to the NY timezone using the astimezone() method
+        df[column_name] = df[column_name].apply(lambda x: x.replace(tzinfo=pytz.utc).astimezone(tz_NY) if x is not None else None)
 
         # Convert datetimes to formatted strings
-        df[column_name] = df[column_name].apply(lambda x: x.strftime("%Y-%m-%d %H:%M:%S"))
+        df[column_name] = df[column_name].apply(lambda x: x.strftime("%Y-%m-%d %H:%M:%S") if x is not None else None)
         
         return df
