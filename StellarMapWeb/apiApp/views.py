@@ -240,6 +240,6 @@ class GetAccountGenealogy(APIView):
 
         # frontend vue account_genealogy_items
         # Convert the dictionary to a JSON format
-        # account_genealogy_items_json = json.dumps(account_genealogy_items)
+        account_genealogy_items_json = json.dumps(account_genealogy_items)
 
-        return Response(account_genealogy_items)
+        return Response(account_genealogy_items_json)
