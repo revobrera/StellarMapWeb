@@ -21,10 +21,10 @@
 
                                         <template v-slot:cell(home_domain)="row">
                                             <template v-if="row.item.home_domain == 'no_element_home_domain	'">
-                                                <span class="label label-danger" style="font-size:10px;" v-b-tooltip.hover title="No Home Domain">NO HOME DOMAIN</span>
+                                                <span class="label label-danger" v-b-tooltip.hover title="No Home Domain">NO HOME DOMAIN</span>
                                             </template>
                                             <template v-else>
-                                                <span class="label label-info" style="font-size:10px;background-color:#ACACAC;" v-b-tooltip.hover title="No Home Domain">[[ row.item.home_domain ]]</span>
+                                                <span class="label label-info" v-b-tooltip.hover>{{ row.item.home_domain }}</span>
                                             </template>
                                         </template>
 
