@@ -135,13 +135,8 @@
                     alert(e.message);
                 }
             },
-            async truncateStellarAccount(stellar_account) {
-                // return last 6 characters of stellar address
-                truncated_string = stellar_account.slice(-6);
-                return truncated_string;
-            },
             async clickToCopy(string_to_copy) {
-                navigator.clipboard.writeText(string_to_copy)
+                navigator.clipboard.writeText(string_to_copy);
             }
         }
     })

@@ -19,7 +19,6 @@
                                         responsive
                                         :tbody-transition-props="transProps">
 
-                                        
                                         <template v-slot:cell(stellar_creator_account)="row">
                                             <template v-if="row.item.stellar_creator_account">
                                                 <div>{{ truncateStellarAccount(row.item.stellar_creator_account) }}</div>
