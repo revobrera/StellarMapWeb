@@ -54,7 +54,7 @@ const lineage_table_mixin = {
           // return last 6 characters of stellar address
           truncated_string = account.slice(0, 6) + '...' + account.slice(-6);
           return truncated_string;
-      },
+      }
     }
   }
 
