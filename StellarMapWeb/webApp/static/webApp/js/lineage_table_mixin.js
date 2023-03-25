@@ -51,9 +51,13 @@ const lineage_table_mixin = {
           }
       },
       truncateStellarAccount(stellar_account) {
+        if (stellar_account && stellar_account.length > 17) {
           // return last 6 characters of stellar address
           truncated_string = stellar_account.slice(0, 6) + '...' + stellar_account.slice(-6);
           return truncated_string;
+        } else {
+          return stellar_account;
+        }
       }
     }
   }
