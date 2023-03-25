@@ -19,12 +19,25 @@
                                         responsive
                                         :tbody-transition-props="transProps">
 
+                                        
+                                        <template v-slot:cell(stellar_creator_account)="row">
+                                            <template v-if="row.item.stellar_creator_account">
+                                                <div>{{ truncateStellarAccount(row.item.stellar_creator_account) }}</div>
+                                            </template>
+                                        </template>
+
+                                        <template v-slot:cell(stellar_account)="row">
+                                            <template v-if="row.item.stellar_account">
+                                                <div>{{ truncateStellarAccount(row.item.stellar_account) }}</div>
+                                            </template>
+                                        </template>
+
                                         <template v-slot:cell(network_name)="row">
                                             <template v-if="row.item.network_name == 'public'">
                                                 <b-badge variant="success">public</b-badge>
                                             </template>
                                             <template v-else>
-                                                <b-badge variant="danger">{{ row.item.home_domain }}</b-badge>
+                                                <b-badge variant="danger">{{ row.item.network_name }}</b-badge>
                                             </template>
                                         </template>
                                         
