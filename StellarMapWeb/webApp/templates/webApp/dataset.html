@@ -23,13 +23,13 @@
 
                                         <template v-slot:cell(stellar_creator_account)="row">
                                             <template v-if="row.item.stellar_creator_account">
-                                                <div v-b-tooltip.hover title="Click to copy: row.item.stellar_creator_account" @click="clickToCopy(row.item.stellar_creator_account)">{{ truncateStellarAccount(row.item.stellar_creator_account) }}</div>
+                                                <div v-b-tooltip.hover title="Click to copy" @click="clickToCopy(row.item.stellar_creator_account)">{{ truncateStellarAccount(row.item.stellar_creator_account) }}</div>
                                             </template>
                                         </template>
 
                                         <template v-slot:cell(stellar_account)="row">
                                             <template v-if="row.item.stellar_account">
-                                                <div v-b-tooltip.hover title="Click to copy: row.item.stellar_account"  @click="clickToCopy(row.item.stellar_account)">{{ truncateStellarAccount(row.item.stellar_account) }}</div>
+                                                <div v-b-tooltip.hover title="Click to copy"  @click="clickToCopy(row.item.stellar_account)">{{ truncateStellarAccount(row.item.stellar_account) }}</div>
                                             </template>
                                         </template>
 
