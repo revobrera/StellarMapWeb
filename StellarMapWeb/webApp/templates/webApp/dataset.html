@@ -23,13 +23,13 @@
 
                                         <template v-slot:cell(stellar_creator_account)="row">
                                             <template v-if="row.item.stellar_creator_account">
-                                                <div>{{ truncateStellarAccount(row.item.stellar_creator_account) }}</div>
+                                                <div v-b-tooltip.hover title="{{ row.item.stellar_creator_account }}">{{ truncateStellarAccount(row.item.stellar_creator_account) }}</div>
                                             </template>
                                         </template>
 
                                         <template v-slot:cell(stellar_account)="row">
                                             <template v-if="row.item.stellar_account">
-                                                <div>{{ truncateStellarAccount(row.item.stellar_account) }}</div>
+                                                <div v-b-tooltip.hover title="{{ row.item.stellar_account }}">{{ truncateStellarAccount(row.item.stellar_account) }}</div>
                                             </template>
                                         </template>
 
@@ -48,6 +48,12 @@
                                             </template>
                                             <template v-else>
                                                 <b-badge variant="info">{{ row.item.home_domain }}</b-badge>
+                                            </template>
+                                        </template>
+
+                                        <template v-slot:cell(stellar_expert)="row">
+                                            <template v-if="row.item.stellar_expert">
+                                                <a href="{{ row.item.stellar_expert }}" v-b-tooltip.hover title="{{ row.item.stellar_expert }}">Follow URL Link</a> 
                                             </template>
                                         </template>
 
