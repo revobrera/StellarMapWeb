@@ -8,6 +8,8 @@
                         <b-tab title="Upstream Creator Accounts" active>
                             <template>
                                 <div>
+                                    <!-- using the verbatim tag to avoid conflicts between Django and Vue.js templates -->
+                                    {% verbatim %}
                                     <b-table 
                                         id="table-transition-example" 
                                         :items="account_genealogy_items" 
@@ -50,6 +52,7 @@
                                         </template>
 
                                     </b-table>
+                                    {% endverbatim %}
                                 </div>
                             </template>
                         </b-tab>
