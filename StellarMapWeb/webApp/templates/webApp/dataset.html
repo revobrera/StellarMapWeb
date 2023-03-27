@@ -53,7 +53,7 @@
 
                                         <template v-slot:cell(stellar_expert)="row">
                                             <template v-if="row.item.stellar_expert">
-                                                <a v-bind:href="viewTooltipString(row.item.stellar_expert)" v-b-tooltip.hover v-bind:title="viewTooltipString(row.item.stellar_expert)">Follow URL Link</a> 
+                                                <a v-bind:href="viewTooltipString(row.item.stellar_expert)" target="_blank" v-b-tooltip.hover v-bind:title="viewTooltipString(row.item.stellar_expert)">Follow URL Link</a> 
                                             </template>
                                         </template>
 
