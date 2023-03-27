@@ -11,15 +11,15 @@ const lineage_table_mixin = {
         },
         account_genealogy_items: [],
         account_genealogy_fields: [
-          { key: 'index', label: 'Index', sortable: true },
-          { key: 'stellar_creator_account', label: 'Creator Account', sortable: true },
-          { key: 'stellar_account_created_at', label: 'Account Created At', sortable: true },
-          { key: 'stellar_account', label: 'Account', sortable: true },
-          { key: 'network_name', label: 'Network Name', sortable: true },
-          { key: 'home_domain', label: 'Home Domain', sortable: true },
-          { key: 'xlm_balance', label: 'XLM Balance', sortable: true },
-          { key: 'stellar_expert', label: 'Stellar Expert', sortable: true },
-          { key: 'status', label: 'Status', sortable: true }
+          { key: 'index', label: 'Index', sortable: true, visible: true },
+          { key: 'stellar_creator_account', label: 'Creator Account', sortable: true, visible: false },
+          { key: 'stellar_account_created_at', label: 'Account Created At', sortable: true, visible: true },
+          { key: 'stellar_account', label: 'Account', sortable: true, visible: true },
+          { key: 'network_name', label: 'Network Name', sortable: true, visible: true },
+          { key: 'home_domain', label: 'Home Domain', sortable: true, visible: true },
+          { key: 'xlm_balance', label: 'XLM Balance', sortable: true, visible: true },
+          { key: 'stellar_expert', label: 'Stellar Expert', sortable: true, visible: true },
+          { key: 'status', label: 'Status', sortable: true, visible: true }
         ]
       }
     },
@@ -76,6 +76,11 @@ const lineage_table_mixin = {
         base_url = "https://stellar.sui.li/";
         url_path = base_url.concat(home_domain);
         return url_path;
+      }
+    },
+    computed: {
+      visibleGeneologyFields() {
+        return this.account_genealogy_fields.filter(field => field.visible)
       }
     }
   }
