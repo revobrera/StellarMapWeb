@@ -47,8 +47,9 @@
                                                 <b-badge variant="danger">NO HOME DOMAIN</b-badge>
                                             </template>
                                             <template v-else>
-                                                <b-badge variant="info">{{ row.item.home_domain }}</b-badge>
-                                                <a v-bind:href="viewExternalLinkTOML(row.item.home_domain)" target="_blank"> <b-badge variant="success">TOML</b-badge> </a>
+                                                {{ row.item.home_domain }}
+                                                <a v-bind:href="viewExternalLinkTOML(row.item.home_domain)" target="_blank"><b-badge variant="success">TOML</b-badge></a>
+                                                <a v-bind:href="viweExternalLinkTOMLChecker(row.item.home_domain)" target="_blank"><b-badge variant="success">TOML Checker</b-badge></a>
                                             </template>
                                         </template>
 

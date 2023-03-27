@@ -69,7 +69,12 @@ const lineage_table_mixin = {
       },
       viewExternalLinkTOML(home_domain) {
         base_url = "https://";
-        url_path = base_url.concat(home_domain, '/.well-known/s.toml');
+        url_path = base_url.concat(home_domain, '/.well-known/stellar.toml');
+        return url_path;
+      },
+      viweExternalLinkTOMLChecker(home_domain) {
+        base_url = "https://stellar.sui.li/";
+        url_path = base_url.concat(home_domain);
         return url_path;
       }
     }
