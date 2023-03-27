@@ -66,6 +66,11 @@ const lineage_table_mixin = {
       },
       viewTooltipString(string_name) {
         return string_name;
+      },
+      viewExternalLinkTOML(home_domain) {
+        base_url = "https://";
+        url_path = base_url.concat(home_domain, '/.well-known/s.toml');
+        return url_path;
       }
     }
   }
