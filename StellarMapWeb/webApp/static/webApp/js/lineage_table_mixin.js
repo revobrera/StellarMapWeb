@@ -58,6 +58,14 @@ const lineage_table_mixin = {
         } else {
           return stellar_account;
         }
+      },
+      viewExternalLinkStellarExpert(stellar_account, network_name) {
+          base_url = "https://stellar.expert/explorer/";
+          url_path = base_url.concat(network_name, '/account/', stellar_account);
+          return url_path;
+      },
+      viewTooltipString(string_name) {
+        return string_name;
       }
     }
   }
