@@ -171,8 +171,6 @@ class StellarMapCreatorAccountLineageHelpers:
                 else:
                     # exits loop
                     has_creator_account = False
-                    creator_account_in_loop = ''
-                    network_in_loop = ''
 
             if queryset_list:
                 # list is not empty
