@@ -78,11 +78,11 @@ const lineage_table_mixin = {
         url_path = base_url.concat(home_domain);
         return url_path;
       },
-      getApiStellarExpertTags(row_index, stellar_account, network_name) {
+      async getApiStellarExpertTags(row_index, stellar_account, network_name) {
         const base_url = "https://api.stellar.expert/explorer/";
         const url_path = base_url.concat(network_name, '/directory/', stellar_account);
-        const response = fetch(url_path);
-        this.apiStellarExpertTagsResponses[row_index] = response.json();
+        const response = await fetch(url_path);
+        this.apiStellarExpertTagsResponses[row_index] = await response.json();
         return this.apiStellarExpertTagsResponses[row_index];
       }
     },
