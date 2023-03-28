@@ -84,6 +84,9 @@ const lineage_table_mixin = {
         const response = await fetch(url_path);
         this.apiStellarExpertTagsResponses[row_index] = await response.json();
         return this.apiStellarExpertTagsResponses[row_index];
+      },
+      formatHashtag(tag) {
+        return '<span>#</span>' + tag.substr(1);
       }
     },
     computed: {
