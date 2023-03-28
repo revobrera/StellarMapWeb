@@ -78,26 +78,23 @@ const lineage_table_mixin = {
         url_path = base_url.concat(home_domain);
         return url_path;
       },
-      async getStellarExpertTags(stellar_account, network_name) {
+      async getApiStellarExpertTags(stellar_account, network_name) {
         const base_url = "https://api.stellar.expert/explorer/";
         const url_path = base_url.concat(network_name, '/directory/', stellar_account);
         const response = await fetch(url_path);
         const data = await response.json();
         return data;
+      },
+      async apiStellarExpertTagsResponses() {
+        const promises = this.items.map(item => {
+          return this.getApiStellarExpertTags(item.stellar_account, item.network_name);
+        });
+        return Promise.all(promises);
       }
     },
     computed: {
       visibleGeneologyFields() {
         return this.account_genealogy_fields.filter(field => field.visible)
-      },
-      apiStellarExpertTagsResponses() {
-        // The apiStellarExpertTagsResponses computed property returns an array of promises,
-        // one for each row in the table. When each promise resolves, the response data 
-        // is stored in the apiStellarExpertTagsResponses array at the same index as the
-        // row. In the template, you can access the response data for each row using its index.
-        return this.items.map(item => {
-          return this.getStellarExpertTags(item.stellar_account, item.network_name);
-        });
       }
     }
   }
