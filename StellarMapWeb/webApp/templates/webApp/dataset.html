@@ -62,13 +62,7 @@
                                                     <b-badge variant="info" v-if="apiStellarExpertTagsResponses[row.item.index].domain !== null">{{ apiStellarExpertTagsResponses[row.item.index].domain }}</b-badge>
                                                     <div v-if="apiStellarExpertTagsResponses[row.item.index].tags && apiStellarExpertTagsResponses[row.item.index].tags.length > 0">
                                                       <b-badge v-for="tag in apiStellarExpertTagsResponses[row.item.index].tags" :key="tag" variant="info">{{ tag }}</b-badge>
-                                                    </div>
-                                                    <div v-else>
-                                                      No tags found.
-                                                    </div>
-                                                  </div>
-                                                <div v-else>
-                                                    Loading tags...
+                                                    </div>                                               
                                                 </div>
                                             </template>
                                         </template>
