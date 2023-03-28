@@ -90,6 +90,18 @@ const lineage_table_mixin = {
       visibleGeneologyFields() {
         return this.account_genealogy_fields.filter(field => field.visible)
       }
+    },
+    watch: {
+      account_genealogy_items: {
+        deep: true,
+        handler(newVal, oldVal) {
+          if (newVal !== oldVal) {
+            newVal.forEach((item) => {
+              this.getApiStellarExpertTags(item.index, item.stellar_account, item.network_name);
+            });
+          }
+        },
+      },
     }
   }
 
