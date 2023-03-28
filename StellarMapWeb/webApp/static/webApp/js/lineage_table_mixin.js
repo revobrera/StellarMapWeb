@@ -84,7 +84,7 @@ const lineage_table_mixin = {
         await fetch(url_path)
           .then(response => response.json())
           .then(data => {
-            this.apiStellarExpertTagsResponse = JSON.parse(data);
+            this.apiStellarExpertTagsResponse = data;
           })
           .catch(error => console.log(error));
       }
