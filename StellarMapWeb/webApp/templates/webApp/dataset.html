@@ -56,12 +56,12 @@
                                         <template v-slot:cell(stellar_expert)="row">
                                             <template v-if="row.item.stellar_expert">
                                                 <a v-bind:href="viewTooltipString(row.item.stellar_expert)" target="_blank" v-b-tooltip.hover v-bind:title="viewTooltipString(row.item.stellar_expert)">Follow URL Link</a>
-                                                <div v-if="apiStellarExpertTagsResponses[row.index]">
+                                                <div v-if="apiStellarExpertTagsResponses[row.index] && getApiStellarExpertTags(row.index, row.item.stellar_account, row.item.network_name)">
                                                     <b-badge variant="info">{{ apiStellarExpertTagsResponses[row.index].address }}</b-badge>
                                                     <b-badge variant="info">{{ apiStellarExpertTagsResponses[row.index].name }}</b-badge>
                                                     <b-badge variant="info">{{ apiStellarExpertTagsResponses[row.index].domain }}</b-badge>
                                                     <b-badge v-for="tag in apiStellarExpertTagsResponses[row.index].tags" :key="tag" variant="info">{{ tag }}</b-badge>
-                                                  </div>
+                                                </div>
                                             </template>
                                         </template>
 

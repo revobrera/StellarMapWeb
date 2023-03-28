@@ -21,7 +21,7 @@ const lineage_table_mixin = {
           { key: 'stellar_expert', label: 'Stellar Expert', sortable: true, visible: true },
           { key: 'status', label: 'Status', sortable: true, visible: true }
         ],
-        apiStellarExpertTagsResponse: null
+        apiStellarExpertTagsResponses: []
       }
     },
     methods: {
@@ -78,18 +78,12 @@ const lineage_table_mixin = {
         url_path = base_url.concat(home_domain);
         return url_path;
       },
-      async getApiStellarExpertTags(stellar_account, network_name) {
+      async getApiStellarExpertTags(row_index, stellar_account, network_name) {
         const base_url = "https://api.stellar.expert/explorer/";
         const url_path = base_url.concat(network_name, '/directory/', stellar_account);
         const response = await fetch(url_path);
-        const data = await response.json();
+        this.apiStellarExpertTagsResponses[row_index] = await response.json();
         return data;
-      },
-      async apiStellarExpertTagsResponses() {
-        const promises = this.items.map(item => {
-          return this.getApiStellarExpertTags(item.stellar_account, item.network_name);
-        });
-        return Promise.all(promises);
       }
     },
     computed: {
