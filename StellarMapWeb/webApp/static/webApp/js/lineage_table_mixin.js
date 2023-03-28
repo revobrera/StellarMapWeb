@@ -86,7 +86,8 @@ const lineage_table_mixin = {
         return this.apiStellarExpertTagsResponses[row_index];
       },
       formatHashtag(tag) {
-        return '<span>#</span>' + tag.substr(1);
+        hashtag = '#';
+        return hashtag.concat(tag);
       }
     },
     computed: {
