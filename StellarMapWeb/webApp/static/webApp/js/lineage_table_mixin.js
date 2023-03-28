@@ -79,39 +79,25 @@ const lineage_table_mixin = {
         return url_path;
       },
       async getStellarExpertTags(stellar_account, network_name) {
-        base_url = "https://api.stellar.expert/explorer/";
-        url_path = base_url.concat(network_name, '/directory/', stellar_account);
-        await fetch(url_path)
-          .then(response => response.json())
-          .then(data => {
-            this.apiStellarExpertTagsResponse = data;
-          })
-          .catch(error => console.log(error));
+        const base_url = "https://api.stellar.expert/explorer/";
+        const url_path = base_url.concat(network_name, '/directory/', stellar_account);
+        const response = await fetch(url_path);
+        const data = await response.json();
+        return data;
       }
     },
     computed: {
       visibleGeneologyFields() {
         return this.account_genealogy_fields.filter(field => field.visible)
-      }
-    },
-    watch: {
-      account_genealogy_items: {
-        // added a watch property that watches for changes to account_genealogy_items,
-        // and when account_genealogy_items is updated, it loops through the new values
-        // and calls getStellarExpertTags with the appropriate arguments for each row 
-        // of data in the b-table component.
-        // Note that we're using the deep option in the watch property to
-        // watch for changes to the account_genealogy_items array at a deep level,
-        // so that if any properties of the objects in account_genealogy_items change,
-        // the watch function will still be triggered.
-        handler(newVal, oldVal) {
-          for (let i = 0; i < newVal.length; i++) {
-            const network_name = newVal[i].network_name;
-            const stellar_account = newVal[i].stellar_account;
-            this.getStellarExpertTags(stellar_account, network_name);
-          }
-        },
-        deep: true
+      },
+      apiStellarExpertTagsResponses() {
+        // The apiStellarExpertTagsResponses computed property returns an array of promises,
+        // one for each row in the table. When each promise resolves, the response data 
+        // is stored in the apiStellarExpertTagsResponses array at the same index as the
+        // row. In the template, you can access the response data for each row using its index.
+        return this.items.map(item => {
+          return this.getStellarExpertTags(item.stellar_account, item.network_name);
+        });
       }
     }
   }
