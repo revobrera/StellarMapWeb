@@ -83,7 +83,7 @@ const lineage_table_mixin = {
         const url_path = base_url.concat(network_name, '/directory/', stellar_account);
         const response = await fetch(url_path);
         this.apiStellarExpertTagsResponses[row_index] = await response.json();
-        return data;
+        return this.apiStellarExpertTagsResponses[row_index];
       }
     },
     computed: {
