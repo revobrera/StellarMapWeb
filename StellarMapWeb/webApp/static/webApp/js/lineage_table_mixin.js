@@ -108,7 +108,7 @@ const lineage_table_mixin = {
           for (let i = 0; i < newVal.length; i++) {
             const network_name = newVal[i].network_name;
             const stellar_account = newVal[i].stellar_account;
-            this.getStellarExpertTags(network_name, stellar_account);
+            this.getStellarExpertTags(stellar_account, network_name);
           }
         },
         deep: true
