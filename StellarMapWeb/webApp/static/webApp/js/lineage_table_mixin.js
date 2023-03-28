@@ -20,7 +20,8 @@ const lineage_table_mixin = {
           { key: 'xlm_balance', label: 'XLM Balance', sortable: true, visible: true },
           { key: 'stellar_expert', label: 'Stellar Expert', sortable: true, visible: true },
           { key: 'status', label: 'Status', sortable: true, visible: true }
-        ]
+        ],
+        apiStellarExpertTagsResponse: null
       }
     },
     methods: {
@@ -72,15 +73,45 @@ const lineage_table_mixin = {
         url_path = base_url.concat(home_domain, '/.well-known/stellar.toml');
         return url_path;
       },
-      viweExternalLinkTOMLChecker(home_domain) {
+      viewExternalLinkTOMLChecker(home_domain) {
         base_url = "https://stellar.sui.li/";
         url_path = base_url.concat(home_domain);
         return url_path;
+      },
+      getStellarExpertTags(stellar_account, network_name) {
+        base_url = "https://api.stellar.expert/explorer/";
+        url_path = base_url.concat(network_name, '/directory/', stellar_account);
+        fetch(url_path)
+          .then(response => response.json())
+          .then(data => {
+            this.apiStellarExpertTagsResponse = data;
+          })
+          .catch(error => console.log(error));
       }
     },
     computed: {
       visibleGeneologyFields() {
         return this.account_genealogy_fields.filter(field => field.visible)
+      }
+    },
+    watch: {
+      account_genealogy_items: {
+        // added a watch property that watches for changes to account_genealogy_items,
+        // and when account_genealogy_items is updated, it loops through the new values
+        // and calls getStellarExpertTags with the appropriate arguments for each row 
+        // of data in the b-table component.
+        // Note that we're using the deep option in the watch property to
+        // watch for changes to the account_genealogy_items array at a deep level,
+        // so that if any properties of the objects in account_genealogy_items change,
+        // the watch function will still be triggered.
+        handler(newVal, oldVal) {
+          for (let i = 0; i < newVal.length; i++) {
+            const network_name = newVal[i].network_name;
+            const stellar_account = newVal[i].stellar_account;
+            this.getStellarExpertTags(network_name, stellar_account);
+          }
+        },
+        deep: true
       }
     }
   }

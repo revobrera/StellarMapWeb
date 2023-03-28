@@ -5,7 +5,7 @@
             <div>
                 <b-card no-body class="bv-tabs">
                     <b-tabs card>
-                        <b-tab title="Upstream Creator Accounts" active>
+                        <b-tab title="Genealogy" active>
                             <template>
                                 <div>
                                     <!-- using the verbatim tag to avoid conflicts between Django and Vue.js templates -->
@@ -49,13 +49,19 @@
                                             <template v-else>
                                                 {{ row.item.home_domain }}
                                                 <a v-bind:href="viewExternalLinkTOML(row.item.home_domain)" target="_blank"><b-badge variant="success">TOML</b-badge></a>
-                                                <a v-bind:href="viweExternalLinkTOMLChecker(row.item.home_domain)" target="_blank"><b-badge variant="success">TOML Checker</b-badge></a>
+                                                <a v-bind:href="viewExternalLinkTOMLChecker(row.item.home_domain)" target="_blank"><b-badge variant="success">TOML Checker</b-badge></a>
                                             </template>
                                         </template>
 
                                         <template v-slot:cell(stellar_expert)="row">
                                             <template v-if="row.item.stellar_expert">
-                                                <a v-bind:href="viewTooltipString(row.item.stellar_expert)" target="_blank" v-b-tooltip.hover v-bind:title="viewTooltipString(row.item.stellar_expert)">Follow URL Link</a> 
+                                                <a v-bind:href="viewTooltipString(row.item.stellar_expert)" target="_blank" v-b-tooltip.hover v-bind:title="viewTooltipString(row.item.stellar_expert)">Follow URL Link</a>
+                                                <div v-if="apiStellarExpertTagsResponse">
+                                                    <b-badge variant="info">{{ apiStellarExpertTagsResponse.address }}</b-badge>
+                                                    <b-badge variant="info">{{ apiStellarExpertTagsResponse.name }}</b-badge>
+                                                    <b-badge variant="info">{{ apiStellarExpertTagsResponse.domain }}</b-badge>
+                                                    <b-badge v-for="tag in apiStellarExpertTagsResponse.tags" :key="tag" variant="info">{{ tag }}</b-badge>
+                                                </div>
                                             </template>
                                         </template>
 
@@ -66,9 +72,6 @@
                         </b-tab>
                         <b-tab title="JSON">
                             <pre v-html="highlightedJSONResponse"></pre>
-                        </b-tab>
-                        <b-tab title="TOML">
-                            <b-card-text>TOML outputs</b-card-text>
                         </b-tab>
                         <b-tab title="TERMINAL">
                             <b-card-text>Terminal outputs</b-card-text>
