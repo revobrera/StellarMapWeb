@@ -1,4 +1,7 @@
 import re
+import sentry_sdk
+
+from apiApp.helpers.sm_cron import StellarMapCronHelpers
 
 class StellarMapParsingUtilityHelpers:
     """
@@ -19,3 +22,16 @@ class StellarMapParsingUtilityHelpers:
         
         document_id = result[1]
         return document_id
+
+class StellarMapUtilityHelpers:
+    """
+    A helpers class for utilities
+    """
+
+    def on_retry_failure(self, retry_state, cron_name):
+        # This function will be called every time a retry fails
+        # Log the exception using Sentry SDK
+        sentry_sdk.capture_exception(retry_state.outcome.exception())
+        # Call set_crons_unhealthy method of StellarMapCronHelpers class
+        cron_helpers = StellarMapCronHelpers(cron_name=cron_name)
+        cron_helpers.set_crons_unhealthy()

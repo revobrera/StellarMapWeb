@@ -234,7 +234,8 @@ class GetAccountGenealogy(APIView):
                 'home_domain': record['home_domain'],
                 'xlm_balance': record['xlm_balance'],
                 'stellar_expert': 'https://stellar.expert/explorer/'+ record['network_name'] + '/account/' + record['stellar_account'],
-                'status': record['status']
+                'status': record['status'],
+                'updated_at': record['updated_at']
             }
             account_genealogy_items.append(account_genealogy_item)
 

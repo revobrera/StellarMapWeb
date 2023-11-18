@@ -41,7 +41,7 @@ class AstraDocument:
         horizon_accounts_operations_doc_api_href --> "https://horizon.stellar.org/operations/{stellar_account}"
         horizon_accounts_effects_doc_api_href --> https://horizon.stellar.org/accounts/{stellar_account}/effects
         stellar_expert_explorer_account_doc_api_href --> https://api.stellar.expert/explorer/{network_name}/account/{stellar_account}
-        
+        stellar_expert_explorer_directory_doc_api_href --> https://api.stellar.expert/explorer/directory/{stellar_account}
         """
         self.collections_name = collections_name
         self.url = f"https://{ASTRA_DB_ID}-{ASTRA_DB_REGION}.apps.astra.datastax.com/api/rest/v2/namespaces/{ASTRA_DB_KEYSPACE}/collections/{self.collections_name}/{self.document_id}"

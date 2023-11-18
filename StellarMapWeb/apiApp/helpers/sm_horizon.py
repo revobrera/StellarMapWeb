@@ -1,8 +1,9 @@
 import json
 
 import sentry_sdk
-from apiApp.helpers.sm_cron import StellarMapCronHelpers
 from apiApp.helpers.sm_datetime import StellarMapDateTimeHelpers
+from apiApp.helpers.sm_utils import StellarMapUtilityHelpers
+from apiApp.services import AstraDocument
 from stellar_sdk import Server
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 
@@ -58,12 +59,8 @@ class StellarMapHorizonAPIHelpers:
         return self.cron_name
 
     def on_retry_failure(self, retry_state):
-        # This function will be called every time a retry fails
-        # Log the exception using Sentry SDK
-        sentry_sdk.capture_exception(retry_state.outcome.exception())
-        # Call set_crons_unhealthy method of StellarMapCronHelpers class
-        cron_helpers = StellarMapCronHelpers(cron_name=self.get_cron_name())
-        cron_helpers.set_crons_unhealthy()
+        sm_util = StellarMapUtilityHelpers()
+        sm_util.on_retry_failure(retry_state, self.cron_name)
 
     @retry(wait=wait_random_exponential(multiplier=1, max=71),
        stop=stop_after_attempt(7),
@@ -186,3 +183,75 @@ class StellarMapHorizonAPIParserHelpers:
                     "created_at": created_at_obj
                 }
                 return creator_dict
+        
+    def parse_account_assets(self):
+        """
+        Gets the account asset balances for the specified Stellar account.
+
+        Not needed to make a request to the Horizon API.
+        The JSON was stored already in horizon_accounts_doc_api_href
+        Parse to get asset balances
+
+        :return: Dictionary of asset balances
+        :rtype: dict
+        """
+        try:
+            response_dict = self.datastax_response
+
+            # building child nodes of an issuer's account balances for the radial tidy tree 
+            balances = []
+            for ab in response_dict['data']['raw_data']['balances']:
+                if 'asset_code' in ab:
+                    # The get() method returns None if the attribute doesn't exist in the dictionary, instead of raising a KeyError.
+                    # This allows the code to continue executing and append the account_balance dictionary to the balances list,
+                    # even if any of the attributes are missing.
+                    account_balance = {
+                        'node_type': 'ASSET',
+                        'asset_type': ab.get('asset_type'),
+                        'asset_code': ab.get('asset_code'),
+                        'asset_issuer': ab.get('asset_issuer'),
+                        'balance': ab.get('balance'),
+                        'limit': ab.get('limit'),
+                        'is_authorized': ab.get('is_authorized'),
+                        'is_authorized_to_maintain_liabilities': ab.get('is_authorized_to_maintain_liabilities'),
+                        'is_clawback_enabled': ab.get('is_clawback_enabled')
+                    }
+                    balances.append(account_balance)
+
+            return balances
+
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+
+    def parse_account_flags(self):
+        """
+        Gets the account flags for the specified Stellar account.
+
+        Not needed to make a request to the Horizon API.
+        The JSON was stored already in horizon_accounts_doc_api_href
+        Parse to get account flags
+
+        :return: Dictionary of flags
+        :rtype: dict
+        """
+        try:
+            response_dict = self.datastax_response
+
+            # building child nodes of an issuer's flags for the radial tidy tree 
+            flags = []
+            if 'flags' in response_dict['data']['raw_data']:
+                account_flag = response_dict['data']['raw_data']['flags']  # Assign the flags dictionary to account_flag
+                """
+                "flags": {
+                    "auth_required": false,
+                    "auth_revocable": false,
+                    "auth_immutable": false,
+                    "auth_clawback_enabled": false
+                },
+                """
+                flags.append(account_flag)
+
+            return flags
+
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
