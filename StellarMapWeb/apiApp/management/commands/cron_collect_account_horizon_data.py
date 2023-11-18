@@ -1,4 +1,3 @@
-import json
 import re
 import uuid
 
@@ -7,8 +6,7 @@ from apiApp.helpers.env import EnvHelpers
 from apiApp.helpers.sm_cron import StellarMapCronHelpers
 from apiApp.helpers.sm_horizon import StellarMapHorizonAPIHelpers
 from apiApp.helpers.sm_utils import StellarMapParsingUtilityHelpers
-from apiApp.managers import (StellarCreatorAccountLineageManager,
-                             UserInquirySearchHistoryManager)
+from apiApp.managers import StellarCreatorAccountLineageManager
 from apiApp.services import AstraDocument
 from django.core.management.base import BaseCommand
 from django.http import HttpRequest

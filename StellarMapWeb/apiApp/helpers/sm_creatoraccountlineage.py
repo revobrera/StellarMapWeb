@@ -116,6 +116,70 @@ class StellarMapCreatorAccountLineageHelpers:
         except Exception as e:
             sentry_sdk.capture_exception(e)
 
+    def async_horizon_accounts_assets_doc_api_href_from_accounts_raw_data(self, client_session, lin_queryset, *args, **kwargs):
+
+        try:
+
+            # Create an instance of the manager
+            lineage_manager = StellarCreatorAccountLineageManager()
+
+            # update status to IN_PROGRESS
+            lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_UPDATING_HORIZON_ACCOUNTS_ASSETS_DOC_API_HREF_FROM_RAW_DATA')
+
+            # Create an instance of Astra Document
+            astra_document = AstraDocument()
+            astra_document.set_datastax_url(datastax_url=lin_queryset.horizon_accounts_doc_api_href)
+            response_dict = astra_document.get_document()
+
+            # Create an instance of StellarMapHorizonAPIParserHelpers
+            api_parser = StellarMapHorizonAPIParserHelpers()
+            api_parser.set_datastax_response(datastax_response=response_dict)
+            account_assets_dict = api_parser.parse_account_assets()
+
+            # update lineage record
+            request = HttpRequest()
+            request.data = {
+                'horizon_accounts_assets_doc_api_href': account_assets_dict,
+                'status': 'DONE_UPDATING_HORIZON_ACCOUNTS_ASSETS_DOC_API_HREF_FROM_RAW_DATA'
+
+            }
+
+            lineage_manager.update_lineage(id=lin_queryset.id, request=request)
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+
+    def async_horizon_accounts_flags_doc_api_href_from_accounts_raw_data(self, client_session, lin_queryset, *args, **kwargs):
+
+        try:
+
+            # Create an instance of the manager
+            lineage_manager = StellarCreatorAccountLineageManager()
+
+            # update status to IN_PROGRESS
+            lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_UPDATING_HORIZON_ACCOUNTS_FLAGS_DOC_API_HREF_FROM_RAW_DATA')
+
+            # Create an instance of Astra Document
+            astra_document = AstraDocument()
+            astra_document.set_datastax_url(datastax_url=lin_queryset.horizon_accounts_doc_api_href)
+            response_dict = astra_document.get_document()
+
+            # Create an instance of StellarMapHorizonAPIParserHelpers
+            api_parser = StellarMapHorizonAPIParserHelpers()
+            api_parser.set_datastax_response(datastax_response=response_dict)
+            account_assets_dict = api_parser.parse_account_assets()
+
+            # update lineage record
+            request = HttpRequest()
+            request.data = {
+                'horizon_accounts_flags_doc_api_href': account_assets_dict,
+                'status': 'DONE_UPDATING_HORIZON_ACCOUNTS_FLAGS_DOC_API_HREF_FROM_RAW_DATA'
+
+            }
+
+            lineage_manager.update_lineage(id=lin_queryset.id, request=request)
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+
     def get_account_genealogy(self, stellar_account, network_name):
         try:
             # loop until no records returned or stellar_creator_account is "no_element_funder"
@@ -160,7 +224,8 @@ class StellarMapCreatorAccountLineageHelpers:
                         'stellar_expert_explorer_account_doc_api_href': None,
                         'status': 'DONE_MAKE_GRANDPARENT_LINEAGE',
                         'created_at': datetime.datetime(2023, 3, 14, 0, 31, 36),
-                        'updated_at': datetime.datetime(2023, 3, 14, 0, 36, 37)
+                        'updated_at': datetime.datetime(2023, 3, 14, 0, 36, 37),
+                        'stellar_expert_explorer_directory_doc_api_href': None
                     }
                     '''
                     row_dict = {field_name: getattr(lin_queryset, field_name) for field_name in lin_queryset._values.keys()}
@@ -183,3 +248,28 @@ class StellarMapCreatorAccountLineageHelpers:
 
         except Exception as e:
             sentry_sdk.capture_exception(e)
+
+
+    def generate_tidy_radial_tree_genealogy(self, genealogy_df):
+        # takes in dataframe from get_account_genealogy()
+        
+        if not genealogy_df.empty:
+            for index, row in genealogy_df.iterrows():
+                # query account queryset
+                lin_manager = StellarCreatorAccountLineageManager()
+                lin_queryset = lin_manager.get_queryset(
+                    stellar_account=row['stellar_account'],
+                    network_name=row['network_name']
+                )
+
+                # Create an instance of Astra Document
+                astra_document = AstraDocument()
+                astra_document.set_datastax_url(datastax_url=lin_queryset.horizon_accounts_doc_api_href)
+                response_json = astra_document.get_document()
+
+                # Create an instance of StellarMapHorizonAPIParserHelpers
+                api_parser = StellarMapHorizonAPIParserHelpers()
+                api_parser.set_datastax_response(datastax_response=response_json)
+                creator_dict = api_parser.parse_operations_creator_account(stellar_account=lin_queryset.stellar_account)
+                
+                tidy_radial_tree_genealogy_dict = api_parser.parse_operations_creator_account(stellar_account=lin_queryset.stellar_account)

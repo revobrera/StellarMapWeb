@@ -85,6 +85,7 @@ class StellarCreatorAccountLineage(DjangoCassandraModel):
         horizon_accounts_effects_doc_api_href (str): a field that stores the horizon accounts effects doc api href
         stellar_expert_explorer_account_doc_api_href (str): a field that stores the Stellar expert explorer account doc api href
         status (str): a field that stores the status of the request with a default value of 'pending'. The valid choices for the status field are 'pending', 'in_progress', and 'completed'.
+        stellar_expert_explorer_directory_doc_api_href (str): a field that stored the Stellar expert explorer directory tags doc api href
     """
 
     __keyspace__ = CASSANDRA_DB_NAME
@@ -103,6 +104,10 @@ class StellarCreatorAccountLineage(DjangoCassandraModel):
     status = cassandra_columns.Text(max_length=63)
     created_at = cassandra_columns.DateTime(primary_key=True, clustering_order="DESC")
     updated_at = cassandra_columns.DateTime()
+    horizon_accounts_assets_doc_api_href = cassandra_columns.Text() # parse_account_assets()
+    stellar_expert_explorer_directory_doc_api_href = cassandra_columns.Text() # https://api.stellar.expert/explorer/directory/{stellar_account}
+    horizon_accounts_flags_doc_api_href = cassandra_columns.Text() # parse_account_flags()
+
 
     def __str__(self):
         """ Method to display Stellar account, network and status in the admin django interface.

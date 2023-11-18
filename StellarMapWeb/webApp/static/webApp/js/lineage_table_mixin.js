@@ -19,7 +19,8 @@ const lineage_table_mixin = {
           { key: 'home_domain', label: 'Home Domain', sortable: true, visible: true },
           { key: 'xlm_balance', label: 'XLM Balance', sortable: true, visible: true },
           { key: 'stellar_expert', label: 'Stellar Expert', sortable: true, visible: true },
-          { key: 'status', label: 'Status', sortable: true, visible: true }
+          { key: 'status', label: 'Status', sortable: true, visible: true },
+          { key: 'updated_at', label: 'Updated At', sortable: true, visible: true }
         ],
         apiStellarExpertTagsResponses: []
       }

@@ -56,6 +56,7 @@ class EnvHelpers:
         """Set the base environment variables for the current Stellar network."""
         self.base_site_network = f"{self.base_site}/explorer/{self.network}"
         self.base_site_network_account = f"{self.base_site_network}/account/"
+        self.base_se_blocked_domains = f"{self.base_se}/explorer/directory/blocked-domains/"
         self.base_se_network = f"{self.base_se}/explorer/{self.network}"
         self.base_se_network_account = f"{self.base_se_network}/account/"
         self.base_se_network_dir = f"{self.base_se_network}/directory/"
@@ -80,6 +81,9 @@ class EnvHelpers:
     
     def get_base_site_network(self):
         return self.base_site_network
+    
+    def get_base_se_blocked_domains(self):
+        return self.base_se_blocked_domains
     
     def get_base_site_network_account(self):
         return self.base_site_network_account
