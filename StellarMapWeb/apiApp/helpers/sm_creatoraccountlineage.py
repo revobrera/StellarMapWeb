@@ -124,7 +124,7 @@ class StellarMapCreatorAccountLineageHelpers:
             lineage_manager = StellarCreatorAccountLineageManager()
 
             # update status to IN_PROGRESS
-            lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_UPDATING_HORIZON_ACCOUNTS_ASSETS_DOC_API_HREF_FROM_RAW_DATA')
+            lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_UPDATING_HORIZON_ACCOUNTS_ASSETS_DOC_API_HREF')
 
             # Create an instance of Astra Document
             astra_document = AstraDocument()
@@ -140,7 +140,7 @@ class StellarMapCreatorAccountLineageHelpers:
             request = HttpRequest()
             request.data = {
                 'horizon_accounts_assets_doc_api_href': account_assets_dict,
-                'status': 'DONE_UPDATING_HORIZON_ACCOUNTS_ASSETS_DOC_API_HREF_FROM_RAW_DATA'
+                'status': 'DONE_UPDATING_HORIZON_ACCOUNTS_ASSETS_DOC_API_HREF'
 
             }
 
@@ -156,7 +156,7 @@ class StellarMapCreatorAccountLineageHelpers:
             lineage_manager = StellarCreatorAccountLineageManager()
 
             # update status to IN_PROGRESS
-            lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_UPDATING_HORIZON_ACCOUNTS_FLAGS_DOC_API_HREF_FROM_RAW_DATA')
+            lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_UPDATING_HORIZON_ACCOUNTS_FLAGS_DOC_API_HREF')
 
             # Create an instance of Astra Document
             astra_document = AstraDocument()
@@ -172,7 +172,7 @@ class StellarMapCreatorAccountLineageHelpers:
             request = HttpRequest()
             request.data = {
                 'horizon_accounts_flags_doc_api_href': account_assets_dict,
-                'status': 'DONE_UPDATING_HORIZON_ACCOUNTS_FLAGS_DOC_API_HREF_FROM_RAW_DATA'
+                'status': 'DONE_UPDATING_HORIZON_ACCOUNTS_FLAGS_DOC_API_HREF'
 
             }
 
