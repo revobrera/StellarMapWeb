@@ -25,7 +25,7 @@ class Command(BaseCommand):
 
                 # Query all records matching status from StellarCreatorAccountLineage
                 lin_queryset = lineage_manager.get_all_queryset(
-                    status__in=['DONE_UPDATING_HORIZON_ACCOUNTS_FLAGS_DOC_API_HREF_FROM_RAW_DATA']
+                    status__in=['DONE_UPDATING_HORIZON_ACCOUNTS_FLAGS_DOC_API_HREF']
                 )
                 
                 # Create an instance of StellarMapCreatorAccountLineageHelpers
