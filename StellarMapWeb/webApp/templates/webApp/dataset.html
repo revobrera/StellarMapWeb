@@ -57,12 +57,12 @@
                                             <template v-if="row.item.stellar_expert">
                                                 <a v-bind:href="viewTooltipString(row.item.stellar_expert)" target="_blank" v-b-tooltip.hover v-bind:title="viewTooltipString(row.item.stellar_expert)">Follow URL Link</a>
                                                 <div v-if="apiStellarExpertTagsResponses[row.item.stellar_account]">
-                                                <b-badge variant="info" v-if="apiStellarExpertTagsResponses[row.item.stellar_account].address !== null">{{ apiStellarExpertTagsResponses[row.item.stellar_account].address }}</b-badge>
-                                                <b-badge variant="info" v-if="apiStellarExpertTagsResponses[row.item.stellar_account].name !== null">{{ apiStellarExpertTagsResponses[row.item.stellar_account].name }}</b-badge>
-                                                <b-badge variant="info" v-if="apiStellarExpertTagsResponses[row.item.stellar_account].domain !== null">{{ apiStellarExpertTagsResponses[row.item.stellar_account].domain }}</b-badge>
-                                                <div v-if="apiStellarExpertTagsResponses[row.item.stellar_account].tags && apiStellarExpertTagsResponses[row.item.stellar_account].tags.length > 0">
-                                                    <b-badge v-for="tag in apiStellarExpertTagsResponses[row.item.stellar_account].tags" :key="tag" variant="info" v-html="formatHashtag(tag)"></b-badge>
-                                                </div>
+                                                    <b-badge variant="info" v-if="apiStellarExpertTagsResponses[row.item.stellar_account].address !== null">{{ apiStellarExpertTagsResponses[row.item.stellar_account].address }}</b-badge>
+                                                    <b-badge variant="info" v-if="apiStellarExpertTagsResponses[row.item.stellar_account].name !== null">{{ apiStellarExpertTagsResponses[row.item.stellar_account].name }}</b-badge>
+                                                    <b-badge variant="info" v-if="apiStellarExpertTagsResponses[row.item.stellar_account].domain !== null">{{ apiStellarExpertTagsResponses[row.item.stellar_account].domain }}</b-badge>
+                                                    <div v-if="apiStellarExpertTagsResponses[row.item.stellar_account].tags && apiStellarExpertTagsResponses[row.item.stellar_account].tags.length > 0">
+                                                        <b-badge v-for="tag in apiStellarExpertTagsResponses[row.item.stellar_account].tags" :key="tag" variant="info" v-html="formatHashtag(tag)"></b-badge>
+                                                    </div>
                                                 </div>
                                             </template>
                                         </template>
