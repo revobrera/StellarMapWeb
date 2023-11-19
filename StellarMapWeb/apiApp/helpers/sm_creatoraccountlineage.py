@@ -1,9 +1,11 @@
+import json
+
+import pandas as pd
 import sentry_sdk
 from apiApp.helpers.sm_horizon import StellarMapHorizonAPIParserHelpers
 from apiApp.managers import StellarCreatorAccountLineageManager
 from apiApp.services import AstraDocument
 from django.http import HttpRequest
-import pandas as pd
 
 
 class StellarMapCreatorAccountLineageHelpers:
@@ -136,12 +138,14 @@ class StellarMapCreatorAccountLineageHelpers:
             api_parser.set_datastax_response(datastax_response=response_dict)
             account_assets_dict = api_parser.parse_account_assets()
 
+            # Converting dictionary to JSON string
+            json_string = json.dumps(account_assets_dict)
+
             # update lineage record
             request = HttpRequest()
             request.data = {
-                'horizon_accounts_assets_doc_api_href': account_assets_dict,
+                'horizon_accounts_assets_doc_api_href': json_string,
                 'status': 'DONE_UPDATING_HORIZON_ACCOUNTS_ASSETS_DOC_API_HREF'
-
             }
 
             lineage_manager.update_lineage(id=lin_queryset.id, request=request)
@@ -166,14 +170,16 @@ class StellarMapCreatorAccountLineageHelpers:
             # Create an instance of StellarMapHorizonAPIParserHelpers
             api_parser = StellarMapHorizonAPIParserHelpers()
             api_parser.set_datastax_response(datastax_response=response_dict)
-            account_assets_dict = api_parser.parse_account_assets()
+            account_flags_dict = api_parser.parse_account_flags()
+
+            # Converting dictionary to JSON string
+            json_string = json.dumps(account_flags_dict)
 
             # update lineage record
             request = HttpRequest()
             request.data = {
-                'horizon_accounts_flags_doc_api_href': account_assets_dict,
+                'horizon_accounts_flags_doc_api_href': json_string,
                 'status': 'DONE_UPDATING_HORIZON_ACCOUNTS_FLAGS_DOC_API_HREF'
-
             }
 
             lineage_manager.update_lineage(id=lin_queryset.id, request=request)
