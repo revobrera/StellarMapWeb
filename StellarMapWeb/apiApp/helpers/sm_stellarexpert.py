@@ -1,5 +1,8 @@
+import json
+
 import requests
 import sentry_sdk
+from apiApp.helpers.env import EnvHelpers
 from apiApp.helpers.sm_horizon import StellarMapHorizonAPIHelpers
 from apiApp.helpers.sm_utils import StellarMapUtilityHelpers
 from tenacity import retry, stop_after_attempt, wait_random_exponential
@@ -26,13 +29,19 @@ class StellarMapStellarExpertAPIHelpers(StellarMapHorizonAPIHelpers):
             `cron_health_check` will set the crons to 'HEALTHY_' after 1.7 hours of buffer.
     """
 
-    def __init__(self, account_id, env_helpers, external_url):
+    def __init__(self, lin_queryset):
         self.headers = {
             "Content-Type": "application/json"
         }
-        self.account_id = account_id
-        self.env_helpers = env_helpers # instance of env_helpers = EnvHelpers()
-        self.external_url = external_url
+        self.lin_queryset = lin_queryset # creator account lineage record
+
+        # set environment
+        self.env_helpers = EnvHelpers()
+        network_name = lin_queryset.network_name
+        if network_name == 'public':
+            self.env_helpers.set_public_network()
+        else:
+            self.env_helpers.set_testnet_network()
 
     def on_retry_failure(self, retry_state):
         sm_util = StellarMapUtilityHelpers()
@@ -105,7 +114,7 @@ class StellarMapStellarExpertAPIHelpers(StellarMapHorizonAPIHelpers):
             base_se_network = self.env_helpers.get_base_se_network()
 
             # Make a GET request to the API to retrieve the asset list
-            response = requests.get(f"{base_se_network}/asset?search={self.account_id}", headers=self.headers)
+            response = requests.get(f"{base_se_network}/asset?search={self.lin_queryset.stellar_account}", headers=self.headers)
             
             if response.status_code == 200:
                 # If the response is successful (status code 200), return the response data in JSON format
@@ -116,7 +125,6 @@ class StellarMapStellarExpertAPIHelpers(StellarMapHorizonAPIHelpers):
         except Exception as e:
             # Capture any exception that occurs during the execution of the function and send it to Sentry for error tracking
             sentry_sdk.capture_exception(e)
-
 
     @retry(wait=wait_random_exponential(multiplier=1, max=71),
            stop=stop_after_attempt(7),
@@ -145,7 +153,7 @@ class StellarMapStellarExpertAPIHelpers(StellarMapHorizonAPIHelpers):
         try:
             base_se_network = self.env_helpers.get_base_se_network()
             # Make a GET request to the API to retrieve the asset rating
-            response = requests.get(f"{base_se_network}/asset/{asset_code}-{self.account_id}-{asset_type}/rating", headers=self.headers)
+            response = requests.get(f"{base_se_network}/asset/{asset_code}-{self.lin_queryset.stellar_account}-{asset_type}/rating", headers=self.headers)
             
             if response.status_code == 200:
                 # If the response is successful (status code 200), return the response data in JSON format
@@ -239,3 +247,62 @@ class StellarMapStellarExpertAPIHelpers(StellarMapHorizonAPIHelpers):
         except Exception as e:
             # Capture any exception that occurs during the execution of the function and send it to Sentry for error tracking
             sentry_sdk.capture_exception(e)
+
+    @retry(wait=wait_random_exponential(multiplier=1, max=71),
+           stop=stop_after_attempt(7),
+           retry_error_callback=on_retry_failure)
+    def get_se_account_directory(self):
+        """
+        Example URI:
+        >>> https://api.stellar.expert/explorer/public/directory/{asset_issuer}
+
+        Example JSON: 
+        >>> {
+            "address": "GDUKMGUGDZQK6YHYA5Z6AY2G4XDSZPSZ3SW5UN3ARVMO6QSRDWP5YLEX",
+            "name": "AnchorUSD",
+            "domain": "www.anchorusd.com",
+            "tags": [
+                "anchor",
+                "issuer"
+            ]
+        }
+        """ 
+
+        try:
+            base_se_network_dir = self.env_helpers.get_base_se_network_dir()
+            # Make a GET request to the API to retrieve the SE account directory
+            response = requests.get(f"{base_se_network_dir}/{self.lin_queryset.stellar_account}", headers=self.headers)
+            
+            if response.status_code == 200:
+                # If the response is successful (status code 200), return the response data in JSON format
+                return response.json()
+            else:
+                # If the response is not successful, raise an exception with a descriptive error message
+                raise Exception(f"Failed to GET SE account directory. Response: {response.content}")
+        except Exception as e:
+            # Capture any exception that occurs during the execution of the function and send it to Sentry for error tracking
+            sentry_sdk.capture_exception(e)
+
+
+class StellarMapStellarExpertAPIParserHelpers:
+    """ 
+    Note: This class parses the Stellar Expert JSON dataset that is embedded into a custom
+          StellarMap JSON formatted.
+    """
+    def __init__(self, lin_queryset):
+        self.lin_queryset = lin_queryset
+
+    def parse_asset_code_issuer_type(self):
+
+        # parse the json data
+        parsed_data = json.loads(self.lin_queryset.horizon_accounts_assets_doc_api_href)
+
+        asset_dict = {}
+        # iterate over each item data
+        for item in parsed_data:
+            if item["asset_issuer"] == self.lin_queryset.stellar_account:
+                asset_dict['asset_code'] = item["asset_code"]
+                asset_dict["asset_issuer"] = item["asset_issuer"]
+                asset_dict["asset_type"] = item["asset_type"]
+
+        return asset_dict
