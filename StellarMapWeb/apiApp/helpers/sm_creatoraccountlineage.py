@@ -199,17 +199,29 @@ class StellarMapCreatorAccountLineageHelpers:
             lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_UPDATING_HORIZON_ACCOUNTS_SE_DIRECTORY')
 
             # Request SE to GET directory for account
-            comprehensive_se_responses = {}
             se_helpers = StellarMapStellarExpertAPIHelpers(lin_queryset=lin_queryset)
 
             # Collecting stellar_account code, issuer and type
             se_parser = StellarMapStellarExpertAPIParserHelpers(lin_queryset=lin_queryset)
             asset_dict = se_parser.parse_asset_code_issuer_type()
 
-            # Collect all SE api responses
+            # Collect all SE API responses
+            comprehensive_se_responses = {}
+
+            # Get SE asset list
             comprehensive_se_responses['se_asset_list'] = se_helpers.get_se_asset_list()
-            comprehensive_se_responses['se_asset_rating'] = se_helpers.get_se_asset_rating(asset_code=asset_dict['asset_code'], asset_type=asset_dict['asset_type'])
+
+            # Get SE asset rating
+            try:
+                comprehensive_se_responses['se_asset_rating'] = se_helpers.get_se_asset_rating(asset_code=asset_dict['asset_code'], asset_type=asset_dict['asset_type'])
+            except KeyError:
+                # Handle the KeyError when asset_dict is empty
+                comprehensive_se_responses['se_asset_rating'] = None
+
+            # Get SE blocked domain
             comprehensive_se_responses['se_blocked_domain'] = se_helpers.get_se_blocked_domain(asset_domain=lin_queryset.home_domain)
+
+            # Get SE account directory
             comprehensive_se_responses['se_account_directory'] = se_helpers.get_se_account_directory()
 
             # Converting dictionary to JSON string
