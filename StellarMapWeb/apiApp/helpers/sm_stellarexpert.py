@@ -271,7 +271,7 @@ class StellarMapStellarExpertAPIHelpers(StellarMapHorizonAPIHelpers):
         try:
             base_se_network_dir = self.env_helpers.get_base_se_network_dir()
             # Make a GET request to the API to retrieve the SE account directory
-            response = requests.get(f"{base_se_network_dir}/{self.lin_queryset.stellar_account}", headers=self.headers)
+            response = requests.get(f"{base_se_network_dir}{self.lin_queryset.stellar_account}", headers=self.headers)
             
             if response.status_code == 200:
                 # If the response is successful (status code 200), return the response data in JSON format
