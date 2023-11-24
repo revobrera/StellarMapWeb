@@ -222,7 +222,10 @@ class StellarMapCreatorAccountLineageHelpers:
             comprehensive_se_responses['se_blocked_domain'] = se_helpers.get_se_blocked_domain(asset_domain=lin_queryset.home_domain)
 
             # Get SE account directory
-            comprehensive_se_responses['se_account_directory'] = se_helpers.get_se_account_directory()
+            se_account_directory = se_helpers.get_se_account_directory()
+            if se_account_directory == "no_element_home_domain":
+                se_account_directory = None
+            comprehensive_se_responses['se_account_directory'] = se_account_directory
 
             # Converting dictionary to JSON string
             json_string = json.dumps(comprehensive_se_responses)
