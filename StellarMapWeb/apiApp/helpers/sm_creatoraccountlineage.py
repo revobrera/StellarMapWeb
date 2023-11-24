@@ -3,6 +3,8 @@ import json
 import pandas as pd
 import sentry_sdk
 from apiApp.helpers.sm_horizon import StellarMapHorizonAPIParserHelpers
+from apiApp.helpers.sm_stellarexpert import (
+    StellarMapStellarExpertAPIHelpers, StellarMapStellarExpertAPIParserHelpers)
 from apiApp.managers import StellarCreatorAccountLineageManager
 from apiApp.services import AstraDocument
 from django.http import HttpRequest
@@ -179,6 +181,44 @@ class StellarMapCreatorAccountLineageHelpers:
             request = HttpRequest()
             request.data = {
                 'horizon_accounts_flags_doc_api_href': json_string,
+                'status': 'DONE_UPDATING_HORIZON_ACCOUNTS_FLAGS_DOC_API_HREF'
+            }
+
+            lineage_manager.update_lineage(id=lin_queryset.id, request=request)
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+
+    def async_stellar_expert_explorer_directory_doc_api_href_from_accounts_raw_data(self, client_session, lin_queryset, *args, **kwargs):
+
+        try:
+
+            # Create an instance of the manager
+            lineage_manager = StellarCreatorAccountLineageManager()
+
+            # update status to IN_PROGRESS
+            lineage_manager.update_status(id=lin_queryset.id, status='IN_PROGRESS_UPDATING_HORIZON_ACCOUNTS_SE_DIRECTORY')
+
+            # Request SE to GET directory for account
+            comprehensive_se_responses = {}
+            se_helpers = StellarMapStellarExpertAPIHelpers(lin_queryset=lin_queryset)
+
+            # Collecting stellar_account code, issuer and type
+            se_parser = StellarMapStellarExpertAPIParserHelpers(lin_queryset=lin_queryset)
+            asset_dict = se_parser.parse_asset_code_issuer_type()
+
+            # Collect all SE api responses
+            comprehensive_se_responses['se_asset_list'] = se_helpers.get_se_asset_list()
+            comprehensive_se_responses['se_asset_rating'] = se_helpers.get_se_asset_rating(asset_code=asset_dict['asset_code'], asset_type=asset_dict['asset_type'])
+            comprehensive_se_responses['se_blocked_domain'] = se_helpers.get_se_blocked_domain(asset_domain=lin_queryset.home_domain)
+            comprehensive_se_responses['se_account_directory'] = se_helpers.get_se_account_directory()
+
+            # Converting dictionary to JSON string
+            json_string = json.dumps(comprehensive_se_responses)
+
+            # update lineage record
+            request = HttpRequest()
+            request.data = {
+                'stellar_expert_explorer_directory_doc_api_href': json_string,
                 'status': 'DONE_UPDATING_HORIZON_ACCOUNTS_FLAGS_DOC_API_HREF'
             }
 
