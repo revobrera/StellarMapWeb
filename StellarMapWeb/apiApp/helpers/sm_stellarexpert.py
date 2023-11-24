@@ -228,7 +228,7 @@ class StellarMapStellarExpertAPIHelpers(StellarMapHorizonAPIHelpers):
         """
 
         try:
-            base_se_blocked_domains = self.env_helpers.base_se_blocked_domains()
+            base_se_blocked_domains = self.env_helpers.get_base_se_blocked_domains()
             
             # Make a GET request to the API to retrieve blocked domains
             if asset_domain is None:
