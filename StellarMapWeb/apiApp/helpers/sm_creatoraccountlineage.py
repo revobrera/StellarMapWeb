@@ -219,7 +219,7 @@ class StellarMapCreatorAccountLineageHelpers:
             request = HttpRequest()
             request.data = {
                 'stellar_expert_explorer_directory_doc_api_href': json_string,
-                'status': 'DONE_UPDATING_HORIZON_ACCOUNTS_FLAGS_DOC_API_HREF'
+                'status': 'DONE_UPDATING_HORIZON_ACCOUNTS_SE_DIRECTORY'
             }
 
             lineage_manager.update_lineage(id=lin_queryset.id, request=request)
