@@ -45,15 +45,24 @@ const lineage_table_mixin = {
               }
 
               // Successful response, do something with the data
-              const response = JSON.parse(await genealogy_response.json());
+              const response = await genealogy_response.json();
 
               console.log(response);
 
-              this.account_genealogy_items = response['account_genealogy_items_json'];
-              this.tree_genealogy_items = response['tree_genealogy_items_json'];
+              if ('account_genealogy_items_json' in response) {
+                this.account_genealogy_items = response['account_genealogy_items_json'];
+                console.log(this.account_genealogy_items);
+              } else {
+                console.log('account_genealogy_items_json not found in response');
+              }
 
-              console.log(this.account_genealogy_items);
-              console.log(this.tree_genealogy_items);
+              if ('tree_genealogy_items_json' in response) {
+                this.tree_genealogy_items = response['tree_genealogy_items_json'];
+                console.log(this.tree_genealogy_items);
+              } else {
+                console.log('tree_genealogy_items_json not found in response');
+              }
+
           } catch (e) {
               // Handle error
               console.error(e);
