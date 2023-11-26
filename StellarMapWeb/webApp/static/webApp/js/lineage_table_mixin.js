@@ -50,14 +50,14 @@ const lineage_table_mixin = {
               console.log(response);
 
               if ('account_genealogy_items_json' in response) {
-                this.account_genealogy_items = response['account_genealogy_items_json'];
+                this.account_genealogy_items = JSON.parse(response['account_genealogy_items_json']);
                 console.log(this.account_genealogy_items);
               } else {
                 console.log('account_genealogy_items_json not found in response');
               }
 
               if ('tree_genealogy_items_json' in response) {
-                this.tree_genealogy_items = response['tree_genealogy_items_json'];
+                this.tree_genealogy_items = JSON.parse(response['tree_genealogy_items_json']);
                 console.log(this.tree_genealogy_items);
               } else {
                 console.log('tree_genealogy_items_json not found in response');
