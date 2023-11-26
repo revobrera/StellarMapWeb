@@ -345,9 +345,10 @@ class StellarMapCreatorAccountLineageHelpers:
                         issuer_node.append(account_issuer_dict)
                 
                 # convert json string as python dictionary
-                horizon_accounts_assets_dict = json.loads(genealogy_df.loc[index, 'horizon_accounts_assets_doc_api_href'])
-                for element_asset in horizon_accounts_assets_dict:
-                    issuer_node.append(element_asset)
+                if genealogy_df.loc[index, 'horizon_accounts_assets_doc_api_href'] is not None:
+                    horizon_accounts_assets_dict = json.loads(genealogy_df.loc[index, 'horizon_accounts_assets_doc_api_href'])
+                    for element_asset in horizon_accounts_assets_dict:
+                        issuer_node.append(element_asset)
                 
                 # aggregating child nodes
                 if child_node:
