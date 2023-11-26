@@ -350,8 +350,9 @@ class StellarMapCreatorAccountLineageHelpers:
                     for element_asset in horizon_accounts_assets_dict:
                         issuer_node.append(element_asset)
                 
-                # aggregating child nodes
-                if child_node and child_node[-1]:
+                # aggregating child nodes 
+                # Check if child_node is not empty, child_node[-1] exists, and 'children' key exists in child_node[-1][-1]
+                if child_node and child_node[-1] and 'children' in child_node[-1][-1]:
                     child_node[-1][-1]['children'].extend(issuer_node)   # Extend the children list of the last item in child_node
                 child_node.append(issuer_node)
 
