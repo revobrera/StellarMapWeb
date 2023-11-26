@@ -334,8 +334,8 @@ class StellarMapCreatorAccountLineageHelpers:
                 'children': []
                 }
                 # convert json string as python dictionary
-                horizon_accounts_flags_doc_api_href = genealogy_df.loc[index, 'horizon_accounts_flags_doc_api_href']
-                if horizon_accounts_flags_doc_api_href is not None:
+                if genealogy_df.loc[index, 'horizon_accounts_flags_doc_api_href'] is not None:
+                    horizon_accounts_flags_doc_api_href = genealogy_df.loc[index, 'horizon_accounts_flags_doc_api_href']
                     horizon_accounts_flags_dict = horizon_accounts_flags_doc_api_href
                     horizon_accounts_flags_dict = json.loads(horizon_accounts_flags_doc_api_href)
                 
