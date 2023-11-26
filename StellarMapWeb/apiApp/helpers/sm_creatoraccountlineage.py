@@ -351,7 +351,7 @@ class StellarMapCreatorAccountLineageHelpers:
                         issuer_node.append(element_asset)
                 
                 # aggregating child nodes
-                if child_node:
+                if child_node and child_node[-1]:
                     child_node[-1][-1]['children'].extend(issuer_node)   # Extend the children list of the last item in child_node
                 child_node.append(issuer_node)
 
