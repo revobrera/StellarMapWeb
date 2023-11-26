@@ -46,6 +46,7 @@ const lineage_table_mixin = {
 
               // Successful response, do something with the data
               const responseJson = await genealogy_response.json();
+              console.log(this.responseJson);
               this.account_genealogy_items = JSON.parse(responseJson.account_genealogy_items_json);
               this.tree_genealogy_items = JSON.parse(responseJson.tree_genealogy_items_json);
 
