@@ -16,7 +16,7 @@
 
 <script>
   // Load the JSON data file
-  d3.json("{% static 'radialTidyTreeApp/json/test.json' %}", function (pubs) {
+  d3.json("{{ this.tree_genealogy_items }}", function (pubs) {
     // Initialize the tooltip element and set its position and opacity to null
     var tooltip = d3.select('#display_radial_tidy_tree')
       .append('div')
@@ -436,6 +436,13 @@
               .html("<b>Name:</b> " + d.name + "<br><b>Issuer Id:</b> " + d.issuer_id
                 + "<br><b>Asset type:</b> " + d.asset_type
                 + "<br><b>Asset Code:</b> " + d.asset_code
+                + "<br><b>Asset Issuer:</b> " + d.asset_issuer
+                + "<br><b>Balance:</b> " + d.balance
+                + "<br><b>Limit:</b> " + d.limit
+                + "<br><b>Is Authorized:</b> " + d.is_authorized
+                + "<br><b>Is Authorized To Maintain Liabilities:</b> " + d.is_authorized_to_maintain_liabilities
+                + "<br><b>Is Clawback Enabled:</b> " + d.is_clawback_enabled
+                + "<br><b>Stellar Expert:</b> <a href=" + d.stellar_expert + ">Link</a>"
                 + "<br><b>Number of Accounts:</b> " + d.num_accounts
                 + "<br><b>Number of Claimable Balances:</b> " + d.num_claimable_balances
                 + "<br><b>Num of Liquidity Pools:</b> " + d.num_liquidity_pools
@@ -452,9 +459,11 @@
               tooltip.style("opacity", 0.71).style("background-color", '#cc3463')
             }
             tooltip
-              .html("<b>Name:</b> " + d.name + "<br><b>Issuer Id:</b> " + d.issuer_id + "<br><b>Description:</b> " + d.description
-                + "<br><b>URL:</b> " + '<a href=https://www.' + d.url + '>' + d.url + '</a>' + "<br><b>Created:</b> " + d.created
-                + "<br><b>Deleted:</b> " + d.deleted)
+              .html("<b>Stellar Account:</b> " + d.stellar_account
+                + "<br><b>Created:</b> " + d.created
+                + "<br><b>Creator Account:</b> " + d.home_domain
+                + "<br><b>Home Domain:</b> " + d.home_domain
+                + "<br><b>XLM Balance:</b> " + d.xlm_balance)
               .style("left", (d3.event.pageX) + "px")
               .style("top", (d3.event.pageY) + "px")
           }
