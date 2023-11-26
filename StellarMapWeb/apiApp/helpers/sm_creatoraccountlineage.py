@@ -334,20 +334,25 @@ class StellarMapCreatorAccountLineageHelpers:
                 'children': []
                 }
                 # convert json string as python dictionary
-                horizon_accounts_flags_dict = json.loads(genealogy_df.loc[index, 'horizon_accounts_flags_doc_api_href'])
-                for element_flag in horizon_accounts_flags_dict:
-                    for element_flag_key, element_flag_value in element_flag.items():
-                        account_issuer_dict[element_flag_key] = element_flag_value
-                    issuer_node.append(account_issuer_dict)
-                    # convert json string as python dictionary
-                    horizon_accounts_assets_dict = json.loads(genealogy_df.loc[index, 'horizon_accounts_assets_doc_api_href'])
-                    for element_asset in horizon_accounts_assets_dict:
-                        issuer_node.append(element_asset)
-                    
-                    # aggregating child nodes
-                    if child_node:
-                        child_node[-1][-1]['children'].extend(issuer_node)   # Extend the children list of the last item in child_node
-                    child_node.append(issuer_node)
+                horizon_accounts_flags_doc_api_href = genealogy_df.loc[index, 'horizon_accounts_flags_doc_api_href']
+                if horizon_accounts_flags_doc_api_href is not None:
+                    horizon_accounts_flags_dict = horizon_accounts_flags_doc_api_href
+                    horizon_accounts_flags_dict = json.loads(horizon_accounts_flags_doc_api_href)
+                
+                    for element_flag in horizon_accounts_flags_dict:
+                        for element_flag_key, element_flag_value in element_flag.items():
+                            account_issuer_dict[element_flag_key] = element_flag_value
+                        issuer_node.append(account_issuer_dict)
+                
+                # convert json string as python dictionary
+                horizon_accounts_assets_dict = json.loads(genealogy_df.loc[index, 'horizon_accounts_assets_doc_api_href'])
+                for element_asset in horizon_accounts_assets_dict:
+                    issuer_node.append(element_asset)
+                
+                # aggregating child nodes
+                if child_node:
+                    child_node[-1][-1]['children'].extend(issuer_node)   # Extend the children list of the last item in child_node
+                child_node.append(issuer_node)
 
         # convert dictionary to json and returns only the first item in the child_node aggregated list
         first_item = child_node[0][0]
