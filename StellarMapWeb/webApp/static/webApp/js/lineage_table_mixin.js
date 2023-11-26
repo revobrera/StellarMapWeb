@@ -49,8 +49,8 @@ const lineage_table_mixin = {
 
               console.log(response);
 
-              this.account_genealogy_items = JSON.parse(response.account_genealogy_items_json);
-              this.tree_genealogy_items = JSON.parse(response.tree_genealogy_items_json);
+              this.account_genealogy_items = JSON.parse(response['account_genealogy_items_json']);
+              this.tree_genealogy_items = JSON.parse(response['tree_genealogy_items_json']);
 
               console.log(this.account_genealogy_items);
               console.log(this.tree_genealogy_items);
