@@ -218,6 +218,9 @@ class GetAccountGenealogy(APIView):
         genealogy_df = sm_dt_helpers.convert_to_NY_datetime(genealogy_df, 'stellar_account_created_at')
         genealogy_df = sm_dt_helpers.convert_to_NY_datetime(genealogy_df, 'created_at')
         genealogy_df = sm_dt_helpers.convert_to_NY_datetime(genealogy_df, 'updated_at')
+
+        # generate the tree from genealogy_df in json format
+        tree_genealogy_items_json = sm_lineage_helpers.generate_tidy_radial_tree_genealogy(genealogy_df=genealogy_df)
        
         # format df as records
         genealogy_records = genealogy_df.to_dict(orient='records')
@@ -234,13 +237,20 @@ class GetAccountGenealogy(APIView):
                 'home_domain': record['home_domain'],
                 'xlm_balance': record['xlm_balance'],
                 'stellar_expert': 'https://stellar.expert/explorer/'+ record['network_name'] + '/account/' + record['stellar_account'],
+                'horizon_account_assets': record['horizon_accounts_assets_doc_api_href'],
+                'stellar_expert_directory': record['stellar_expert_explorer_directory_doc_api_href'],
+                'horizon_account_flags': record['horizon_accounts_flags_doc_api_href'],
                 'status': record['status'],
                 'updated_at': record['updated_at']
             }
             account_genealogy_items.append(account_genealogy_item)
 
-        # frontend vue account_genealogy_items
+        # frontend vue account_genealogy_items for datatables display
         # Convert the dictionary to a JSON format
         account_genealogy_items_json = json.dumps(account_genealogy_items)
 
-        return Response(account_genealogy_items_json)
+        # return Response(account_genealogy_items_json)
+        return Response({
+            'account_genealogy_items_json': account_genealogy_items_json,
+            'tree_genealogy_items_json': tree_genealogy_items_json
+        })

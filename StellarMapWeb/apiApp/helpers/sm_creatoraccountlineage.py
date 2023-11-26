@@ -314,6 +314,51 @@ class StellarMapCreatorAccountLineageHelpers:
     def generate_tidy_radial_tree_genealogy(self, genealogy_df):
         # takes in dataframe from get_account_genealogy()
         
+        child_node = []
+        if not genealogy_df.empty:
+            # Get the index values of the DataFrame
+            indices = genealogy_df.index.values
+            
+            # Iterate through each record starting from the last index down to the first index
+            for i in range(len(indices) - 1, -1, -1):
+                issuer_node = []
+                index = indices[i]
+                account_issuer_dict = {
+                'node_type': 'ISSUER',
+                'created': genealogy_df.loc[index, 'stellar_account_created_at'],
+                'stellar_account': genealogy_df.loc[index, 'stellar_account'],
+                'creator_account': genealogy_df.loc[index, 'stellar_creator_account'],
+                'home_domain': genealogy_df.loc[index, 'home_domain'],
+                'xlm_balance': genealogy_df.loc[index, 'xlm_balance'],
+                'stellar_expert': 'https://stellar.expert/explorer/' + genealogy_df.loc[index, 'network_name'] + '/account/' + genealogy_df.loc[index, 'stellar_account'],
+                'children': []
+                }
+                # convert json string as python dictionary
+                horizon_accounts_flags_dict = json.loads(genealogy_df.loc[index, 'horizon_accounts_flags_doc_api_href'])
+                for element_flag in horizon_accounts_flags_dict:
+                    for element_flag_key, element_flag_value in element_flag.items():
+                        account_issuer_dict[element_flag_key] = element_flag_value
+                    issuer_node.append(account_issuer_dict)
+                    # convert json string as python dictionary
+                    horizon_accounts_assets_dict = json.loads(genealogy_df.loc[index, 'horizon_accounts_assets_doc_api_href'])
+                    for element_asset in horizon_accounts_assets_dict:
+                        issuer_node.append(element_asset)
+                    
+                    # aggregating child nodes
+                    if child_node:
+                        child_node[-1][-1]['children'].extend(issuer_node)   # Extend the children list of the last item in child_node
+                    child_node.append(issuer_node)
+
+        # convert dictionary to json and returns only the first item in the child_node aggregated list
+        first_item = child_node[0][0]
+        first_item_json = json.dumps(first_item, indent=4)
+
+        return first_item_json
+
+
+    def generate_tidy_radial_tree_genealogy_deprecated(self, genealogy_df):
+        # takes in dataframe from get_account_genealogy()
+        
         if not genealogy_df.empty:
             for index, row in genealogy_df.iterrows():
                 # query account queryset

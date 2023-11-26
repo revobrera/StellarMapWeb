@@ -22,7 +22,8 @@ const lineage_table_mixin = {
           { key: 'status', label: 'Status', sortable: true, visible: true },
           { key: 'updated_at', label: 'Updated At', sortable: true, visible: true }
         ],
-        apiStellarExpertTagsResponses: []
+        apiStellarExpertTagsResponses: [],
+        tree_genealogy_items: null
       }
     },
     methods: {
@@ -44,8 +45,12 @@ const lineage_table_mixin = {
               }
 
               // Successful response, do something with the data
-              this.account_genealogy_items = JSON.parse(await genealogy_response.json());
+              const responseJson = await genealogy_response.json();
+              this.account_genealogy_items = JSON.parse(responseJson.account_genealogy_items_json);
+              this.tree_genealogy_items = JSON.parse(responseJson.tree_genealogy_items_json);
+
               console.log(this.account_genealogy_items);
+              console.log(this.tree_genealogy_items);
           } catch (e) {
               // Handle error
               console.error(e);
