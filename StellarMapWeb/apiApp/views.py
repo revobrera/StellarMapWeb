@@ -249,8 +249,12 @@ class GetAccountGenealogy(APIView):
         # Convert the dictionary to a JSON format
         account_genealogy_items_json = json.dumps(account_genealogy_items)
 
-        # return Response(account_genealogy_items_json)
-        return Response({
+        genealogy_response = {
             'account_genealogy_items_json': account_genealogy_items_json,
             'tree_genealogy_items_json': tree_genealogy_items_json
-        })
+        }
+
+        genealogy_response_json = json.dumps(genealogy_response)
+
+        # return Response(account_genealogy_items_json)
+        return Response(genealogy_response_json)
