@@ -16,6 +16,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'highlightjs-11.7.0/styles/monokai-sublime.min.css' %}">
     <script src="{% static 'highlightjs-11.7.0/highlight.min.js' %}"></script>
 
+    <!-- Sentry Browser Integration -->
+    <script src="https://js.sentry-cdn.com/67187ea5a12a4dcf9f58230f9d424e39.min.js" crossorigin="anonymous"></script>
+
     <!-- Load required Bootstrap and BootstrapVue CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-4.6.2/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-vue-2.23.1/bootstrap-vue.min.css' %}">
@@ -25,6 +28,27 @@
     <!-- Custom VueJS mixin -->
     <script src="{% static 'webApp/js/lineage_table_mixin.js' %}"></script>
 </head>
+
+<script type="text/javascript">
+    Sentry.init({
+    dsn: "https://67187ea5a12a4dcf9f58230f9d424e39@o188341.ingest.sentry.io/4504574495752192",
+
+    // Alternatively, use `process.env.npm_package_version` for a dynamic release version
+    // if your build tool supports it.
+    release: "stellarmap-network-alpha-v0.1.2",
+    integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
+
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0,
+
+    // Capture Replay for 10% of all sessions,
+    // plus for 100% of sessions with an error
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
+    });
+</script>
 
 <body class="bg-color-261D45">
     <div id="app">
