@@ -36,7 +36,12 @@
     // Alternatively, use `process.env.npm_package_version` for a dynamic release version
     // if your build tool supports it.
     release: "stellarmap-network-alpha-v0.1.2",
-    integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
+    integrations: [
+        new Sentry.BrowserTracing({
+        routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+        }),
+        new Sentry.Replay(),
+    ],
 
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
