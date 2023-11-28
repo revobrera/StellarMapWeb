@@ -19,6 +19,18 @@
     <!-- Sentry Browser Integration -->
     <script src="https://js.sentry-cdn.com/67187ea5a12a4dcf9f58230f9d424e39.min.js" crossorigin="anonymous"></script>
 
+    <script
+        src="https://browser.sentry-cdn.com/7.82.0/bundle.tracing.min.js"
+        integrity="sha384-x2GFl8C9y5ZR77jJTadV2S+hAMkysxXIonhCI5v8GvIbuXNjoiTUR6zIfm5pOoI1"
+        crossorigin="anonymous">
+    </script>
+
+    <script
+        src="https://browser.sentry-cdn.com/7.82.0/bundle.tracing.replay.min.js"
+        integrity="sha384-CnDB9e8iBbuCWyO/8dNXMxFdzSkAcHnWf7tY2eNaCNv20dIyXOlPo0mWJXGeKbDy"
+        crossorigin="anonymous">
+    </script>
+
     <!-- Load required Bootstrap and BootstrapVue CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-4.6.2/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-vue-2.23.1/bootstrap-vue.min.css' %}">
@@ -31,7 +43,7 @@
 
 <script type="text/javascript">
     Sentry.init({
-    dsn: "https://67187ea5a12a4dcf9f58230f9d424e39@o188341.ingest.sentry.io/4504574495752192",
+    dsn: "https://bee2d4805fd88aff0eaa85cf8649a721@o188341.ingest.sentry.io/4506300722118656",
 
     // Alternatively, use `process.env.npm_package_version` for a dynamic release version
     // if your build tool supports it.
