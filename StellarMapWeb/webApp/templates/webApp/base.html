@@ -31,6 +31,12 @@
         crossorigin="anonymous">
     </script>
 
+    <script
+        src="https://browser.sentry-cdn.com/7.82.0/reportingobserver.min.js"
+        integrity="sha384-KeZhBIGZyNHYcJS9B+MinFkT8GoV1xwdGnBYaKTF0CcitoBksE6aDfjjd9YtM0TV"
+        crossorigin="anonymous"
+    ></script>
+
     <!-- Load required Bootstrap and BootstrapVue CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-4.6.2/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-vue-2.23.1/bootstrap-vue.min.css' %}">
@@ -44,7 +50,7 @@
 <script type="text/javascript">
     Sentry.init({
     dsn: "{{ SENTRY_DSN_VUE }}",
-    integrations: [new Sentry.Integrations.Vue({Vue, attachProps: true})],
+    integrations: [new Sentry.Integrations.ReportingObserver()],
 
     environment: "{{ ENV }}",
     release: "stellarmap-network-alpha-v0.1.2"
