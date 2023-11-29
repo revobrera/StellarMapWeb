@@ -43,27 +43,11 @@
 
 <script type="text/javascript">
     Sentry.init({
-    dsn: "https://bee2d4805fd88aff0eaa85cf8649a721@o188341.ingest.sentry.io/4506300722118656",
+    dsn: "{{ SENTRY_DSN_VUE }}",
+    integrations: [new Sentry.Integrations.Vue({Vue, attachProps: true})],
 
-    // Alternatively, use `process.env.npm_package_version` for a dynamic release version
-    // if your build tool supports it.
-    release: "stellarmap-network-alpha-v0.1.2",
-    integrations: [
-        new Sentry.BrowserTracing({
-        routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-        }),
-        new Sentry.Replay(),
-    ],
-
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
-
-    // Capture Replay for 10% of all sessions,
-    // plus for 100% of sessions with an error
-    replaysSessionSampleRate: 0.1,
-    replaysOnErrorSampleRate: 1.0,
+    environment: "{{ ENV }}",
+    release: "stellarmap-network-alpha-v0.1.2"
     });
 </script>
 

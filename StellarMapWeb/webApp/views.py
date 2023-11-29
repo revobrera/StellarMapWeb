@@ -1,6 +1,6 @@
+from decouple import config
 from django.shortcuts import redirect, render
 from django.urls import reverse
-
 
 def redirect_to_search_view(request):
 
@@ -9,6 +9,8 @@ def redirect_to_search_view(request):
 
 def search_view(request):
   context = {
-    'search_variable': 'Hello World!'
+    'search_variable': 'Hello World!',
+    'ENV': config('SENTRY_DSN_VUE'),
+    'SENTRY_DSN_VUE': config('SENTRY_DSN_VUE')
   }
   return render(request, 'webApp/search.html', context)
