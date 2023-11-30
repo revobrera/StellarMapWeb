@@ -251,7 +251,7 @@ class GetAccountGenealogy(APIView):
 
         # TODO
         genealogy_response = {
-            'account_genealogy_items_json': account_genealogy_items_json,
+            'account_genealogy_items_json': account_genealogy_items,
             'tree_genealogy_items_json': tree_genealogy_items_json
         }
 
