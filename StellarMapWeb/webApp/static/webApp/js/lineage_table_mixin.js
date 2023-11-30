@@ -41,32 +41,33 @@ const lineage_table_mixin = {
               if (!genealogy_response.ok) {
                   // Get the error message from the response
                   const error = await genealogy_response.json();
-                  throw new Error(error.message);
+                  Sentry.captureException(error);
               }
 
               // Successful response, do something with the data
               const response = await genealogy_response.json();
 
-              console.log(response);
+              Sentry.captureMessage(response);
 
               if ('account_genealogy_items_json' in response) {
                 this.account_genealogy_items = JSON.parse(response['account_genealogy_items_json']);
-                console.log(this.account_genealogy_items);
+                Sentry.captureMessage(this.account_genealogy_items);
               } else {
-                console.log('account_genealogy_items_json not found in response');
+                Sentry.captureMessage('account_genealogy_items_json not found in response');
               }
 
               if ('tree_genealogy_items_json' in response) {
                 this.tree_genealogy_items = JSON.parse(response['tree_genealogy_items_json']);
-                console.log(this.tree_genealogy_items);
+                Sentry.captureMessage(this.tree_genealogy_items);
               } else {
-                console.log('tree_genealogy_items_json not found in response');
+                Sentry.captureMessage('tree_genealogy_items_json not found in response');
               }
 
           } catch (e) {
               // Handle error
               console.error(e);
               alert(e.message);
+              Sentry.captureException(e);
           }
       },
       truncateStellarAccount(stellar_account) {
