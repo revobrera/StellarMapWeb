@@ -126,9 +126,9 @@
                     // Set 'loading' to false to hide the loading indicator
                     this.loading = false;
                 } catch (e) {
-                    // If an error occurs, store the error message in 'response'
-                    this.response = e.message;
-                    alert(this.response)
+                    // this.response = e.message;
+                    Sentry.captureMessage(e)
+                    alert(e)
                 }
             },
             toggleNetwork() {
