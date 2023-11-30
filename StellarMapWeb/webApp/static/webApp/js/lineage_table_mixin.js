@@ -45,22 +45,21 @@ const lineage_table_mixin = {
               }
 
               // Successful response, do something with the data
-              const response = await genealogy_response.json();
+              const responseJson = JSON.parse(await genealogy_response.json());
+              Sentry.captureMessage(responseJson);
 
-              Sentry.captureMessage(response);
-
-              if ('account_genealogy_items_json' in response) {
-                this.account_genealogy_items = JSON.parse(response['account_genealogy_items_json']);
+              if ('account_genealogy_items_json' in responseJson) {
+                this.account_genealogy_items = responseJson['account_genealogy_items_json'];
                 Sentry.captureMessage(this.account_genealogy_items);
               } else {
-                Sentry.captureMessage('account_genealogy_items_json not found in response');
+                Sentry.captureMessage('account_genealogy_items_json not found in responseJson');
               }
 
-              if ('tree_genealogy_items_json' in response) {
-                this.tree_genealogy_items = JSON.parse(response['tree_genealogy_items_json']);
+              if ('tree_genealogy_items_json' in responseJson) {
+                this.tree_genealogy_items = responseJson['tree_genealogy_items_json'];
                 Sentry.captureMessage(this.tree_genealogy_items);
               } else {
-                Sentry.captureMessage('tree_genealogy_items_json not found in response');
+                Sentry.captureMessage('tree_genealogy_items_json not found in responseJson');
               }
 
           } catch (e) {
