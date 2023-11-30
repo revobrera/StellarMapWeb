@@ -48,19 +48,12 @@ const lineage_table_mixin = {
               const responseJson = JSON.parse(await genealogy_response.json());
               Sentry.captureMessage(responseJson);
 
-              if ('account_genealogy_items_json' in responseJson) {
-                this.account_genealogy_items = responseJson['account_genealogy_items_json'];
-                Sentry.captureMessage(this.account_genealogy_items);
-              } else {
-                Sentry.captureMessage('account_genealogy_items_json not found in responseJson');
-              }
-
-              if ('tree_genealogy_items_json' in responseJson) {
-                this.tree_genealogy_items = responseJson['tree_genealogy_items_json'];
-                Sentry.captureMessage(this.tree_genealogy_items);
-              } else {
-                Sentry.captureMessage('tree_genealogy_items_json not found in responseJson');
-              }
+              this.account_genealogy_items = responseJson['account_genealogy_items_json'];
+              Sentry.captureMessage(this.account_genealogy_items);
+            
+            
+              this.tree_genealogy_items = responseJson['tree_genealogy_items_json'];
+              Sentry.captureMessage(this.tree_genealogy_items);              
 
           } catch (e) {
               // Handle error
