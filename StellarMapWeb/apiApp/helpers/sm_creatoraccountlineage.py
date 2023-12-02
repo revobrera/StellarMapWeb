@@ -356,11 +356,14 @@ class StellarMapCreatorAccountLineageHelpers:
                     child_node[-1][-1]['children'].extend(issuer_node)   # Extend the children list of the last item in child_node
                 child_node.append(issuer_node)
 
-        # convert dictionary to json and returns only the first item in the child_node aggregated list
+        # collect first item in the child_node aggregated list
         first_item = child_node[0][0]
+
+        # convert dictionary to json
         first_item_json = json.dumps(first_item, indent=4)
 
-        return first_item_json
+        # return first item dictionary
+        return first_item
 
 
     def generate_tidy_radial_tree_genealogy_deprecated(self, genealogy_df):
