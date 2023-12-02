@@ -15,8 +15,11 @@
   </div>
 
 <script>
+  // Assign the value of the Vue variable to a JavaScript variable
+  const treeGenealogyItems = "{{ tree_genealogy_items }}";
+
   // Load the JSON data file
-  d3.json("{{ tree_genealogy_items }}", function (pubs) {
+  d3.json(treeGenealogyItems, function (pubs) {
     // Initialize the tooltip element and set its position and opacity to null
     var tooltip = d3.select('#display_radial_tidy_tree')
       .append('div')
