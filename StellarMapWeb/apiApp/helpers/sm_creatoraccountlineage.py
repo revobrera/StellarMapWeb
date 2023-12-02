@@ -360,7 +360,7 @@ class StellarMapCreatorAccountLineageHelpers:
         first_item = child_node[0][0]
 
         # convert dictionary to json
-        first_item_json = json.dumps(first_item, indent=4)
+        # first_item_json = json.dumps(first_item, indent=4)
 
         # return first item dictionary
         return first_item
