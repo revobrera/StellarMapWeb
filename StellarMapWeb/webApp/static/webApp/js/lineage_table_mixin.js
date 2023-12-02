@@ -46,14 +46,10 @@ const lineage_table_mixin = {
 
               // parse the JSON
               const responseJson = JSON.parse(await genealogy_response.json());
-              Sentry.captureMessage(responseJson);
 
-              this.account_genealogy_items = responseJson.account_genealogy_items_json;
-              Sentry.captureMessage(this.account_genealogy_items);
-            
-            
-              this.tree_genealogy_items = responseJson.tree_genealogy_items_json;
-              Sentry.captureMessage(this.tree_genealogy_items);              
+              // assign to vue variables
+              this.account_genealogy_items = responseJson.account_genealogy_items;
+              this.tree_genealogy_items = responseJson.tree_genealogy_items;
 
           } catch (e) {
               // Handle error

@@ -219,8 +219,8 @@ class GetAccountGenealogy(APIView):
         genealogy_df = sm_dt_helpers.convert_to_NY_datetime(genealogy_df, 'created_at')
         genealogy_df = sm_dt_helpers.convert_to_NY_datetime(genealogy_df, 'updated_at')
 
-        # generate the tree from genealogy_df in json format
-        tree_genealogy_items_json = sm_lineage_helpers.generate_tidy_radial_tree_genealogy(genealogy_df=genealogy_df)
+        # generate the tree from genealogy_df as dictionary format
+        tree_genealogy_items = sm_lineage_helpers.generate_tidy_radial_tree_genealogy(genealogy_df=genealogy_df)
        
         # format df as records
         genealogy_records = genealogy_df.to_dict(orient='records')
@@ -247,15 +247,14 @@ class GetAccountGenealogy(APIView):
 
         # frontend vue account_genealogy_items for datatables display
         # Convert the dictionary to a JSON format
-        account_genealogy_items_json = json.dumps(account_genealogy_items)
+        # account_genealogy_items_json = json.dumps(account_genealogy_items)
 
-        # TODO
         genealogy_response = {
-            'account_genealogy_items_json': account_genealogy_items,
-            'tree_genealogy_items_json': tree_genealogy_items_json
+            'account_genealogy_items': account_genealogy_items,
+            'tree_genealogy_items': tree_genealogy_items
         }
 
+        # Convert the dictionary to a JSON format
         genealogy_response_json = json.dumps(genealogy_response)
 
-        # return Response(account_genealogy_items_json)
         return Response(genealogy_response_json)
