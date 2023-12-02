@@ -19,7 +19,7 @@
   const treeGenealogyItems = "{{ tree_genealogy_items }}";
 
   // Load the JSON data file
-  d3.json(treeGenealogyItems, function (pubs) {
+  d3.json.parse(treeGenealogyItems, function (pubs) {
     // Initialize the tooltip element and set its position and opacity to null
     var tooltip = d3.select('#display_radial_tidy_tree')
       .append('div')
