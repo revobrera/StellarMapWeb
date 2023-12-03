@@ -16,7 +16,7 @@
 
 <script>
   // Assign the value of the Vue variable to a JavaScript variable
-  const treeGenealogyItems = JSON.parse('{{ tree_genealogy_items }}');
+  const treeGenealogyItems = {{ tree_genealogy_items }};
 
   // Load the JSON data file
   d3.json(treeGenealogyItems, function (pubs) {
