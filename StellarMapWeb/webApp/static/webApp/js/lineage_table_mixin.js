@@ -45,7 +45,7 @@ const lineage_table_mixin = {
       }
     },
     mounted() {
-      this.smrt_treeGenealogyItems = "{{ tree_genealogy_items }}";
+      this.smrt_treeGenealogyItems = {{ tree_genealogy_items }};
       this.smrt_tooltip = d3.select('#display_radial_tidy_tree')
         .append('div')
         .attr('class', 'tooltip')
