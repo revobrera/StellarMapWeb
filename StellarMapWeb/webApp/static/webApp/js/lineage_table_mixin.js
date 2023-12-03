@@ -45,6 +45,7 @@ const lineage_table_mixin = {
       }
     },
     mounted() {
+      this.smrt_treeGenealogyItems = this.tree_genealogy_items;
       this.smrt_tooltip = d3.select('#display_radial_tidy_tree')
         .append('div')
         .attr('class', 'tooltip')
@@ -116,7 +117,7 @@ const lineage_table_mixin = {
 
               // assign to vue variables
               this.account_genealogy_items = responseJson.account_genealogy_items;
-              this.smrt_treeGenealogyItems = responseJson.tree_genealogy_items;
+              this.tree_genealogy_items = responseJson.tree_genealogy_items;
 
           } catch (e) {
               // Handle error
