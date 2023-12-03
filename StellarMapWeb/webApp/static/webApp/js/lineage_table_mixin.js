@@ -45,7 +45,7 @@ const lineage_table_mixin = {
       }
     },
     mounted() {
-      this.smrt_treeGenealogyItems = this.tree_genealogy_items;
+      this.smrt_treeGenealogyItems = JSON.parse(JSON.stringify(this.tree_genealogy_items));
       this.smrt_tooltip = d3.select('#display_radial_tidy_tree')
         .append('div')
         .attr('class', 'tooltip')
@@ -57,7 +57,7 @@ const lineage_table_mixin = {
         .attr('class', 'breadcrumbs');
       this.smrt_width = this.smrt_diameter;
       this.smrt_height = this.smrt_diameter;
-      this.smrt_root = this.smrt_treeGenealogyItems;
+      this.smrt_root = JSON.parse(JSON.stringify(this.smrt_treeGenealogyItems)); // ensures that the smrt_root object is a deep copy of smrt_treeGenealogyItems
       this.smrt_root.x0 = this.smrt_height / 2;
       this.smrt_root.y0 = 0;
       this.smrt_tree = d3.layout.tree()
@@ -374,5 +374,3 @@ const lineage_table_mixin = {
       },
     }
   }
-
-  
