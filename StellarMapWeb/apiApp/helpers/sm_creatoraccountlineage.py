@@ -356,8 +356,18 @@ class StellarMapCreatorAccountLineageHelpers:
                     child_node[-1][-1]['children'].extend(issuer_node)   # Extend the children list of the last item in child_node
                 child_node.append(issuer_node)
 
-        # collect first item in the child_node aggregated list
-        first_item = child_node[0][0]
+        #TODO collect first item in the child_node aggregated list
+        try:
+            if len(child_node) > 0:
+                first_item = child_node[0][0]                
+            else:
+                # Handle the case when the list is empty
+                # or take appropriate action based on your requirements
+                sentry_sdk.capture_exception(e)
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+        
+
 
         # convert dictionary to json
         # first_item_json = json.dumps(first_item, indent=4)
