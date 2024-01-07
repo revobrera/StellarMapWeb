@@ -12,12 +12,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
 
-from .helpers.env import EnvHelpers
-from .helpers.lineage_creator_accounts import LineageHelpers
-from .helpers.sm_conn import SiteChecker
-from .managers import UserInquirySearchHistoryManager
-from .models import UserInquirySearchHistory
-from .serializers import (UserInquirySearchHistorySerializer)
+from apiApp.helpers.env import EnvHelpers
+from apiApp.helpers.lineage_creator_accounts import LineageHelpers
+from apiApp.helpers.sm_conn import SiteChecker
+from apiApp.managers import UserInquirySearchHistoryManager
+from apiApp.models import UserInquirySearchHistory
+from apiApp.serializers import (UserInquirySearchHistorySerializer)
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -221,6 +221,7 @@ class GetAccountGenealogy(APIView):
 
         # generate the tree from genealogy_df as dictionary format
         tree_genealogy_items = sm_lineage_helpers.generate_tidy_radial_tree_genealogy(genealogy_df=genealogy_df)
+        tree_genealogy_items = sm_dt_helpers.convert_to_NY_datetime(tree_genealogy_items, 'created')
        
         # format df as records
         genealogy_records = genealogy_df.to_dict(orient='records')
