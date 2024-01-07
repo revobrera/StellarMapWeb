@@ -221,7 +221,6 @@ class GetAccountGenealogy(APIView):
 
         # generate the tree from genealogy_df as dictionary format
         tree_genealogy_items = sm_lineage_helpers.generate_tidy_radial_tree_genealogy(genealogy_df=genealogy_df)
-        tree_genealogy_items = sm_dt_helpers.convert_to_NY_datetime(tree_genealogy_items, 'created')
        
         # format df as records
         genealogy_records = genealogy_df.to_dict(orient='records')
