@@ -321,8 +321,8 @@ class StellarMapCreatorAccountLineageHelpers:
             indices = genealogy_df.index.values
 
             # convert column of timestamps to datetimes
-            sm_dt_helpers = StellarMapDateTimeHelpers()
-            genealogy_df = sm_dt_helpers.convert_to_NY_datetime(genealogy_df, 'stellar_account_created_at')
+            # sm_dt_helpers = StellarMapDateTimeHelpers()
+            # genealogy_df = sm_dt_helpers.convert_to_NY_datetime(genealogy_df, 'stellar_account_created_at')
             
             # Iterate through each record starting from the last index down to the first index
             for i in range(len(indices) - 1, -1, -1):
